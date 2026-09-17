@@ -1,0 +1,16 @@
+pub mod about;
+pub mod appointment;
+pub mod common;
+pub mod contact;
+pub mod departments;
+pub mod faq;
+pub mod footer;
+pub mod hero;
+pub mod icons;
+pub mod modal;
+pub mod plans;
+pub mod services;
+pub mod team;
+pub mod testimonials;
+pub mod toast;
+pub mod why_us;

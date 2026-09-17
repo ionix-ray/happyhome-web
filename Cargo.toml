@@ -1,0 +1,32 @@
+[workspace]
+members = [
+    "crates/happyhome-domain",
+    "crates/happyhome-ui",
+    "crates/happyhome-tests"
+]
+resolver = "2"
+
+[workspace.dependencies]
+dioxus = "=0.7.9"
+serde = { version = "1.0", features = ["derive"] }
+toml = "0.8"
+thiserror = "1.0"
+
+[profile.release]
+opt-level = "z"
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true
+debug = false
+
+[profile.dev]
+opt-level = 1
+debug = false
+split-debuginfo = "unpacked"
+
+[profile.wasm-dev]
+inherits = "dev"
+opt-level = 1
+debug = false
+

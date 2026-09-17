@@ -1,0 +1,346 @@
+[site]
+name = "Happy Home Hospital And Rehab"
+tagline = "Your health, guided by experts"
+logo_url = "https://happyhomehospital.com/wp-content/uploads/2026/05/Logo-happy-home.jpg"
+favicon_url = "https://happyhomehospital.com/wp-content/uploads/2026/05/fav-logo.png"
+
+[emergency]
+message = "24/7 Emergency & Critical Neuro ICU"
+phone = "+91 8249914673"
+whatsapp_phone = "+918249914673"
+
+[contact]
+address = "Plot no.223, K-1 Kalinga Nagar, Ghatikia, Bhubaneswar, Odisha 751029"
+phone_primary = "+91 8249914673"
+phone_secondary = "+91 69131 11955"
+phone_whatsapp = "+918249914673"
+email = "hello@happyhomehospital.com"
+hours = "24×7 Emergency & Inpatient Care | OPD: Mon–Sat 9:00 AM – 8:00 PM"
+
+[social]
+facebook = "https://facebook.com/happyhomehospital"
+twitter = "https://twitter.com/happyhomehospital"
+linkedin = "https://linkedin.com/company/happyhomehospital"
+youtube = "https://youtube.com"
+instagram = "https://instagram.com/happyhomehospital"
+
+[seo]
+title = "Happy Home Hospital And Rehab | Bhubaneswar | Neuro & Spine Rehabilitation Centre"
+description = "Happy Home Hospital and Rehab in Bhubaneswar offers expert neuro rehabilitation, stroke recovery, spinal cord injury care, tracheostomy management, and 24/7 critical care. Call +91 8249914673."
+keywords = ["neuro rehabilitation bhubaneswar", "stroke recovery centre", "spinal cord injury rehab", "tbi care", "happy home hospital", "rehab centre bhubaneswar"]
+og_image = "assets/images/facility.jpg"
+canonical = "https://happyhomehospital.com/"
+schema_type = "Hospital"
+
+[footer]
+about_text = "Happy Home Hospital & Inpatient Rehab is Odisha's trusted centre for specialized neuro and spine rehabilitation, critical step-down ICU recovery, and comprehensive holistic patient care since 2021."
+
+[[footer.quick_links]]
+label = "About Us"
+url = "#about"
+
+[[footer.quick_links]]
+label = "Services"
+url = "#services"
+
+[[footer.quick_links]]
+label = "Our Doctors"
+url = "#team"
+
+[[footer.quick_links]]
+label = "Departments"
+url = "#departments"
+
+[[footer.quick_links]]
+label = "Rehab Plans"
+url = "#plans"
+
+[[footer.quick_links]]
+label = "Book Appointment"
+url = "#appointment"
+
+[[footer.legal_links]]
+label = "Terms & Conditions"
+url = "/terms-conditions/"
+
+[[footer.legal_links]]
+label = "Privacy Policy"
+url = "/privacy-policy/"
+
+[[footer.legal_links]]
+label = "Patient Charter & Rights"
+url = "/patient-charter/"
+
+[[footer.legal_links]]
+label = "NABH Accreditation Guidelines"
+url = "/accreditation/"
+
+[rehab]
+name = "Happy Home Rehab"
+tagline = "Helping You To Bring Back Your Smile"
+
+[[rehab.team]]
+name = "Dr. Vijay Kumar Sahu"
+role = "Founder & Managing Director"
+title = "MPT (Neuro Rehabilitation)"
+specialty = "Specialist in Neuro Rehabilitation, Stroke Recovery & Long-term Critical Care"
+image_url = "assets/images/dr_vijay_sahu.jpg"
+
+[[rehab.team]]
+name = "Dr. Sambit Dash"
+role = "Senior Consultant (Anesthesiology & Critical Care)"
+title = "MD"
+specialty = "Expert in Post-Trauma Stabilization, Neuro Disorders & Critical Step-Down"
+image_url = "assets/images/dr_sambit_dash.jpg"
+
+[[rehab.team]]
+name = "Dr. Ananya Pattnaik"
+role = "Senior Consultant Neurologist"
+title = "MD, DM (Neurology)"
+specialty = "Specialist in Stroke, Parkinson's Disease, Cognitive Recovery & Dementia Care"
+image_url = "assets/images/dr_ananya_pattnaik.jpg"
+
+[[rehab.team]]
+name = "Dr. Jajati Keshari Jena"
+role = "Chief of Physiotherapy & Rehabilitation"
+title = "MPT (Neuro Rehabilitation)"
+specialty = "Specialist in Spinal Cord Injury, Gait Training & Orthopedic Mobility"
+image_url = "assets/images/dr_jajati_jena.jpg"
+
+[[rehab.services]]
+name = "Post Neuro-Surgery Rehabilitation"
+slug = "post-neuro-surgery-rehabilitation"
+description = "Comprehensive multi-phase rehabilitation following craniotomy, tumor resection, and spine surgery to restore motor control and autonomy."
+icon_key = "brain"
+
+[[rehab.services]]
+name = "Spinal Cord Injury Rehabilitation"
+slug = "spinal-cord-injury-rehabilitation"
+description = "Specialized paraplegia and quadriplegia mobility retraining, bladder-bowel management, and assistive tech empowerment."
+icon_key = "spine"
+
+[[rehab.services]]
+name = "Traumatic Brain Injury (TBI) Care"
+slug = "traumatic-brain-injury-tbi-care"
+description = "Evidence-based cognitive restructuring, physical equilibrium restoration, and occupational therapy for severe brain trauma."
+icon_key = "tbi"
+
+[[rehab.services]]
+name = "Advanced Bedsore & Wound Care"
+slug = "advanced-bedsore-wound-care"
+description = "Staged pressure ulcer healing using negative pressure wound therapy (NPWT), dynamic alternating air mattresses, and debridement."
+icon_key = "wound"
+
+[[rehab.services]]
+name = "Tracheostomy & Respiratory Support Care"
+slug = "tracheostomy-respiratory-support-care"
+description = "Decannulation protocols, specialized suctioning, chest physiotherapy, and round-the-clock oxygenation monitoring."
+icon_key = "respiratory"
+
+[[rehab.services]]
+name = "Cancer Palliative & Critical Care"
+slug = "cancer-palliative-critical-care-management"
+description = "Holistic pain relief, compassionate symptom alleviation, nutritional support, and dignified emotional care for oncology patients."
+icon_key = "palliative"
+
+[[rehab.services]]
+name = "Parkinson's Disease & Dementia Care"
+slug = "parkinsons-disease-dementia-rehabilitation"
+description = "Sensory cueing, gait stabilization, swallowing therapy, and cognitive orientation exercises designed to maximize daily independence."
+icon_key = "parkinsons"
+
+[[rehab.services]]
+name = "Stroke Recovery & Paralysis Management"
+slug = "stroke-recovery-paralysis-management"
+description = "Neuroplasticity-based hemiplegia recovery combining neuro-developmental therapy (NDT), functional electrical stimulation, and robotic gait."
+icon_key = "stroke"
+
+[[rehab.services]]
+name = "Post-Surgical Orthopedic & CTVS Rehab"
+slug = "post-general-abdominal-orthopedic-ctvs-surgery-rehabilitation"
+description = "Structured post-operative recovery for joint replacements, complex fractures, abdominal surgeries, and coronary bypass interventions."
+icon_key = "surgery-rehab"
+
+[[rehab.why_us]]
+title = "24/7 Resident Doctors & Nurses"
+description = "Round-the-clock continuous clinical monitoring by experienced physicians and ACLS/BLS certified nursing teams."
+icon_key = "clock-medical"
+
+[[rehab.why_us]]
+title = "30-Bed Dedicated Inpatient Facility"
+description = "Custom-built rehabilitation ward with barrier-free bathrooms, piped medical gases, and specialized patient elevators."
+icon_key = "hospital-full"
+
+[[rehab.why_us]]
+title = "Personalized Recovery Protocols"
+description = "Daily 1:1 physical therapy, speech pathology, and occupational rehabilitation tailored to each patient's specific neuro deficit."
+icon_key = "plan"
+
+[[rehab.why_us]]
+title = "Advanced Pressure Sore Prevention"
+description = "Equipped with dynamic alternating pressure mattresses, turning schedules, and surgical wound healing infrastructure."
+icon_key = "wound"
+
+[[rehab.testimonials]]
+name = "Rajesh Mohapatra"
+role = "Son of Post-Stroke Patient"
+text = "When my 68-year-old father suffered a massive ischemic stroke, he couldn't speak or stand. Within 6 weeks at Happy Home Rehab under Dr. Vijay Sahu and team, he walked with minimal support and spoke clearly. Their compassion is unmatched."
+stars = 5
+
+[[rehab.testimonials]]
+name = "Sunita Patra"
+role = "Family of TBI Recovery Patient"
+text = "Following a road accident and severe traumatic brain injury, Happy Home gave our son a second chance at life. The 24/7 nursing and intensive cognitive therapy brought back his memory and motor coordination."
+stars = 5
+
+[[rehab.testimonials]]
+name = "Col. Anil Raut"
+role = "Spinal Decompression Rehab Patient"
+text = "The dedicated neuro-physiotherapy gym and the individualized daily exercises helped me overcome leg numbness and regain full mobility after my L3-L4 spinal surgery. Truly Bhubaneswar's premier center."
+stars = 5
+
+[[rehab.faqs]]
+question = "What conditions are eligible for inpatient rehabilitation?"
+answer = "We specialize in patients recovering from stroke, traumatic brain injuries, neurosurgeries, spinal trauma, prolonged ICU stays, cancer palliative care, and severe chronic wounds requiring 24/7 medical supervision."
+
+[[rehab.faqs]]
+question = "What is the typical length of stay in the rehabilitation center?"
+answer = "Lengths of stay range from 2 weeks for acute post-surgical rehab to 6 to 12 weeks for complex stroke recovery or traumatic spinal cord rehabilitation, based on multi-disciplinary weekly assessments."
+
+[[rehab.faqs]]
+question = "Can family members or attendants stay with the patient?"
+answer = "Yes. We provide comfortable private and semi-private rooms equipped with dedicated attendant beds, attached bathrooms, and meal facilities to ensure family members are actively involved in the recovery process."
+
+[[rehab.faqs]]
+question = "Do you have ICU backup for emergencies?"
+answer = "Yes. Our facility features High Dependency Unit (HDU) and step-down critical care infrastructure with central oxygen lines, multipara cardiac monitors, defibrillators, and emergency crash carts on standby."
+
+[[rehab.faqs]]
+question = "How do we arrange for patient admission or transfer?"
+answer = "You can call our 24/7 admissions helpline at +91 8249914673. We coordinate inter-hospital ambulance transfers with oxygen and ventilator support throughout Odisha and neighboring states."
+
+[hospital]
+name = "Happy Home Hospital"
+tagline = "Your health, guided by experts"
+
+[[hospital.team]]
+name = "Dr. Vijay Kumar Sahu"
+role = "Founder & Managing Director"
+title = "MPT (Neuro Rehabilitation)"
+specialty = "Neuro & Spine Rehabilitation Lead, Critical Care Management"
+image_url = "assets/images/dr_vijay_sahu.jpg"
+
+[[hospital.team]]
+name = "Dr. Sambit Dash"
+role = "Chief of Anesthesiology & Critical Care"
+title = "MD"
+specialty = "Critical Care ICU, Trauma Resuscitation, Perioperative Care"
+image_url = "assets/images/dr_sambit_dash.jpg"
+
+[[hospital.team]]
+name = "Dr. Ananya Pattnaik"
+role = "Senior Consultant Neurologist"
+title = "MD, DM (Neurology)"
+specialty = "Stroke, Epilepsy, Neuromuscular Disorders, Neuro-Critical Consultations"
+image_url = "assets/images/dr_ananya_pattnaik.jpg"
+
+[[hospital.team]]
+name = "Dr. Jajati Keshari Jena"
+role = "Senior Consultant Orthopedics & Joint Care"
+title = "MPT (Neuro Rehabilitation)"
+specialty = "Post-Surgical Joint Care, Spinal Decompression Recovery & Pain Clinic"
+image_url = "assets/images/dr_jajati_jena.jpg"
+
+[[hospital.services]]
+name = "24/7 Emergency & Trauma Care"
+slug = "emergency-trauma"
+description = "Immediate medical intervention for acute neuro trauma, medical emergencies, and life-threatening conditions with 24-hour doctor coverage."
+icon_key = "ambulance"
+
+[[hospital.services]]
+name = "Critical Care & High Dependency Unit (HDU)"
+slug = "critical-care-hdu"
+description = "Advanced hemodynamic monitoring, non-invasive ventilation, and specialized nurse-to-patient ratios for high-risk recovery."
+icon_key = "activity"
+
+[[hospital.services]]
+name = "Comprehensive Multi-Specialty OPD"
+slug = "multispecialty-opd"
+description = "Outpatient consultations across neurology, orthopedics, general medicine, physical medicine, and geriatric healthcare."
+icon_key = "hospital"
+
+[[hospital.services]]
+name = "Diagnostic Laboratory & Imaging"
+slug = "diagnostic-laboratory"
+description = "Rapid biochemistry, hematology, microbiology, bedside ECG, 2D Echo, and digital X-ray facilities with express reporting."
+icon_key = "activity"
+
+[[hospital.services]]
+name = "Advanced Physiotherapy & Pain Clinic"
+slug = "advanced-physiotherapy"
+description = "Electrotherapy, laser therapy, ultrasonic deep tissue healing, and ergonomic realignment for acute and chronic pain."
+icon_key = "wheelchair"
+
+[[hospital.services]]
+name = "Oncology Palliative & End-of-Life Care"
+slug = "oncology-palliative"
+description = "Dedicated medical support focused on pain management, symptom control, and emotional comfort for patients with advanced illnesses."
+icon_key = "palliative"
+
+[[hospital.why_us]]
+title = "24/7 Emergency & Ambulance"
+description = "Immediate emergency response team with equipped ambulance transfer ready at all times."
+icon_key = "ambulance"
+
+[[hospital.why_us]]
+title = "AIIMS & SCB Trained Specialists"
+description = "Experienced senior consultants bringing premier clinical standards and compassionate care to Happy Home Hospital."
+icon_key = "shield"
+
+[[hospital.why_us]]
+title = "Infection-Controlled Hospital Environment"
+description = "Strict HEPA-filtered clean wards, rigorous sterilization protocols, and zero-compromise hygiene."
+icon_key = "hospital-full"
+
+[[hospital.why_us]]
+title = "Transparent & Affordable Healthcare"
+description = "Fair and transparent billing with comprehensive health packages and cashless insurance support."
+icon_key = "plan"
+
+[[hospital.testimonials]]
+name = "Prabhat Das"
+role = "OPD Patient"
+text = "Dr. Sahu and the medical team at Happy Home Hospital provided exceptional attention to my chronic back and spine pain. The diagnosis was precise, and the treatment avoided unnecessary surgery."
+stars = 5
+
+[[hospital.testimonials]]
+name = "Meenakshi Behera"
+role = "ICU Patient Family"
+text = "The doctors and staff were available 24 hours a day when my mother needed acute post-operative stabilization. Clean environment, courteous staff, and very transparent communication."
+stars = 5
+
+[[hospital.testimonials]]
+name = "Er. Subrat Rout"
+role = "Healthcare Consultant"
+text = "Happy Home combines the clinical rigor of top tertiary hospitals with personalized warmth. A true asset to Bhubaneswar's medical infrastructure."
+stars = 5
+
+[[hospital.faqs]]
+question = "What are the hospital OPD consultation timings?"
+answer = "Our Outpatient Department (OPD) operates Monday through Saturday from 9:00 AM to 8:00 PM. Emergency admissions and trauma care are available 24 hours a day, 7 days a week."
+
+[[hospital.faqs]]
+question = "Do you accept health insurance and TPA claims?"
+answer = "Yes. We assist with cashless insurance claims through leading Third Party Administrators (TPAs) and provide comprehensive documentation for private and public reimbursement policies."
+
+[[hospital.faqs]]
+question = "What emergency diagnostic facilities are available on-site?"
+answer = "Our on-site diagnostic center offers 24/7 pathology lab tests, digital X-rays, bedside ultrasound, ECG, and arterial blood gas (ABG) analysis with rapid turnaround times."
+
+[[hospital.faqs]]
+question = "How can I book a specialist doctor consultation?"
+answer = "You can book directly through our online appointment form on this website, call +91 8249914673, or send a message on WhatsApp for instant confirmation."
+
+[[hospital.faqs]]
+question = "Where is Happy Home Hospital located?"
+answer = "We are centrally located at Plot no.223, K-1 Kalinga Nagar, Ghatikia, Bhubaneswar 751029, easily accessible from Khandagiri, Patrapada, and Bhubaneswar Airport."

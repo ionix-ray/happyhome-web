@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 120" width="320" height="120" fill="none">
+  <defs>
+    <linearGradient id="hhLotusGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#134cb3" />
+      <stop offset="60%" stop-color="#2563eb" />
+      <stop offset="100%" stop-color="#36a1d7" />
+    </linearGradient>
+    <linearGradient id="hhRingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#36a1d7" />
+      <stop offset="100%" stop-color="#134cb3" />
+    </linearGradient>
+  </defs>
+
+  <!-- Lotus Mandala Yantra Emblem -->
+  <g transform="translate(60, 60)">
+    <!-- Outer Lotus Petals (12 radiating petals) -->
+    <!-- Cardinal Petals -->
+    <path d="M0 -54 C12 -44 14 -32 0 -22 C-14 -32 -12 -44 0 -54Z" fill="url(#hhLotusGrad)" opacity="0.9" />
+    <path d="M0 54 C12 44 14 32 0 22 C-14 32 -12 44 0 54Z" fill="url(#hhLotusGrad)" opacity="0.9" />
+    <path d="M54 0 C44 12 32 14 22 0 C32 -14 44 -12 54 0Z" fill="url(#hhLotusGrad)" opacity="0.9" />
+    <path d="-54 0 C-44 12 -32 14 -22 0 C-32 -14 -44 -12 -54 0Z" fill="url(#hhLotusGrad)" opacity="0.9" />
+
+    <!-- 30 deg Petals -->
+    <g transform="rotate(30)">
+      <path d="M0 -54 C12 -44 14 -32 0 -22 C-14 -32 -12 -44 0 -54Z" fill="url(#hhLotusGrad)" opacity="0.85" />
+      <path d="M0 54 C12 44 14 32 0 22 C-14 32 -12 44 0 54Z" fill="url(#hhLotusGrad)" opacity="0.85" />
+      <path d="M54 0 C44 12 32 14 22 0 C32 -14 44 -12 54 0Z" fill="url(#hhLotusGrad)" opacity="0.85" />
+      <path d="-54 0 C-44 12 -32 14 -22 0 C-32 -14 -44 -12 -54 0Z" fill="url(#hhLotusGrad)" opacity="0.85" />
+    </g>
+
+    <!-- 60 deg Petals -->
+    <g transform="rotate(60)">
+      <path d="M0 -54 C12 -44 14 -32 0 -22 C-14 -32 -12 -44 0 -54Z" fill="url(#hhLotusGrad)" opacity="0.85" />
+      <path d="M0 54 C12 44 14 32 0 22 C-14 32 -12 44 0 54Z" fill="url(#hhLotusGrad)" opacity="0.85" />
+      <path d="M54 0 C44 12 32 14 22 0 C32 -14 44 -12 54 0Z" fill="url(#hhLotusGrad)" opacity="0.85" />
+      <path d="-54 0 C-44 12 -32 14 -22 0 C-32 -14 -44 -12 -54 0Z" fill="url(#hhLotusGrad)" opacity="0.85" />
+    </g>
+
+    <!-- Concentric Rings -->
+    <circle cx="0" cy="0" r="34" stroke="url(#hhRingGrad)" stroke-width="2.5" fill="none" />
+    <circle cx="0" cy="0" r="24" stroke="#36a1d7" stroke-width="1.5" fill="none" />
+
+    <!-- Shatkona / 6-Pointed Star (Sacred geometry healing yantra) -->
+    <polygon points="0,-22 19,11 -19,11" stroke="#36a1d7" stroke-width="1.8" fill="none" />
+    <polygon points="0,22 19,-11 -19,-11" stroke="#36a1d7" stroke-width="1.8" fill="none" />
+
+    <!-- Central Bindu / Core Dot -->
+    <circle cx="0" cy="0" r="4.5" fill="#134cb3" />
+
+    <!-- 5 Chakra Beads on Inner Ring -->
+    <circle cx="0" cy="-29" r="3" fill="#38bdf8" />
+    <circle cx="-27.5" cy="-9" r="3" fill="#10b981" />
+    <circle cx="27.5" cy="-9" r="3" fill="#f59e0b" />
+    <circle cx="-17" cy="23.5" r="3" fill="#ea580c" />
+    <circle cx="17" cy="23.5" r="3" fill="#a855f7" />
+  </g>
+
+  <!-- Brand Typography -->
+  <g id="brand-text">
+    <!-- HAPPY -->
+    <text x="130" y="44" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-weight="800" font-size="34" letter-spacing="1.5" fill="#2d8f7b">HAPPY</text>
+
+    <!-- HOME -->
+    <text x="130" y="78" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-weight="800" font-size="36" letter-spacing="1.5" fill="#36a1d7">HOME</text>
+
+    <!-- HOSPITAL -->
+    <text x="132" y="97" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-weight="800" font-size="14.5" letter-spacing="5" fill="#134cb3" class="hh-hospital-text">HOSPITAL</text>
+
+    <!-- Slogan Subtitle with Orange Accents -->
+    <g transform="translate(130, 108)">
+      <line x1="2" y1="-2" x2="22" y2="-2" stroke="#36a1d7" stroke-width="1.5" />
+      <circle cx="27" cy="-2" r="2.5" fill="#ea580c" />
+      <text x="35" y="1" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-weight="700" font-size="8.5" letter-spacing="1.2" fill="#36a1d7">WHERE HEALING BEGINS</text>
+      <circle cx="163" cy="-2" r="2.5" fill="#ea580c" />
+      <line x1="168" y1="-2" x2="188" y2="-2" stroke="#36a1d7" stroke-width="1.5" />
+    </g>
+  </g>
+</svg>

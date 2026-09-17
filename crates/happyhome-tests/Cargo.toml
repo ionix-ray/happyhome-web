@@ -1,0 +1,9 @@
+[package]
+name = "happyhome-tests"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+happyhome-domain = { path = "../happyhome-domain" }
+toml = { workspace = true }
+serde = { workspace = true }
