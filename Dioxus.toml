@@ -1,5 +1,5 @@
 [application]
-name = "happyhome-ui"
+name = "happyhome"
 default_platform = "web"
 asset_dir = "assets"
 
@@ -8,7 +8,7 @@ title = "Happy Home Hospital And Rehab | Bhubaneswar | Neuro Rehabilitation Cent
 
 [web.watcher]
 reload_html = true
-watch_path = ["src", "assets", "../config"]
+watch_path = ["src", "assets", "config"]
 
 [web]
 pre_compress = true
@@ -25,4 +25,5 @@ script = []
 [web.resource.dev]
 style = []
 script = []
+
 

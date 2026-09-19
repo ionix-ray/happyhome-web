@@ -1,13 +1,11 @@
-[workspace]
-members = [
-    "crates/happyhome-domain",
-    "crates/happyhome-ui",
-    "crates/happyhome-tests"
-]
-resolver = "2"
+[package]
+name = "happyhome"
+version = "0.1.0"
+edition = "2021"
 
-[workspace.dependencies]
-dioxus = "=0.7.9"
+[dependencies]
+console_error_panic_hook = "0.1.7"
+dioxus = { version = "=0.7.9", features = ["web"] }
 serde = { version = "1.0", features = ["derive"] }
 toml = "0.8"
 thiserror = "1.0"
@@ -29,4 +27,3 @@ split-debuginfo = "unpacked"
 inherits = "dev"
 opt-level = 1
 debug = false
-

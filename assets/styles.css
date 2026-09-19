@@ -1,0 +1,627 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Serif+Display&display=swap');
+
+:root, [data-theme="light"] {
+  /* Authentic Happy Home Hospital & Rehab Theme (Light Mode) */
+  --c-bg: #f3f7fb;              /* Pristine Ice-Blue Medical Background */
+  --c-bg-card: #ffffff;         /* Pure White Card Canvas */
+  --c-bg-2: #e9f2f8;            /* Alternate Section Ice Wash */
+  --c-brand: #36a1d7;           /* Coastal Cyan (Official Logo primary) */
+  --c-brand-dark: #134cb3;      /* Deep Royal Medical Navy */
+  --c-brand-deep: #101a29;      /* Charcoal Obsidian */
+  --c-brand-soft: #e5f3fa;      /* Soft Cyan Hover/Badge Wash */
+  --c-brand-teal: #2d8f7b;      /* "HAPPY" Emblem Teal */
+  --c-accent: #f59e0b;          /* Healing Amber Dot */
+  --c-accent-orange: #ea580c;   /* Slogan Accent Dot */
+  --c-text: #0f172a;            /* Slate 900 — 15.6:1 WCAG AAA */
+  --c-text-sec: #334155;        /* Slate 700 — 9.5:1 WCAG AAA */
+  --c-muted: #475569;           /* Slate 600 — 7.0:1 WCAG AAA */
+  --c-line: #cbd5e1;            /* Slate 300 Crisp Card Border */
+  --c-warn: #d97706;
+  --c-danger: #dc2626;
+}
+
+/* Dual-Brand dynamic overrides */
+[data-brand="hospital"] {
+  --c-brand: #36a1d7;
+  --c-brand-dark: #134cb3;
+  --c-brand-soft: #e5f3fa;
+  --c-brand-teal: #2d8f7b;
+}
+
+[data-brand="rehab"] {
+  --c-brand: #0d9488;
+  --c-brand-dark: #0f766e;
+  --c-brand-soft: #e6f9f5;
+  --c-brand-teal: #14b8a6;
+}
+
+/* Dark mode theme overrides (Guaranteed 100% WCAG AAA/AA Visibility) */
+[data-theme="dark"],
+.dark,
+html.dark {
+  --c-bg: #0a101d;              /* Deep Midnight Medical Navy */
+  --c-bg-card: #111a2e;         /* Elevated Dark Navy Card */
+  --c-bg-2: #162238;            /* Alternating Navy Surface */
+  --c-brand: #38bdf8;           /* Luminous Medical Cyan */
+  --c-brand-dark: #60a5fa;      /* Electric Royal Blue */
+  --c-brand-deep: #f8fafc;
+  --c-brand-soft: rgba(56, 189, 248, 0.16);
+  --c-brand-teal: #34d399;
+  --c-text: #f8fafc;            /* Slate 50 — 16.0:1 WCAG AAA */
+  --c-text-sec: #e2e8f0;        /* Slate 200 — 12.2:1 WCAG AAA */
+  --c-muted: #94a3b8;           /* Slate 400 — 6.5:1 WCAG AA */
+  --c-line: #1e2e4a;            /* Midnight Navy Card Border */
+}
+
+/* Universal typography & background fail-safe overrides */
+.dark .text-slate-900,
+.dark .text-slate-800,
+[data-theme="dark"] .text-slate-900,
+[data-theme="dark"] .text-slate-800 {
+  color: #f8fafc !important;
+}
+
+.dark .text-slate-700,
+.dark .text-slate-600,
+[data-theme="dark"] .text-slate-700,
+[data-theme="dark"] .text-slate-600 {
+  color: #cbd5e1 !important;
+}
+
+.dark .text-slate-500,
+.dark .text-slate-400,
+[data-theme="dark"] .text-slate-500,
+[data-theme="dark"] .text-slate-400 {
+  color: #94a3b8 !important;
+}
+
+.dark .bg-white,
+[data-theme="dark"] .bg-white {
+  background-color: var(--c-bg-card) !important;
+}
+
+.dark .bg-slate-50,
+[data-theme="dark"] .bg-slate-50 {
+  background-color: var(--c-bg-2) !important;
+}
+
+.dark .bg-slate-100,
+[data-theme="dark"] .bg-slate-100 {
+  background-color: #1e293b !important;
+}
+
+.dark .border-slate-200,
+[data-theme="dark"] .border-slate-200 {
+  border-color: var(--c-line) !important;
+}
+
+/* Light mode failsafes */
+:root:not(.dark) .text-slate-900,
+[data-theme="light"] .text-slate-900 {
+  color: #0f172a !important;
+}
+
+:root:not(.dark) .text-slate-800,
+[data-theme="light"] .text-slate-800 {
+  color: #1e293b !important;
+}
+
+:root:not(.dark) .text-slate-700,
+[data-theme="light"] .text-slate-700 {
+  color: #334155 !important;
+}
+
+:root:not(.dark) .text-slate-600,
+[data-theme="light"] .text-slate-600 {
+  color: #475569 !important;
+}
+
+:root:not(.dark) .bg-white,
+[data-theme="light"] .bg-white {
+  background-color: #ffffff !important;
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body, #app {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--c-bg);
+  color: var(--c-text);
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+h1, h2, h3, h4, h5, h6, .serif {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-weight: 400;
+  color: var(--c-text);
+  margin-top: 0;
+}
+
+/* Accessibility skip link */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--c-brand-dark);
+  color: #ffffff;
+  padding: 8px 16px;
+  z-index: 100;
+  transition: top 0.2s ease;
+  font-weight: 700;
+  border-radius: 0 0 8px 0;
+}
+.skip-link:focus {
+  top: 0;
+}
+
+/* Responsive Containers with premium padding */
+.container-x {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+@media (min-width: 640px) {
+  .container-x {
+    padding: 0 2rem;
+  }
+}
+@media (min-width: 1024px) {
+  .container-x {
+    padding: 0 2.5rem;
+  }
+}
+
+/* Gradient typography */
+.grad-text {
+  background: linear-gradient(105deg, var(--c-brand-dark), var(--c-brand) 65%, var(--c-brand-teal));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+[data-theme="dark"] .grad-text {
+  background: linear-gradient(105deg, #60a5fa, #38bdf8 65%, #34d399);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.brand-text {
+  background: linear-gradient(90deg, var(--c-brand-dark), var(--c-brand));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Top emergency bar */
+.topbar {
+  background: linear-gradient(90deg, #101a29 0%, #134cb3 55%, #36a1d7 100%);
+}
+
+/* Buttons */
+.btn-solid {
+  background: linear-gradient(135deg, #134cb3 0%, #36a1d7 100%);
+  color: #ffffff !important;
+  font-weight: 700;
+  box-shadow: 0 8px 20px -6px rgba(19, 76, 179, 0.45);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, filter 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+.btn-solid:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px -8px rgba(19, 76, 179, 0.6);
+  filter: brightness(1.05);
+}
+
+/* Shimmer reflection animation on primary CTAs */
+.btn-solid::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(60deg, transparent 40%, rgba(255,255,255,0.22) 50%, transparent 60%);
+  transform: translateX(-100%) rotate(45deg);
+  transition: transform 0.6s ease;
+}
+.btn-solid:hover::after {
+  transform: translateX(100%) rotate(45deg);
+}
+
+.btn-outline {
+  border: 1.5px solid var(--c-line);
+  font-weight: 600;
+  color: var(--c-text);
+  background: transparent;
+  transition: all 0.2s ease;
+}
+.btn-outline:hover {
+  border-color: var(--c-brand);
+  color: var(--c-brand);
+  background: var(--c-brand-soft);
+}
+
+.btn-ghost {
+  border: 1.5px solid transparent;
+  font-weight: 600;
+  color: var(--c-text);
+  transition: all 0.2s ease;
+}
+.btn-ghost:hover {
+  background: var(--c-brand-soft);
+  color: var(--c-brand);
+}
+
+/* Hero elements */
+.hero-wrap {
+  background: radial-gradient(1100px 500px at 85% -10%, rgba(54, 161, 215, 0.15), transparent 60%),
+              radial-gradient(800px 400px at 0% 20%, rgba(19, 76, 179, 0.12), transparent 55%);
+}
+[data-theme="dark"] .hero-wrap {
+  background: radial-gradient(1100px 500px at 85% -10%, rgba(56, 189, 248, 0.15), transparent 60%),
+              radial-gradient(800px 400px at 0% 20%, rgba(59, 130, 246, 0.12), transparent 55%);
+}
+
+.hero-badge {
+  background: var(--c-bg-card);
+  border: 1px solid var(--c-line);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+}
+
+.provide-chip {
+  background: var(--c-bg-card);
+  border: 1px solid var(--c-line);
+  color: var(--c-text);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+  transition: all 0.2s ease;
+}
+.provide-chip:hover {
+  border-color: var(--c-brand);
+  color: var(--c-brand);
+  transform: translateY(-2px);
+}
+
+.stat-pill {
+  background: var(--c-bg-card);
+  border: 1px solid var(--c-line);
+  box-shadow: 0 6px 20px -8px rgba(15, 23, 42, 0.06);
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+.stat-pill:hover {
+  transform: translateY(-2px);
+  border-color: var(--c-brand);
+}
+.stat-pill .num {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-weight: 400;
+  color: var(--c-brand-dark);
+}
+[data-theme="dark"] .stat-pill .num {
+  color: var(--c-brand);
+}
+
+/* ── Innovative Healing Cure Card System ────────────────────────────────── */
+@keyframes healingAura {
+  0%, 100% {
+    box-shadow: 0 4px 20px -6px rgba(54, 161, 215, 0.08), 0 0 0 1px var(--c-line);
+  }
+  50% {
+    box-shadow: 0 14px 36px -6px rgba(45, 143, 123, 0.16), 0 0 0 1.5px rgba(54, 161, 215, 0.35);
+  }
+}
+
+@keyframes healingPulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 0px rgba(54, 161, 215, 0));
+  }
+  50% {
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 8px rgba(54, 161, 215, 0.3));
+  }
+}
+
+.soft-card, .healing-card {
+  background: var(--c-bg-card);
+  border: 1px solid var(--c-line);
+  border-radius: 1.25rem;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.4s ease;
+  animation: healingAura 7s ease-in-out infinite;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Restorative radial healing light on hover & scroll */
+.soft-card::before, .healing-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 0%, rgba(54, 161, 215, 0.09), transparent 75%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.soft-card:hover, .healing-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 22px 48px -12px rgba(19, 76, 179, 0.22), 0 0 0 1.5px rgba(54, 161, 215, 0.5);
+  border-color: var(--c-brand);
+}
+
+.soft-card:hover::before, .healing-card:hover::before {
+  opacity: 1;
+}
+
+.icon-ring {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--c-brand-soft);
+  color: var(--c-brand);
+  border: 1px solid rgba(54, 161, 215, 0.25);
+  animation: healingPulse 5s ease-in-out infinite;
+}
+
+.sec-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--c-brand-soft);
+  color: var(--c-brand-dark);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0.4rem 1.1rem;
+  border-radius: 999px;
+  border: 1px solid rgba(54, 161, 215, 0.25);
+}
+[data-theme="dark"] .sec-tag {
+  color: var(--c-brand);
+  border-color: rgba(56, 189, 248, 0.3);
+}
+
+/* Timeline */
+.timeline-item {
+  position: relative;
+  padding-left: 2.2rem;
+}
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: 10px;
+  top: 26px;
+  bottom: -18px;
+  width: 2px;
+  background: linear-gradient(var(--c-brand), rgba(54, 161, 215, 0.15));
+}
+.timeline-item:last-child::before {
+  display: none;
+}
+
+.timeline-dot {
+  position: absolute;
+  left: 0;
+  top: 2px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--c-bg-card);
+  border: 2px solid var(--c-brand);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  color: var(--c-brand);
+  font-weight: 800;
+}
+
+/* Plan Cards */
+.plan-card {
+  border: 1.5px solid var(--c-line);
+  background: var(--c-bg-card);
+  border-radius: 1.5rem;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.plan-card.featured {
+  background: linear-gradient(145deg, #101a29 0%, #134cb3 70%, #1e5cb8 100%);
+  color: #ffffff !important;
+  transform: scale(1.02);
+  box-shadow: 0 24px 50px -20px rgba(19, 76, 179, 0.6);
+  border-color: transparent;
+}
+.plan-card.featured .plan-name,
+.plan-card.featured .plan-price {
+  color: #ffffff !important;
+}
+
+.check {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--c-brand-soft);
+  color: var(--c-brand);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Testimonial Card */
+.testi-card {
+  background: var(--c-bg-card);
+  border: 1px solid var(--c-line);
+  border-radius: 1.25rem;
+  position: relative;
+}
+.testi-card::before {
+  content: '“';
+  position: absolute;
+  top: -14px;
+  left: 24px;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--c-brand-dark), var(--c-brand));
+  color: #ffffff;
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: 1.8rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(19, 76, 179, 0.3);
+}
+
+/* Form Inputs */
+.inp {
+  width: 100%;
+  border: 1.5px solid var(--c-line);
+  border-radius: 0.8rem;
+  padding: 0.8rem 1rem;
+  font-family: inherit;
+  font-size: 0.92rem;
+  color: var(--c-text);
+  background: var(--c-bg-card);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.inp:focus {
+  outline: none;
+  border-color: var(--c-brand);
+  box-shadow: 0 0 0 4px rgba(54, 161, 215, 0.2);
+}
+.inp::placeholder {
+  color: var(--c-muted);
+}
+
+/* ==========================================================================
+   Restorative Healing Animation & Scroll Peak-In System
+   ========================================================================== */
+
+/* 1. Base Peak-in States (GPU-accelerated, composite-friendly) */
+/* Restrained orchestration: pure CSS scroll-driven animations */
+
+.peak-in-up,
+.peak-in-left,
+.peak-in-right,
+.peak-in-down,
+.peak-in-scale {
+  opacity: 1;
+  transform: none;
+}
+
+@supports (animation-timeline: view()) {
+  .peak-in-up,
+  .peak-in-left,
+  .peak-in-right,
+  .peak-in-down,
+  .peak-in-scale {
+    animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+    animation-fill-mode: both;
+    animation-timeline: view();
+    animation-range: entry 5% cover 20%;
+  }
+
+  .peak-in-up { animation-name: peakInUp; }
+  .peak-in-left { animation-name: peakInLeft; }
+  .peak-in-right { animation-name: peakInRight; }
+  .peak-in-down { animation-name: peakInDown; }
+  .peak-in-scale { animation-name: peakInScale; }
+}
+
+@keyframes peakInUp {
+  from { opacity: 0; transform: translate3d(0, 30px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+@keyframes peakInLeft {
+  from { opacity: 0; transform: translate3d(-30px, 0, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+@keyframes peakInRight {
+  from { opacity: 0; transform: translate3d(30px, 0, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+@keyframes peakInDown {
+  from { opacity: 0; transform: translate3d(0, -30px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+@keyframes peakInScale {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Staggered Delay Utilities */
+.delay-75  { animation-delay: 75ms; }
+.delay-100 { animation-delay: 100ms; }
+.delay-150 { animation-delay: 150ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-250 { animation-delay: 250ms; }
+.delay-300 { animation-delay: 300ms; }
+
+/* Reduced Motion Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .peak-in-up,
+  .peak-in-left,
+  .peak-in-right,
+  .peak-in-down,
+  .peak-in-scale {
+    animation: none !important;
+  }
+}
+
+/* Refined interaction: remove gimmicky infinite breathing/pulsing */
+.vital-live-dot {
+  position: relative;
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #10b981;
+}
+.vital-live-dot::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: rgba(16, 185, 129, 0.2);
+}
+
+/* Carbon Design micro-interactions - crisp, no bounce */
+.carbon-btn-hover {
+  transition: background-color 0.15s ease, opacity 0.15s ease;
+}
+.carbon-btn-hover:active {
+  opacity: 0.85;
+}
+
+/* Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--c-bg-2);
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
