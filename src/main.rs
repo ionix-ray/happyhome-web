@@ -44,11 +44,12 @@ fn App() -> Element {
             // Accessibility skip link
             a { class: "skip-link", href: "#main-content", "Skip to main content" }
 
-            // Top utility emergency bar
-            TopBar {}
-
-            // Glassmorphic navigation
-            NavBar {}
+            // Sticky Header containing TopBar and NavBar
+            header {
+                class: "sticky top-0 z-40 shadow-sm transition-all duration-300",
+                TopBar {}
+                NavBar {}
+            }
 
             // Main sections
             main { id: "main-content",
@@ -130,8 +131,7 @@ fn NavBar() -> Element {
 
     rsx! {
         nav {
-            class: "fixed top-0 left-0 right-0 z-40 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md shadow-sm transition-all duration-300",
-            style: "top: 36px;",
+            class: "w-full bg-white/95 dark:bg-slate-900/95 backdrop-blur-md transition-all duration-300",
             "aria-label": "Main navigation",
 
             div { class: "container-x flex items-center justify-between py-3",

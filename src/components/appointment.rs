@@ -95,7 +95,7 @@ pub fn Appointment() -> Element {
                                 "24/7 Admissions Helpline"
                             }
 
-                            h3 { class: "text-2xl sm:text-3xl font-bold mb-4 leading-snug",
+                            h3 { class: "text-2xl sm:text-3xl font-bold mb-4 leading-snug text-white",
                                 "Need Immediate Medical Assistance or Ambulance?"
                             }
 
@@ -156,6 +156,8 @@ pub fn Appointment() -> Element {
                                         "Patient Full Name *"
                                     }
                                     input {
+                                        id: "patient-name",
+                                        name: "patient_name",
                                         class: "inp",
                                         r#type: "text",
                                         required: true,
@@ -170,6 +172,8 @@ pub fn Appointment() -> Element {
                                         "Mobile Number *"
                                     }
                                     input {
+                                        id: "patient-phone",
+                                        name: "patient_phone",
                                         class: "inp",
                                         r#type: "tel",
                                         required: true,

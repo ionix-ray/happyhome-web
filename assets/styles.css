@@ -54,6 +54,11 @@ html.dark {
 }
 
 /* Universal typography & background fail-safe overrides */
+.dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6,
+[data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3, [data-theme="dark"] h4, [data-theme="dark"] h5, [data-theme="dark"] h6 {
+  color: #f8fafc !important;
+}
+
 .dark .text-slate-900,
 .dark .text-slate-800,
 [data-theme="dark"] .text-slate-900,
@@ -96,29 +101,24 @@ html.dark {
 }
 
 /* Light mode failsafes */
-:root:not(.dark) .text-slate-900,
 [data-theme="light"] .text-slate-900 {
-  color: #0f172a !important;
+  color: #0f172a;
 }
 
-:root:not(.dark) .text-slate-800,
 [data-theme="light"] .text-slate-800 {
-  color: #1e293b !important;
+  color: #1e293b;
 }
 
-:root:not(.dark) .text-slate-700,
 [data-theme="light"] .text-slate-700 {
-  color: #334155 !important;
+  color: #334155;
 }
 
-:root:not(.dark) .text-slate-600,
 [data-theme="light"] .text-slate-600 {
-  color: #475569 !important;
+  color: #475569;
 }
 
-:root:not(.dark) .bg-white,
 [data-theme="light"] .bg-white {
-  background-color: #ffffff !important;
+  background-color: #ffffff;
 }
 
 * {
@@ -145,6 +145,11 @@ h1, h2, h3, h4, h5, h6, .serif {
   font-weight: 400;
   color: var(--c-text);
   margin-top: 0;
+}
+
+.text-white h1, .text-white h2, .text-white h3, .text-white h4, .text-white h5, .text-white h6,
+h1.text-white, h2.text-white, h3.text-white, h4.text-white, h5.text-white, h6.text-white {
+  color: #ffffff !important;
 }
 
 /* Accessibility skip link */

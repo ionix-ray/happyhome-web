@@ -1,0 +1,106 @@
+{
+  "summary": {
+    "total": 19,
+    "passedCount": 19,
+    "failedCount": 0
+  },
+  "results": [
+    {
+      "testName": "App Mounts Successfully",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "testName": "Page Title is Clean and Not Duplicated",
+      "passed": true,
+      "details": "Title: \"Happy Home Hospital And Rehab | Bhubaneswar | Neuro Rehabilitation Centredioxus | ⛺\""
+    },
+    {
+      "testName": "Brand Logo Exists & Loads Natural Dimensions",
+      "passed": true,
+      "details": "Count: 1"
+    },
+    {
+      "testName": "Initial Brand Mode matches config",
+      "passed": true,
+      "details": "Initial: hospital"
+    },
+    {
+      "testName": "Switch to Rehab Centre Mode",
+      "passed": true,
+      "details": "Brand: rehab"
+    },
+    {
+      "testName": "Switch to Hospital Mode",
+      "passed": true,
+      "details": "Brand: hospital"
+    },
+    {
+      "testName": "Theme Toggles Correctly",
+      "passed": true,
+      "details": "Theme: light -> dark"
+    },
+    {
+      "testName": "All Primary Nav Links Present in Navbar",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "testName": "Doctor Cards Rendered in Team Section",
+      "passed": true,
+      "details": "Found: 4 cards"
+    },
+    {
+      "testName": "Doctor Images Load Successfully with Natural Width",
+      "passed": true,
+      "details": "Broken images: 0/4"
+    },
+    {
+      "testName": "FAQ Items Present",
+      "passed": true,
+      "details": "Count: 5"
+    },
+    {
+      "testName": "FAQ Item Click Expands/Interacts",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "testName": "Appointment Form Fields Present",
+      "passed": true,
+      "details": "Name: true, Phone: true"
+    },
+    {
+      "testName": "Footer Rendered",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "testName": "Footer Contains Authentic Phone and Address",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "testName": "Zero Browser Console Errors",
+      "passed": true,
+      "details": "Errors: []"
+    },
+    {
+      "testName": "Zero 404/500 Network Asset Failures",
+      "passed": true,
+      "details": "Failed URLs: []"
+    },
+    {
+      "testName": "Mobile Hamburger Button Visible on 375px",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "testName": "Mobile Drawer Opens with Nav Links",
+      "passed": true,
+      "details": "Links count: 9"
+    }
+  ],
+  "consoleErrors": [],
+  "networkErrors": []
+}

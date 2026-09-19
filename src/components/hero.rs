@@ -54,7 +54,7 @@ pub fn Hero() -> Element {
     rsx! {
         section {
             id: "home",
-            class: "hero-wrap pt-28 sm:pt-32 pb-16 overflow-hidden",
+            class: "hero-wrap pt-12 sm:pt-16 pb-16 overflow-hidden",
             role: "banner",
             "aria-labelledby": "hero-heading",
 
