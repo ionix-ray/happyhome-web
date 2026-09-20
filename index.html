@@ -142,12 +142,12 @@
 
         function triggerLocalMutation(px, py) {
           for (var p = 0; p < basePairs.length; p++) {
-            var prog = p / basePairs.length;
-            var bx = prog * width;
-            var by = height * 0.38;
-            var d = Math.hypot(bx - px, by - py);
-            if (d < 260) {
-              startMutation(p);
+            var bp = basePairs[p];
+            if (bp.lastX && bp.lastY) {
+              var d = Math.hypot(bp.lastX - px, bp.lastY - py);
+              if (d < 280) {
+                startMutation(p);
+              }
             }
           }
         }
@@ -164,19 +164,19 @@
           bp.targetB = newTypes[1];
         }
 
-        // 2. Neuroscience Synaptic Network
-        var somaCount = Math.min(36, Math.max(18, Math.floor(width / 42)));
+        // 2. Neuroscience & Brain Synaptic Network
+        var somaCount = Math.min(38, Math.max(20, Math.floor((width + height) / 60)));
         var somaList = [];
         for (var s = 0; s < somaCount; s++) {
           somaList.push({
             x: Math.random() * width,
             y: Math.random() * height,
-            vx: (Math.random() - 0.5) * 0.35,
-            vy: (Math.random() - 0.5) * 0.35,
-            radius: Math.random() * 2.5 + 2.0,
+            vx: (Math.random() - 0.5) * 0.32,
+            vy: (Math.random() - 0.5) * 0.32,
+            radius: Math.random() * 2.5 + 2.2,
             pulse: Math.random() * 6.28,
             charge: 0,
-            color: Math.random() > 0.4 ? '#38bdf8' : '#2dd4bf'
+            color: Math.random() > 0.45 ? '#38bdf8' : '#2dd4bf'
           });
         }
 
@@ -206,61 +206,86 @@
           }
 
           // Periodic random gene mutation event sweep
-          if (time - lastMutationTime > 1.8) {
+          if (time - lastMutationTime > 1.6) {
             lastMutationTime = time;
             var randLocus = Math.floor(Math.random() * basePairs.length);
             startMutation(randLocus);
             if (randLocus + 1 < basePairs.length) startMutation(randLocus + 1);
           }
 
-          // ── A. DRAW DNA DOUBLE HELIX WITH MULTICOLOUR MUTATING CODONS ──
-          var helixRadius = Math.min(54, width * 0.045);
+          // ── A. DRAW DIAGONAL DNA DOUBLE HELIX (FROM LEFT-END TO RIGHT-END CORNER) ──
+          var startX = -60, startY = -60;
+          var endX = width + 60, endY = height + 60;
+          var dirX = endX - startX;
+          var dirY = endY - startY;
+          var diagLen = Math.hypot(dirX, dirY);
+          var normX = -dirY / diagLen; // perpendicular unit normal
+          var normY = dirX / diagLen;
+
+          var helixRadius = Math.min(52, Math.min(width, height) * 0.052);
           var strand1Points = [];
           var strand2Points = [];
 
           for (var i = 0; i < basePairs.length; i++) {
             var bp = basePairs[i];
-            var prog = i / basePairs.length;
-            var x = prog * width;
+            var prog = i / (basePairs.length - 1);
 
-            var baseY = height * (0.34 + 0.12 * Math.sin(prog * 2.6 + time * 0.22));
+            // Diagonal point along the corner-to-corner axis
+            var diagPtX = startX + prog * dirX;
+            var diagPtY = startY + prog * dirY;
 
+            // Organic transverse wave undulation perpendicular to diagonal
+            var wave = Math.sin(prog * 7.0 + time * 0.35) * 44;
+            var baseX = diagPtX + normX * wave;
+            var baseY = diagPtY + normY * wave;
+
+            // Interactive pointer magnetic flex
             if (pointer.active) {
-              var dPointer = Math.hypot(x - pointer.x, baseY - pointer.y);
-              if (dPointer < 180) {
-                var pull = (1 - dPointer / 180) * 26;
-                baseY += (pointer.y > baseY ? pull : -pull);
+              var dPointer = Math.hypot(baseX - pointer.x, baseY - pointer.y);
+              if (dPointer < 200) {
+                var pull = (1 - dPointer / 200) * 35;
+                baseX += (pointer.x - baseX) * (pull / 200);
+                baseY += (pointer.y - baseY) * (pull / 200);
               }
             }
 
-            var angle = prog * Math.PI * 8.5 + time * 1.5;
+            bp.lastX = baseX;
+            bp.lastY = baseY;
+
+            // 3D helical rotation angle
+            var angle = prog * Math.PI * 13 + time * 1.7;
             var sinA = Math.sin(angle);
             var cosA = Math.cos(angle);
-
-            var y1 = baseY + sinA * helixRadius;
-            var y2 = baseY - sinA * helixRadius;
             var depth = cosA;
 
-            strand1Points.push({ x: x, y: y1, depth: depth });
-            strand2Points.push({ x: x, y: y2, depth: -depth });
+            var strandDisp = sinA * helixRadius;
+            var x1 = baseX + normX * strandDisp;
+            var y1 = baseY + normY * strandDisp;
 
+            var x2 = baseX - normX * strandDisp;
+            var y2 = baseY - normY * strandDisp;
+
+            strand1Points.push({ x: x1, y: y1, depth: depth });
+            strand2Points.push({ x: x2, y: y2, depth: -depth });
+
+            // Mutation state progression
             if (bp.mutating > 0) {
               bp.mutating += bp.mutationSpeed;
               if (bp.mutating >= 0.5 && bp.typeA !== bp.targetA) {
                 bp.typeA = bp.targetA;
                 bp.typeB = bp.targetB;
-                for (var k = 0; k < 5; k++) {
+                for (var k = 0; k < 6; k++) {
                   var spAngle = Math.random() * Math.PI * 2;
-                  var spSpeed = Math.random() * 2.2 + 0.8;
+                  var spSpeed = Math.random() * 2.4 + 1.0;
                   sparks.push({
-                    x: x,
+                    x: baseX,
                     y: baseY,
                     vx: Math.cos(spAngle) * spSpeed,
                     vy: Math.sin(spAngle) * spSpeed,
                     color: NUCLEOTIDES[bp.typeA].color,
                     alpha: 1.0,
-                    size: Math.random() * 2.4 + 1.2,
-                    decay: 0.03
+                    size: Math.random() * 2.6 + 1.2,
+                    decay: 0.028
                   });
                 }
               }
@@ -274,39 +299,39 @@
 
             var depthAlpha = 0.25 + (depth + 1) * 0.28;
             if (bp.mutating > 0) {
-              depthAlpha = Math.min(1.0, depthAlpha + Math.sin(bp.mutating * Math.PI) * 0.6);
+              depthAlpha = Math.min(1.0, depthAlpha + Math.sin(bp.mutating * Math.PI) * 0.65);
             }
 
-            var midX = x;
+            var midX = (x1 + x2) / 2;
             var midY = (y1 + y2) / 2;
 
             ctx.beginPath();
-            ctx.moveTo(x, y1);
+            ctx.moveTo(x1, y1);
             ctx.lineTo(midX, midY);
             ctx.strokeStyle = 'rgba(' + colA.rgba + ', ' + depthAlpha + ')';
-            ctx.lineWidth = bp.mutating > 0 ? 2.5 : (depth > 0 ? 1.8 : 1.1);
+            ctx.lineWidth = bp.mutating > 0 ? 2.6 : (depth > 0 ? 1.8 : 1.1);
             ctx.stroke();
 
             ctx.beginPath();
             ctx.moveTo(midX, midY);
-            ctx.lineTo(x, y2);
+            ctx.lineTo(x2, y2);
             ctx.strokeStyle = 'rgba(' + colB.rgba + ', ' + depthAlpha + ')';
-            ctx.lineWidth = bp.mutating > 0 ? 2.5 : (depth > 0 ? 1.8 : 1.1);
+            ctx.lineWidth = bp.mutating > 0 ? 2.6 : (depth > 0 ? 1.8 : 1.1);
             ctx.stroke();
 
             ctx.beginPath();
-            ctx.arc(midX, midY, bp.mutating > 0 ? 3.0 : 1.5, 0, Math.PI * 2);
+            ctx.arc(midX, midY, bp.mutating > 0 ? 3.4 : 1.6, 0, Math.PI * 2);
             ctx.fillStyle = bp.mutating > 0 ? '#fbbf24' : 'rgba(255, 255, 255, ' + depthAlpha + ')';
             ctx.fill();
 
             var beadR = depth > 0 ? 3.2 : 2.0;
             ctx.beginPath();
-            ctx.arc(x, y1, beadR, 0, Math.PI * 2);
+            ctx.arc(x1, y1, beadR, 0, Math.PI * 2);
             ctx.fillStyle = colA.color;
             ctx.fill();
 
             ctx.beginPath();
-            ctx.arc(x, y2, beadR, 0, Math.PI * 2);
+            ctx.arc(x2, y2, beadR, 0, Math.PI * 2);
             ctx.fillStyle = colB.color;
             ctx.fill();
           }
@@ -327,7 +352,7 @@
           drawStrand(strand1Points, 'rgba(56, 189, 248, 0.35)');
           drawStrand(strand2Points, 'rgba(45, 143, 123, 0.35)');
 
-          // ── B. DRAW NEUROSCIENCE SYNAPTIC NETWORK & ACTION POTENTIALS ──
+          // ── B. DRAW NEUROSCIENCE & BRAIN SYNAPTIC NETWORK FUSION ──
           for (var s = 0; s < somaList.length; s++) {
             var n = somaList[s];
             n.x += n.vx;
@@ -337,28 +362,28 @@
 
             if (pointer.active) {
               var dPtr = Math.hypot(n.x - pointer.x, n.y - pointer.y);
-              if (dPtr < 160) {
-                var bridgeAlpha = (1 - dPtr / 160) * 0.55;
+              if (dPtr < 170) {
+                var bridgeAlpha = (1 - dPtr / 170) * 0.55;
                 ctx.beginPath();
                 ctx.moveTo(n.x, n.y);
                 ctx.lineTo(pointer.x, pointer.y);
                 ctx.strokeStyle = 'rgba(56, 189, 248, ' + bridgeAlpha + ')';
                 ctx.lineWidth = 1.0;
                 ctx.stroke();
-
                 n.charge = Math.min(1.0, n.charge + 0.08);
               }
             }
             if (n.charge > 0) n.charge -= 0.02;
 
+            // Connect nearby neurons with axons
             for (var s2 = s + 1; s2 < somaList.length; s2++) {
               var n2 = somaList[s2];
               var dx = n.x - n2.x;
               var dy = n.y - n2.y;
               var dist = Math.hypot(dx, dy);
 
-              if (dist < 145) {
-                var alpha = (1 - dist / 145) * 0.22;
+              if (dist < 150) {
+                var alpha = (1 - dist / 150) * 0.22;
                 if (n.charge > 0 || n2.charge > 0) alpha += 0.25;
 
                 ctx.beginPath();
@@ -380,6 +405,53 @@
               }
             }
 
+            // Brain-Gene Synaptic Bridges: Connect nearby neurons to diagonal DNA strand
+            if (s % 2 === 0 && basePairs.length > 0) {
+              var locusIdx = Math.floor((n.x / width) * basePairs.length);
+              locusIdx = Math.max(0, Math.min(basePairs.length - 1, locusIdx));
+              var locus = basePairs[locusIdx];
+              if (locus && locus.lastX) {
+                var dLocus = Math.hypot(n.x - locus.lastX, n.y - locus.lastY);
+                if (dLocus < 190) {
+                  var synapseAlpha = (1 - dLocus / 190) * 0.26;
+                  ctx.beginPath();
+                  ctx.moveTo(n.x, n.y);
+                  ctx.lineTo(locus.lastX, locus.lastY);
+                  ctx.strokeStyle = 'rgba(45, 143, 123, ' + synapseAlpha + ')';
+                  ctx.lineWidth = 0.8;
+                  ctx.setLineDash([3, 3]);
+                  ctx.stroke();
+                  ctx.setLineDash([]);
+
+                  // Launch neuro-genetic action potential jump to DNA
+                  if (Math.random() < 0.005 && actionPotentials.length < 24) {
+                    actionPotentials.push({
+                      x1: n.x, y1: n.y,
+                      x2: locus.lastX, y2: locus.lastY,
+                      t: 0,
+                      speed: Math.random() * 0.03 + 0.02,
+                      color: '#fbbf24',
+                      isDnaTarget: true,
+                      targetLocus: locusIdx
+                    });
+                  }
+                }
+              }
+            }
+
+            // Brain dendritic micro-arbor branches
+            ctx.beginPath();
+            for (var b = 0; b < 3; b++) {
+              var branchA = n.pulse + (b * Math.PI * 2) / 3;
+              var bLen = n.radius * 2.2;
+              ctx.moveTo(n.x, n.y);
+              ctx.lineTo(n.x + Math.cos(branchA) * bLen, n.y + Math.sin(branchA) * bLen);
+            }
+            ctx.strokeStyle = 'rgba(56, 189, 248, 0.22)';
+            ctx.lineWidth = 0.8;
+            ctx.stroke();
+
+            // Soma cell body
             var somaPulse = Math.sin(time * 2 + n.pulse) * 0.6;
             ctx.beginPath();
             ctx.arc(n.x, n.y, n.radius + somaPulse + n.charge * 1.5, 0, Math.PI * 2);
@@ -394,6 +466,9 @@
             var ap = actionPotentials[a];
             ap.t += ap.speed;
             if (ap.t >= 1) {
+              if (ap.isDnaTarget && ap.targetLocus !== undefined) {
+                startMutation(ap.targetLocus);
+              }
               actionPotentials.splice(a, 1);
               continue;
             }

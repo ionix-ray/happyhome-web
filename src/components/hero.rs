@@ -2,7 +2,7 @@
 
 use crate::components::icons::{
     ArrowRightIcon, CarbonActivityPulseIcon, CarbonChartTrendIcon, CarbonCognitiveIcon,
-    CarbonEmergencySirenIcon, CarbonHeartHealthIcon, CarbonHospitalBedIcon, CarbonPartnershipIcon,
+    CarbonEmergencySirenIcon, CarbonHospitalBedIcon, CarbonPartnershipIcon,
     CarbonShieldQualityIcon, CarbonSmilesHeartIcon, StethoscopeIcon, WhatsAppIcon,
 };
 use crate::domain::config::SiteConfig;
