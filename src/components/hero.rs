@@ -126,7 +126,7 @@ pub fn Hero() -> Element {
                     }
 
                     // ── Right Column: Hospital & Founder Visual ───────────
-                    div { class: "lg:col-span-5 relative mt-6 lg:mt-0 peak-in-right delay-150",
+                    div { class: "lg:col-span-5 relative mt-6 lg:mt-0 reveal-init reveal-stagger-2",
 
                         // Main facility image card with organic healing breath aura
                         div { class: "relative rounded-[2rem] overflow-hidden border-4 border-white dark:border-slate-800 shadow-2xl aspect-[4/5] bg-cover bg-center group",
@@ -167,6 +167,70 @@ pub fn Hero() -> Element {
                             }
                         }
                     }
+                }
+            }
+
+            // Running Facts & Stats Marquee Ticker
+            div { class: "mt-12 facts-ticker-wrap select-none",
+                div { class: "facts-ticker-content",
+                    span { class: "facts-item text-sky-700 dark:text-sky-300",
+                        span { "🚨 24/7 Emergency & Neuro ICU" }
+                    }
+                    span { class: "text-slate-400 dark:text-slate-600", "·" }
+                    span { class: "facts-item text-teal-700 dark:text-teal-300",
+                        span { "🛏️ 30 Dedicated Inpatient Beds" }
+                    }
+                    span { class: "text-slate-400 dark:text-slate-600", "·" }
+                    span { class: "facts-item text-indigo-700 dark:text-indigo-300",
+                        span { "📈 98.6% Patient Recovery Rate" }
+                    }
+                    span { class: "text-slate-400 dark:text-slate-600", "·" }
+                    span { class: "facts-item text-amber-700 dark:text-amber-300",
+                        span { "🛡️ NABH Quality Norms" }
+                    }
+                    span { class: "text-slate-400 dark:text-slate-600", "·" }
+                    span { class: "facts-item text-rose-700 dark:text-rose-300",
+                        span { "🧠 Specialized Neuro & Spine Rehab" }
+                    }
+                    span { class: "text-slate-400 dark:text-slate-600", "·" }
+                    span { class: "facts-item text-teal-700 dark:text-teal-300",
+                        span { "🤝 1:1 Daily Physiotherapy" }
+                    }
+                    span { class: "text-slate-400 dark:text-slate-600", "·" }
+                    span { class: "facts-item text-sky-700 dark:text-sky-300",
+                        span { "❤️ 1,000+ Smiles Restored Since 2021" }
+                    }
+                    span { class: "text-slate-400 dark:text-slate-600", "·" }
+
+                    // Duplicate items for seamless continuous ticker loop
+                    span { class: "facts-item text-sky-700 dark:text-sky-300",
+                        span { "🚨 24/7 Emergency & Neuro ICU" }
+                    }
+                    span { class: "text-slate-400 dark:text-slate-600", "·" }
+                    span { class: "facts-item text-teal-700 dark:text-teal-300",
+                        span { "🛏️ 30 Dedicated Inpatient Beds" }
+                    }
+                    span { class: "text-slate-400 dark:text-slate-600", "·" }
+                    span { class: "facts-item text-indigo-700 dark:text-indigo-300",
+                        span { "📈 98.6% Patient Recovery Rate" }
+                    }
+                    span { class: "text-slate-400 dark:text-slate-600", "·" }
+                    span { class: "facts-item text-amber-700 dark:text-amber-300",
+                        span { "🛡️ NABH Quality Norms" }
+                    }
+                    span { class: "text-slate-400 dark:text-slate-600", "·" }
+                    span { class: "facts-item text-rose-700 dark:text-rose-300",
+                        span { "🧠 Specialized Neuro & Spine Rehab" }
+                    }
+                    span { class: "text-slate-400 dark:text-slate-600", "·" }
+                    span { class: "facts-item text-teal-700 dark:text-teal-300",
+                        span { "🤝 1:1 Daily Physiotherapy" }
+                    }
+                    span { class: "text-slate-400 dark:text-slate-600", "·" }
+                    span { class: "facts-item text-sky-700 dark:text-sky-300",
+                        span { "❤️ 1,000+ Smiles Restored Since 2021" }
+                    }
+                    span { class: "text-slate-400 dark:text-slate-600", "·" }
                 }
             }
         }

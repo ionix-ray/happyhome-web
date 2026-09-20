@@ -75,50 +75,70 @@ pub fn Departments() -> Element {
                 div { class: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8",
                     for (idx, dept) in departments.iter().enumerate() {
                         {
+                            let img_src = match idx % 4 {
+                                0 => "/assets/images/card_icu.jpg",
+                                1 => "/assets/images/card_corridor.jpg",
+                                2 => "/assets/images/card_rehab.jpg",
+                                _ => "/assets/images/card_doctor.jpg",
+                            };
                             let delay_cls = match idx % 3 {
-                                0 => "delay-100",
-                                1 => "delay-200",
-                                _ => "delay-300",
+                                0 => "reveal-stagger-1",
+                                1 => "reveal-stagger-2",
+                                _ => "reveal-stagger-3",
                             };
                             rsx! {
                                 div {
                                     key: "{dept.name}",
-                                    class: "cure-card p-8 flex flex-col justify-between group transition-all peak-in-up {delay_cls}",
+                                    class: "cure-card cure-card-split group reveal-init {delay_cls}",
 
-                                    div {
-                                        div { class: "flex items-center justify-between mb-4",
-                                            span { class: "text-xs font-bold uppercase tracking-wider text-sky-700 dark:text-sky-300 bg-sky-50 dark:bg-sky-950/60 px-3 py-1 rounded-full",
-                                                "{dept.tag}"
-                                            }
-                                            span { class: "text-xs font-semibold text-slate-600 dark:text-slate-300",
-                                                "{dept.beds}"
-                                            }
+                                    // Upper Image Half with tag overlay
+                                    div { class: "cure-card-img-wrap",
+                                        img {
+                                            src: "{img_src}",
+                                            alt: "{dept.name}",
+                                            class: "cure-card-img",
+                                            loading: "lazy",
                                         }
-
-                                        h3 { class: "text-xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors",
-                                            "{dept.name}"
-                                        }
-
-                                        p { class: "text-sm text-slate-700 dark:text-slate-300 mb-6 leading-relaxed font-medium",
-                                            "{dept.description}"
-                                        }
-
-                                        ul { class: "space-y-2.5 mb-6",
-                                            for feat in dept.features.iter() {
-                                                li { class: "flex items-center gap-2 text-xs font-medium text-slate-700 dark:text-slate-300",
-                                                    span { class: "w-1.5 h-1.5 rounded-full bg-sky-500 shrink-0" }
-                                                    "{feat}"
+                                        div { class: "cure-card-img-overlay",
+                                            div { class: "flex items-center justify-between w-full",
+                                                span { class: "text-[10px] font-extrabold uppercase tracking-wider text-white bg-sky-600/90 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/20",
+                                                    "{dept.tag}"
+                                                }
+                                                span { class: "text-[10px] font-bold text-white bg-slate-900/80 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/10",
+                                                    "{dept.beds}"
                                                 }
                                             }
                                         }
                                     }
 
-                                    div { class: "pt-4 border-t border-slate-100 dark:border-slate-800",
-                                        a {
-                                            href: "#appointment",
-                                            class: "text-xs font-bold text-sky-600 hover:text-sky-700 dark:text-sky-400 flex items-center justify-between group-hover:translate-x-1 transition-transform",
-                                            span { "Check Inpatient Admission" }
-                                            span { "→" }
+                                    // Lower Half: Content
+                                    div { class: "cure-card-body",
+                                        div {
+                                            h3 { class: "text-lg font-bold text-slate-900 dark:text-white mb-2 group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors",
+                                                "{dept.name}"
+                                            }
+
+                                            p { class: "text-xs sm:text-sm text-slate-600 dark:text-slate-300 mb-5 leading-relaxed font-medium",
+                                                "{dept.description}"
+                                            }
+
+                                            ul { class: "space-y-2 mb-6",
+                                                for feat in dept.features.iter() {
+                                                    li { class: "flex items-center gap-2 text-xs font-medium text-slate-700 dark:text-slate-300",
+                                                        span { class: "w-1.5 h-1.5 rounded-full bg-sky-500 shrink-0" }
+                                                        "{feat}"
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                        div { class: "pt-4 border-t", style: "border-color: var(--c-line);",
+                                            a {
+                                                href: "#appointment",
+                                                class: "text-xs font-bold text-sky-600 hover:text-sky-700 dark:text-sky-400 flex items-center justify-between group-hover:translate-x-1 transition-transform",
+                                                span { "Check Inpatient Admission" }
+                                                span { "→" }
+                                            }
                                         }
                                     }
                                 }

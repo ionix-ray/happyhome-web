@@ -69,7 +69,8 @@ fn App() -> Element {
             // Footer
             components::footer::Footer {}
 
-            // Interactive popups & toasts
+            // Interactive popups, mobile drawer & toasts
+            MobileNavDrawer {}
             components::modal::DoctorModal {}
             components::toast::Toast {}
         }
@@ -82,25 +83,60 @@ fn TopBar() -> Element {
     let config = use_context::<SiteConfig>();
 
     rsx! {
-        div { class: "topbar py-2 px-4 sm:px-6 border-b border-white/10 text-xs font-semibold select-none",
-            div { class: "container-x flex flex-wrap items-center justify-between gap-3 text-white",
-                div { class: "flex items-center gap-6",
-                    span { class: "inline-flex items-center gap-2",
-                        CarbonActivityPulseIcon { size: 16, color: "#fecdd3" }
-                        span { "{config.emergency.message}: " }
-                        a {
-                            href: "tel:{config.emergency.phone}",
-                            class: "font-bold text-white hover:underline",
-                            "{config.emergency.phone}"
-                        }
-                    }
-                    span { class: "hidden md:inline-flex items-center gap-1.5 text-white/80",
-                        MapPinIcon { size: 14, color: "currentColor" }
-                        span { "{config.contact.address}" }
+        div {
+            class: "topbar py-1.5 px-4 sm:px-6 border-b border-white/10 text-xs font-semibold select-none overflow-hidden",
+            // Desktop: Clean single row with dots
+            div { class: "container-x hidden md:flex items-center justify-between gap-4 text-white text-[11px]",
+                div { class: "flex items-center gap-2",
+                    CarbonActivityPulseIcon { size: 14, color: "#fecdd3" }
+                    span { class: "text-white/90", "Emergency Helpline:" }
+                    a {
+                        href: "tel:{config.emergency.phone}",
+                        class: "font-bold text-white hover:underline ml-1",
+                        "{config.emergency.phone}"
                     }
                 }
-                div { class: "hidden sm:flex items-center gap-4 text-white/90 text-[11px]",
-                    span { "{config.contact.hours}" }
+                div { class: "flex items-center gap-1.5 text-white/80",
+                    MapPinIcon { size: 13, color: "currentColor" }
+                    span { "Plot no.223, K-1 Kalinga Nagar, Bhubaneswar" }
+                }
+                div { class: "flex items-center gap-1.5 text-white/90",
+                    span { "🕐 {config.contact.hours}" }
+                }
+            }
+            // Mobile: Ticker marquee infinite scroll with 2 copies of deduplicated string
+            div { class: "topbar-ticker-wrap md:hidden",
+                div { class: "topbar-ticker-content text-white text-[11px] font-medium",
+                    span { class: "inline-flex items-center gap-4 pr-8",
+                        span { class: "inline-flex items-center gap-1.5 font-bold",
+                            CarbonActivityPulseIcon { size: 13, color: "#fecdd3" }
+                            "Emergency: "
+                            a { href: "tel:{config.emergency.phone}", class: "underline", "{config.emergency.phone}" }
+                        }
+                        span { "·" }
+                        span { class: "inline-flex items-center gap-1",
+                            MapPinIcon { size: 12, color: "currentColor" }
+                            "Kalinga Nagar, Bhubaneswar"
+                        }
+                        span { "·" }
+                        span { "{config.contact.hours}" }
+                        span { "·" }
+                    }
+                    span { class: "inline-flex items-center gap-4 pr-8",
+                        span { class: "inline-flex items-center gap-1.5 font-bold",
+                            CarbonActivityPulseIcon { size: 13, color: "#fecdd3" }
+                            "Emergency: "
+                            a { href: "tel:{config.emergency.phone}", class: "underline", "{config.emergency.phone}" }
+                        }
+                        span { "·" }
+                        span { class: "inline-flex items-center gap-1",
+                            MapPinIcon { size: 12, color: "currentColor" }
+                            "Kalinga Nagar, Bhubaneswar"
+                        }
+                        span { "·" }
+                        span { "{config.contact.hours}" }
+                        span { "·" }
+                    }
                 }
             }
         }
@@ -120,12 +156,11 @@ fn NavBar() -> Element {
 
     let nav_links: &[(&str, &str)] = &[
         ("Home", "#home"),
-        ("About Us", "#about"),
+        ("About", "#about"),
         ("Services", "#services"),
-        ("Portfolio", "#appointment"),
-        ("Career", "#contact"),
+        ("Departments", "#departments"),
         ("Doctors", "#team"),
-        ("Blog", "#contact"),
+        ("Why Us", "#why-us"),
         ("Contact", "#contact"),
     ];
 
@@ -134,7 +169,7 @@ fn NavBar() -> Element {
             class: "w-full bg-white/95 dark:bg-slate-900/95 backdrop-blur-md transition-all duration-300",
             "aria-label": "Main navigation",
 
-            div { class: "container-x flex items-center justify-between py-3",
+            div { class: "container-x flex items-center justify-between py-2.5 sm:py-3",
 
                 // Official Brand Logo — Real transparent PNG, zero border, zero bg patch
                 a {
@@ -144,8 +179,8 @@ fn NavBar() -> Element {
                     img {
                         src: "/assets/images/happy-home-logo-nav.png",
                         alt: "Happy Home Hospital And Rehab",
-                        height: "60",
-                        class: "h-14 w-auto object-contain select-none dark:brightness-[1.12] dark:contrast-[1.1]",
+                        height: "56",
+                        class: "h-12 sm:h-14 w-auto object-contain select-none dark:brightness-[1.12] dark:contrast-[1.1]",
                         loading: "eager",
                         decoding: "async"
                     }
@@ -163,34 +198,30 @@ fn NavBar() -> Element {
                     }
                 }
 
-                // Right controls: Brand toggle, Theme toggle, Appointment CTA, Mobile burger
-                div { class: "flex items-center gap-2.5 sm:gap-3",
+                // Right controls: Compact Brand toggle, Theme toggle, Appointment CTA, Mobile burger
+                div { class: "flex items-center gap-2 sm:gap-2.5",
 
-                    // Brand toggle pill (Hospital vs Rehab mode at end of navbar)
+                    // Compact Brand Switcher (Hospital / Rehab)
                     div {
-                        class: "hidden md:inline-flex p-1 bg-slate-100 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-bold shadow-inner",
+                        class: "brand-toggle-compact",
                         role: "group",
-                        "aria-label": "Select medical mode",
+                        "aria-label": "Toggle Hospital or Rehab mode",
 
                         button {
-                            class: if *brand.read() == BrandMode::Hospital {
-                                "px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-blue-700 to-sky-600 text-white shadow-sm transition-all inline-flex items-center gap-1.5 text-[11px] uppercase tracking-wider"
-                            } else {
-                                "px-3.5 py-1.5 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all inline-flex items-center gap-1.5 text-[11px] uppercase tracking-wider"
-                            },
+                            class: if *brand.read() == BrandMode::Hospital { "brand-toggle-btn active-hosp" } else { "brand-toggle-btn" },
                             onclick: move |_| *brand.write() = BrandMode::Hospital,
-                            HospitalIcon { size: 13, color: "currentColor" }
-                            span { "Hospital" }
+                            title: "Hospital Wing",
+                            "aria-label": "Switch to Hospital Wing",
+                            HospitalIcon { size: 14, color: "currentColor" }
+                            span { class: "tooltip", "Hospital Wing" }
                         }
                         button {
-                            class: if *brand.read() == BrandMode::Rehab {
-                                "px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-teal-700 to-emerald-600 text-white shadow-sm transition-all inline-flex items-center gap-1.5 text-[11px] uppercase tracking-wider"
-                            } else {
-                                "px-3.5 py-1.5 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all inline-flex items-center gap-1.5 text-[11px] uppercase tracking-wider"
-                            },
+                            class: if *brand.read() == BrandMode::Rehab { "brand-toggle-btn active-rehab" } else { "brand-toggle-btn" },
                             onclick: move |_| *brand.write() = BrandMode::Rehab,
-                            StethoscopeIcon { size: 13, color: "currentColor" }
-                            span { "Rehab Centre" }
+                            title: "Rehab Centre",
+                            "aria-label": "Switch to Rehab Centre",
+                            StethoscopeIcon { size: 14, color: "currentColor" }
+                            span { class: "tooltip", "Rehab Centre" }
                         }
                     }
 
@@ -212,7 +243,7 @@ fn NavBar() -> Element {
 
                     // Book appointment CTA
                     a {
-                        class: "btn-solid hidden sm:inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider carbon-btn-hover shadow-md",
+                        class: "btn-solid hidden sm:inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider carbon-btn-hover shadow-md",
                         href: "#appointment",
                         StethoscopeIcon { size: 14, color: "#fff" }
                         "Book Appointment"
@@ -231,61 +262,103 @@ fn NavBar() -> Element {
                     }
                 }
             }
+        }
+    }
+}
 
-            // Mobile menu drawer
-            if is_mobile_open {
-                div { class: "lg:hidden border-t border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 p-6 space-y-4 shadow-xl",
+// ── Mobile Navigation Drawer ──────────────────────────────────────────────────
+#[component]
+fn MobileNavDrawer() -> Element {
+    let brand_signal = use_context::<BrandModeSignal>();
+    let mut mobile_nav_signal = use_context::<MobileNavSignal>();
+    let mut brand = brand_signal.0;
+    let is_mobile_open = *mobile_nav_signal.0.read();
 
-                    // Mobile brand toggle
-                    div { class: "flex p-1 bg-slate-100 dark:bg-slate-800 rounded-xl mb-4 text-xs font-bold",
-                        button {
-                            class: if *brand.read() == BrandMode::Hospital {
-                                "flex-1 py-2 rounded-lg bg-emerald-700 text-white text-center flex items-center justify-center gap-1.5"
-                            } else {
-                                "flex-1 py-2 text-slate-600 dark:text-slate-400 text-center flex items-center justify-center gap-1.5"
-                            },
-                            onclick: move |_| {
-                                *brand.write() = BrandMode::Hospital;
-                                *mobile_nav_signal.0.write() = false;
-                            },
-                            HospitalIcon { size: 14, color: "currentColor" }
-                            span { "Hospital" }
-                        }
-                        button {
-                            class: if *brand.read() == BrandMode::Rehab {
-                                "flex-1 py-2 rounded-lg bg-emerald-700 text-white text-center flex items-center justify-center gap-1.5"
-                            } else {
-                                "flex-1 py-2 text-slate-600 dark:text-slate-400 text-center flex items-center justify-center gap-1.5"
-                            },
-                            onclick: move |_| {
-                                *brand.write() = BrandMode::Rehab;
-                                *mobile_nav_signal.0.write() = false;
-                            },
-                            StethoscopeIcon { size: 14, color: "currentColor" }
-                            span { "Rehab Centre" }
-                        }
+    let nav_links: &[(&str, &str)] = &[
+        ("Home", "#home"),
+        ("About", "#about"),
+        ("Services", "#services"),
+        ("Departments", "#departments"),
+        ("Doctors", "#team"),
+        ("Why Us", "#why-us"),
+        ("Contact", "#contact"),
+    ];
+
+    if !is_mobile_open {
+        return rsx! {};
+    }
+
+    rsx! {
+        div {
+            class: "mobile-drawer-backdrop lg:hidden",
+            onclick: move |_| *mobile_nav_signal.0.write() = false,
+        }
+        div {
+            class: "mobile-drawer-panel lg:hidden p-6 space-y-6",
+            div { class: "flex items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-800",
+                img {
+                    src: "/assets/images/happy-home-logo-nav.png",
+                    alt: "Happy Home Hospital",
+                    class: "h-10 w-auto object-contain",
+                }
+                button {
+                    class: "p-2 rounded-xl text-slate-500 hover:text-slate-900 dark:hover:text-white",
+                    onclick: move |_| *mobile_nav_signal.0.write() = false,
+                    "aria-label": "Close navigation menu",
+                    CloseIcon { size: 20, color: "currentColor" }
+                }
+            }
+
+            // Mobile brand toggle pill
+            div { class: "p-1 bg-slate-100 dark:bg-slate-800 rounded-xl flex text-xs font-bold",
+                button {
+                    class: if *brand.read() == BrandMode::Hospital {
+                        "flex-1 py-2 rounded-lg bg-gradient-to-r from-blue-700 to-sky-600 text-white flex items-center justify-center gap-1.5 shadow-sm"
+                    } else {
+                        "flex-1 py-2 text-slate-600 dark:text-slate-400 flex items-center justify-center gap-1.5"
+                    },
+                    onclick: move |_| {
+                        *brand.write() = BrandMode::Hospital;
+                        *mobile_nav_signal.0.write() = false;
+                    },
+                    HospitalIcon { size: 14, color: "currentColor" }
+                    span { "Hospital" }
+                }
+                button {
+                    class: if *brand.read() == BrandMode::Rehab {
+                        "flex-1 py-2 rounded-lg bg-gradient-to-r from-teal-700 to-emerald-600 text-white flex items-center justify-center gap-1.5 shadow-sm"
+                    } else {
+                        "flex-1 py-2 text-slate-600 dark:text-slate-400 flex items-center justify-center gap-1.5"
+                    },
+                    onclick: move |_| {
+                        *brand.write() = BrandMode::Rehab;
+                        *mobile_nav_signal.0.write() = false;
+                    },
+                    StethoscopeIcon { size: 14, color: "currentColor" }
+                    span { "Rehab Centre" }
+                }
+            }
+
+            // Links
+            div { class: "flex flex-col space-y-3 text-sm font-bold uppercase tracking-wider text-slate-700 dark:text-slate-200",
+                for (name, href) in nav_links.iter() {
+                    a {
+                        key: "{name}",
+                        href: "{href}",
+                        onclick: move |_| *mobile_nav_signal.0.write() = false,
+                        class: "py-2 hover:text-sky-600 dark:hover:text-sky-400 transition-colors flex items-center justify-between border-b border-slate-100 dark:border-slate-800/60",
+                        span { "{name}" }
+                        span { class: "text-slate-400 text-xs", "→" }
                     }
+                }
+            }
 
-                    div { class: "flex flex-col space-y-3 text-sm font-semibold text-slate-700 dark:text-slate-200",
-                        for (name, href) in nav_links.iter() {
-                            a {
-                                key: "{name}",
-                                href: "{href}",
-                                onclick: move |_| *mobile_nav_signal.0.write() = false,
-                                class: "py-1 hover:text-emerald-700 transition-colors",
-                                "{name}"
-                            }
-                        }
-                    }
-
-                    div { class: "pt-4 border-t border-slate-200 dark:border-slate-800",
-                        a {
-                            class: "btn-solid w-full text-center py-3 rounded-xl text-sm font-bold block",
-                            href: "#appointment",
-                            onclick: move |_| *mobile_nav_signal.0.write() = false,
-                            "Book Appointment"
-                        }
-                    }
+            div { class: "pt-2",
+                a {
+                    class: "btn-solid w-full text-center py-3 rounded-xl text-xs font-bold uppercase tracking-wider block shadow-md",
+                    href: "#appointment",
+                    onclick: move |_| *mobile_nav_signal.0.write() = false,
+                    "Book Appointment"
                 }
             }
         }

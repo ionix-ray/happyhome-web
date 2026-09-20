@@ -30,15 +30,59 @@
         var loader = document.getElementById('app-loading');
         if (loader) loader.remove();
       }
+      function initScrollObserver() {
+        if (!('IntersectionObserver' in window)) {
+          document.querySelectorAll('.reveal-init').forEach(function(el) {
+            el.classList.add('is-visible');
+          });
+          return;
+        }
+        var io = new IntersectionObserver(function(entries) {
+          entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              io.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.01, rootMargin: '200px 0px 200px 0px' });
+
+        function scanElements() {
+          var els = document.querySelectorAll('.reveal-init:not(.observed)');
+          els.forEach(function(el) {
+            el.classList.add('observed');
+            io.observe(el);
+          });
+        }
+
+        scanElements();
+        var dynObserver = new MutationObserver(function() {
+          scanElements();
+        });
+        if (document.body) {
+          dynObserver.observe(document.body, { childList: true, subtree: true });
+        }
+
+        // Failsafe: Ensure all cards become visible within 1.2s
+        setTimeout(function() {
+          document.querySelectorAll('.reveal-init').forEach(function(el) {
+            el.classList.add('is-visible');
+          });
+        }, 1200);
+      }
+
       var observer = new MutationObserver(function() {
         if (document.getElementById('app')) {
           cleanup();
+          initScrollObserver();
           observer.disconnect();
         }
       });
       observer.observe(document.documentElement, { childList: true, subtree: true });
       window.addEventListener('DOMContentLoaded', function() {
-        if (document.getElementById('app')) cleanup();
+        if (document.getElementById('app')) {
+          cleanup();
+          initScrollObserver();
+        }
       });
     })();
   </script>

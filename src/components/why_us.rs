@@ -44,14 +44,20 @@ pub fn WhyUs() -> Element {
                     center: true,
                 }
 
-                div { class: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8",
+                div { class: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8",
                     for (idx, item) in why_us.into_iter().enumerate() {
                         {
+                            let img_src = match idx % 4 {
+                                0 => "/assets/images/card_corridor.jpg",
+                                1 => "/assets/images/card_icu.jpg",
+                                2 => "/assets/images/card_rehab.jpg",
+                                _ => "/assets/images/card_doctor.jpg",
+                            };
                             let delay_cls = match idx % 4 {
-                                0 => "delay-100",
-                                1 => "delay-200",
-                                2 => "delay-300",
-                                _ => "delay-400",
+                                0 => "reveal-stagger-1",
+                                1 => "reveal-stagger-2",
+                                2 => "reveal-stagger-3",
+                                _ => "reveal-stagger-4",
                             };
                             let badge_cls = match idx % 4 {
                                 0 => "badge-cyan",
@@ -62,30 +68,43 @@ pub fn WhyUs() -> Element {
                             rsx! {
                                 div {
                                     key: "{item.title}",
-                                    class: "cure-card p-8 flex flex-col justify-between hover:-translate-y-2 transition-all duration-300 peak-in-up {delay_cls}",
+                                    class: "cure-card cure-card-split group reveal-init {delay_cls}",
 
-                                    div {
-                                        div { class: "flex items-center justify-between mb-6",
-                                            div { class: "icon-badge {badge_cls}",
-                                                DynamicIcon { name: item.icon_key, size: 24, color: "currentColor" }
-                                            }
-                                            span { class: "text-2xl font-black text-slate-300 dark:text-slate-700",
-                                                "0{idx + 1}"
-                                            }
+                                    // Upper Image Half
+                                    div { class: "cure-card-img-wrap !h-36",
+                                        img {
+                                            src: "{img_src}",
+                                            alt: "{item.title}",
+                                            class: "cure-card-img",
+                                            loading: "lazy",
                                         }
-
-                                        h3 { class: "text-lg font-bold text-slate-900 dark:text-white mb-3",
-                                            "{item.title}"
-                                        }
-
-                                        p { class: "text-sm text-slate-700 dark:text-slate-200 leading-relaxed font-medium",
-                                            "{item.description}"
+                                        div { class: "cure-card-img-overlay",
+                                            div { class: "flex items-center justify-between w-full",
+                                                div { class: "icon-badge {badge_cls} !w-9 !h-9 !rounded-xl shadow-md",
+                                                    DynamicIcon { name: item.icon_key, size: 18, color: "currentColor" }
+                                                }
+                                                span { class: "text-lg font-black text-white/90 drop-shadow-md",
+                                                    "0{idx + 1}"
+                                                }
+                                            }
                                         }
                                     }
 
-                                    div { class: "mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center gap-2 text-xs font-bold text-teal-600 dark:text-teal-400",
-                                        CarbonShieldCheckIcon { size: 18, color: "currentColor" }
-                                        span { "Clinical Standard Verified" }
+                                    // Lower Half: Text
+                                    div { class: "cure-card-body !p-5",
+                                        div {
+                                            h3 { class: "text-base font-bold text-slate-900 dark:text-white mb-2 group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors",
+                                                "{item.title}"
+                                            }
+                                            p { class: "text-xs leading-relaxed text-slate-600 dark:text-slate-300 font-medium",
+                                                "{item.description}"
+                                            }
+                                        }
+
+                                        div { class: "mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center gap-1.5 text-[11px] font-bold text-teal-600 dark:text-teal-400",
+                                            CarbonShieldCheckIcon { size: 15, color: "currentColor" }
+                                            span { "Clinical Standard" }
+                                        }
                                     }
                                 }
                             }

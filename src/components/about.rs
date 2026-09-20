@@ -37,7 +37,7 @@ pub fn About() -> Element {
                 div { class: "grid grid-cols-1 lg:grid-cols-12 gap-12 items-center mb-16",
 
                     // Left Column: Story & Milestones (slide from left on scroll)
-                    div { class: "lg:col-span-7 space-y-6 peak-in-left",
+                    div { class: "lg:col-span-7 space-y-6 reveal-init reveal-stagger-1",
                         p { class: "text-base sm:text-lg text-slate-700 dark:text-slate-300 leading-relaxed",
                             "Happy Home Hospital & Rehab was established in 2021 in Ghatikia, Bhubaneswar, with a singular mission: to provide world-class, multi-disciplinary inpatient rehabilitation for patients recovering from severe neurological insults, spine surgeries, brain trauma, and chronic immobilizing conditions."
                         }
@@ -67,7 +67,7 @@ pub fn About() -> Element {
                     }
 
                     // Right Column: Founder Doctor Card (slide from right on scroll)
-                    div { class: "lg:col-span-5 peak-in-right delay-150",
+                    div { class: "lg:col-span-5 reveal-init reveal-stagger-2",
                         div { class: "cure-card p-8 relative overflow-hidden border-2 border-sky-500/30",
                             div { class: "flex flex-col sm:flex-row items-center sm:items-start gap-6 mb-6",
                                 img {

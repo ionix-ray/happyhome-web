@@ -749,3 +749,279 @@ h1.text-white, h2.text-white, h3.text-white, h4.text-white, h5.text-white, h6.te
   background: #94a3b8;
 }
 
+/* ==========================================================================
+   Production-Grade UI/UX Overhaul Enhancements
+   ========================================================================== */
+
+/* 1. TopBar Single-Line Ticker (Seamless loop on mobile) */
+.topbar-ticker-wrap {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+@media (max-width: 767px) {
+  .topbar-ticker-content {
+    display: inline-flex;
+    white-space: nowrap;
+    animation: topbarScroll 22s linear infinite;
+  }
+  .topbar-ticker-wrap:hover .topbar-ticker-content {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes topbarScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* 2. Compact Navbar Brand Switcher */
+.brand-toggle-compact {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px;
+  background: rgba(15, 23, 42, 0.06);
+  border: 1px solid var(--c-line);
+  border-radius: 9999px;
+  position: relative;
+  transition: all 0.25s ease;
+}
+
+[data-theme="dark"] .brand-toggle-compact {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--c-line);
+}
+
+.brand-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 9999px;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  color: var(--c-muted);
+  background: transparent;
+}
+
+.brand-toggle-btn.active-hosp {
+  background: linear-gradient(135deg, #134cb3 0%, #36a1d7 100%);
+  color: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(19, 76, 179, 0.4);
+}
+
+.brand-toggle-btn.active-rehab {
+  background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);
+  color: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(15, 118, 110, 0.4);
+}
+
+/* Tooltip for compact brand toggle */
+.brand-toggle-btn .tooltip {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background: #0f172a;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 4px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+  pointer-events: none;
+  transition: all 0.2s ease;
+  z-index: 50;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
+
+.brand-toggle-btn:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* 3. Card Split: Upper Image Half + Lower Text Half */
+.cure-card-split {
+  display: flex;
+  flex-direction: column;
+  background: var(--c-bg-card);
+  border: 1px solid var(--c-line);
+  border-radius: 1.5rem;
+  overflow: hidden;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.04), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+.cure-card-split:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 22px 42px -10px rgba(54, 161, 215, 0.2), 0 8px 16px -4px rgba(19, 76, 179, 0.12);
+  border-color: rgba(54, 161, 215, 0.5);
+}
+
+[data-theme="dark"] .cure-card-split {
+  background: var(--c-bg-card);
+  border-color: var(--c-line);
+  box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.45);
+}
+
+[data-theme="dark"] .cure-card-split:hover {
+  box-shadow: 0 22px 45px -10px rgba(56, 189, 248, 0.25), 0 0 20px rgba(56, 189, 248, 0.15);
+  border-color: rgba(56, 189, 248, 0.45);
+}
+
+.cure-card-img-wrap {
+  position: relative;
+  width: 100%;
+  height: 10.5rem;
+  overflow: hidden;
+  background: #0f172a;
+}
+
+.cure-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.cure-card-split:hover .cure-card-img {
+  transform: scale(1.08);
+}
+
+.cure-card-img-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.05) 0%, rgba(15, 23, 42, 0.65) 100%);
+  display: flex;
+  align-items: flex-end;
+  padding: 1rem 1.25rem;
+}
+
+.cure-card-body {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: space-between;
+}
+
+/* 4. Running Facts & Stats Marquee Ticker */
+.facts-ticker-wrap {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  padding: 0.85rem 0;
+  background: linear-gradient(90deg, rgba(54, 161, 215, 0.08) 0%, rgba(19, 76, 179, 0.12) 50%, rgba(45, 143, 123, 0.08) 100%);
+  border-top: 1px solid var(--c-line);
+  border-bottom: 1px solid var(--c-line);
+  backdrop-filter: blur(8px);
+}
+
+[data-theme="dark"] .facts-ticker-wrap {
+  background: linear-gradient(90deg, rgba(56, 189, 248, 0.06) 0%, rgba(96, 165, 250, 0.1) 50%, rgba(52, 211, 153, 0.06) 100%);
+}
+
+.facts-ticker-content {
+  display: inline-flex;
+  white-space: nowrap;
+  animation: factsTicker 28s linear infinite;
+  gap: 2.5rem;
+}
+
+.facts-ticker-wrap:hover .facts-ticker-content {
+  animation-play-state: paused;
+}
+
+@keyframes factsTicker {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.facts-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--c-text);
+  text-transform: uppercase;
+}
+
+/* 5. Scroll Reveal System via IntersectionObserver */
+.reveal-init {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-init.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-stagger-1 { transition-delay: 80ms; }
+.reveal-stagger-2 { transition-delay: 160ms; }
+.reveal-stagger-3 { transition-delay: 240ms; }
+.reveal-stagger-4 { transition-delay: 320ms; }
+
+/* 6. Mobile Navigation Drawer Slide Animation */
+.mobile-drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(8px);
+  z-index: 99;
+  animation: fadeIn 0.25s ease forwards;
+}
+
+.mobile-drawer-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 85%;
+  max-width: 340px;
+  background: var(--c-bg-card);
+  border-left: 1px solid var(--c-line);
+  box-shadow: -8px 0 32px rgba(0, 0, 0, 0.25);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  animation: slideDrawer 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  overflow-y: auto;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideDrawer {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .topbar-ticker-content,
+  .facts-ticker-content {
+    animation: none !important;
+  }
+  .reveal-init {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+

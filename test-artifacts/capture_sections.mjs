@@ -12,33 +12,47 @@ async function capture() {
     args: ['--no-sandbox', '--disable-setuid-sandbox']
   });
 
-  const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
-  const page = await context.newPage();
+  // Desktop 1440
+  const contextDesktop = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+  const page = await contextDesktop.newPage();
   await page.goto(BASE_URL, { waitUntil: 'networkidle' });
   await page.waitForSelector('nav', { timeout: 10000 });
 
-  // 1. Services section with dual-track explorer
-  await page.locator('#services').scrollIntoViewIfNeeded();
-  await page.waitForTimeout(500);
-  await page.screenshot({ path: path.join(SCREENSHOT_DIR, '05_services_dual_track.png') });
+  // 0. Hero with Single-line TopBar and Running facts ticker
+  await page.screenshot({ path: path.join(SCREENSHOT_DIR, '01_hero_desktop_v2.png') });
 
-  // 2. Why us section with cure-cards & badges
+  // 1. Services section with upper AI image half + lower text half
+  await page.locator('#services').scrollIntoViewIfNeeded();
+  await page.waitForTimeout(600);
+  await page.screenshot({ path: path.join(SCREENSHOT_DIR, '05_services_split_cards.png') });
+
+  // 2. Why us section
   await page.locator('#why-us').scrollIntoViewIfNeeded();
-  await page.waitForTimeout(500);
-  await page.screenshot({ path: path.join(SCREENSHOT_DIR, '06_why_us_cards.png') });
+  await page.waitForTimeout(600);
+  await page.screenshot({ path: path.join(SCREENSHOT_DIR, '06_why_us_split_cards.png') });
 
   // 3. Departments section
   await page.locator('#departments').scrollIntoViewIfNeeded();
-  await page.waitForTimeout(500);
-  await page.screenshot({ path: path.join(SCREENSHOT_DIR, '07_departments_cards.png') });
+  await page.waitForTimeout(600);
+  await page.screenshot({ path: path.join(SCREENSHOT_DIR, '07_departments_split_cards.png') });
 
-  // 4. Contact section
-  await page.locator('#contact').scrollIntoViewIfNeeded();
-  await page.waitForTimeout(500);
-  await page.screenshot({ path: path.join(SCREENSHOT_DIR, '08_contact_section.png') });
+  // Mobile 375
+  const contextMobile = await browser.newContext({ viewport: { width: 375, height: 812 } });
+  const pageMobile = await contextMobile.newPage();
+  await pageMobile.goto(BASE_URL, { waitUntil: 'networkidle' });
+  await pageMobile.waitForSelector('nav', { timeout: 10000 });
+
+  // Mobile Hero with ticker
+  await pageMobile.screenshot({ path: path.join(SCREENSHOT_DIR, '09_mobile_hero_ticker.png') });
+
+  // Open mobile drawer
+  const burger = pageMobile.locator('nav button[aria-label="Toggle mobile navigation"]');
+  await burger.click();
+  await pageMobile.waitForTimeout(500);
+  await pageMobile.screenshot({ path: path.join(SCREENSHOT_DIR, '10_mobile_drawer_open.png') });
 
   await browser.close();
-  console.log('✅ Captured detailed section screenshots!');
+  console.log('✅ Captured multi-viewport screenshots!');
 }
 
 capture();
