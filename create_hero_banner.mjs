@@ -5,6 +5,10 @@ import fs from 'fs';
 const OUT_PATH = path.resolve('assets/images/hero_hospital_ambulance.jpg');
 const CHROME_PATH = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 
+// Read logo and emergency photo as base64
+const logoB64 = fs.readFileSync(path.resolve('assets/images/happy-home-logo-transparent-v2.png')).toString('base64');
+const ambB64 = fs.readFileSync('/Volumes/hex/happy-home/insta_banner/demo_banner_3_emergency.jpg').toString('base64');
+
 const htmlContent = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,22 +29,20 @@ const htmlContent = `<!DOCTYPE html>
       position: relative;
     }
 
-    /* Background with architectural hospital atmosphere and subtle glow */
     .bg-layer {
       position: absolute;
       inset: 0;
-      background: radial-gradient(circle at 80% 20%, rgba(2, 132, 199, 0.35), transparent 50%),
-                  radial-gradient(circle at 10% 80%, rgba(45, 143, 123, 0.25), transparent 45%),
-                  linear-gradient(135deg, #091428 0%, #0d213f 50%, #091428 100%);
+      background: radial-gradient(circle at 85% 15%, rgba(2, 132, 199, 0.4), transparent 50%),
+                  radial-gradient(circle at 10% 85%, rgba(45, 143, 123, 0.3), transparent 45%),
+                  linear-gradient(135deg, #091428 0%, #0d213f 50%, #07101f 100%);
     }
 
-    /* Architectural grid lines */
     .grid-pattern {
       position: absolute;
       inset: 0;
-      background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-      background-size: 40px 40px;
+      background-image: linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+      background-size: 36px 36px;
     }
 
     .container {
@@ -48,30 +50,30 @@ const htmlContent = `<!DOCTYPE html>
       z-index: 10;
       width: 100%;
       height: 100%;
-      padding: 40px 50px;
+      padding: 36px 44px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
     }
 
-    /* Top Brand Bar */
+    /* Top Brand Bar with Official Logo */
     .top-bar {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: rgba(255, 255, 255, 0.96);
-      padding: 16px 32px;
+      background: #ffffff;
+      padding: 14px 28px;
       border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35);
     }
     .logo-img {
-      height: 64px;
+      height: 60px;
       object-fit: contain;
     }
     .top-badges {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 14px;
     }
     .badge-pill {
       display: flex;
@@ -80,46 +82,47 @@ const htmlContent = `<!DOCTYPE html>
       padding: 8px 16px;
       border-radius: 9999px;
       font-size: 13px;
-      font-weight: 700;
+      font-weight: 800;
+      letter-spacing: 0.5px;
     }
     .badge-emergency {
-      background: #fee2e2;
+      background: #fef2f2;
       color: #dc2626;
-      border: 1px solid #fca5a5;
+      border: 1.5px solid #fecaca;
     }
     .badge-nabh {
-      background: #ecfdf5;
+      background: #f0fdf4;
       color: #059669;
-      border: 1px solid #a7f3d0;
+      border: 1.5px solid #bbf7d0;
     }
 
-    /* Main Content Split */
+    /* Main Content Grid */
     .main-grid {
       display: grid;
-      grid-template-columns: 1fr 1.05fr;
-      gap: 40px;
+      grid-template-columns: 1fr 1.08fr;
+      gap: 36px;
       align-items: center;
       flex: 1;
-      padding: 20px 0;
+      padding: 18px 0;
     }
 
     .left-col {
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 18px;
     }
     .eyebrow {
       display: inline-flex;
       align-items: center;
       gap: 8px;
       color: #38bdf8;
-      font-size: 14px;
+      font-size: 13.5px;
       font-weight: 800;
       letter-spacing: 2px;
       text-transform: uppercase;
     }
     .headline {
-      font-size: 44px;
+      font-size: 42px;
       font-weight: 900;
       line-height: 1.15;
       letter-spacing: -0.5px;
@@ -131,7 +134,7 @@ const htmlContent = `<!DOCTYPE html>
       -webkit-text-fill-color: transparent;
     }
     .lead-text {
-      font-size: 16px;
+      font-size: 15.5px;
       line-height: 1.6;
       color: #cbd5e1;
     }
@@ -145,7 +148,7 @@ const htmlContent = `<!DOCTYPE html>
       display: flex;
       align-items: center;
       gap: 12px;
-      font-size: 15px;
+      font-size: 14.5px;
       font-weight: 700;
       color: #f1f5f9;
     }
@@ -159,39 +162,41 @@ const htmlContent = `<!DOCTYPE html>
       justify-content: center;
       color: #fff;
       font-size: 13px;
+      flex-shrink: 0;
     }
 
-    /* Right visual card showcasing modern emergency response & ambulance */
+    /* Right visual card showcasing modern emergency ambulance response */
     .visual-card {
       position: relative;
-      border-radius: 28px;
+      border-radius: 26px;
       overflow: hidden;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
-      border: 2px solid rgba(56, 189, 248, 0.3);
-      height: 480px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+      border: 2px solid rgba(56, 189, 248, 0.35);
+      height: 490px;
       background: #0f2744;
     }
     .visual-card img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      object-position: center;
     }
     .card-overlay-badge {
       position: absolute;
-      bottom: 24px;
-      left: 24px;
-      right: 24px;
-      background: rgba(9, 20, 40, 0.88);
+      bottom: 20px;
+      left: 20px;
+      right: 20px;
+      background: rgba(9, 20, 40, 0.92);
       backdrop-filter: blur(16px);
-      padding: 16px 20px;
-      border-radius: 18px;
+      padding: 14px 18px;
+      border-radius: 16px;
       border: 1px solid rgba(255, 255, 255, 0.15);
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
     .overlay-title {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 800;
       color: #ffffff;
     }
@@ -215,34 +220,29 @@ const htmlContent = `<!DOCTYPE html>
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: rgba(15, 23, 42, 0.75);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(12px);
-      padding: 14px 28px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(14px);
+      padding: 12px 24px;
       border-radius: 16px;
     }
     .bottom-left {
       display: flex;
       align-items: center;
-      gap: 24px;
-      font-size: 14px;
+      gap: 20px;
+      font-size: 13.5px;
       color: #94a3b8;
     }
     .bottom-left strong {
       color: #f8fafc;
     }
-    .bottom-cta {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
     .call-btn {
       background: linear-gradient(135deg, #0284c7, #0ea5e9);
       color: #ffffff;
-      padding: 10px 22px;
-      border-radius: 12px;
+      padding: 9px 20px;
+      border-radius: 10px;
       font-weight: 800;
-      font-size: 14px;
+      font-size: 13.5px;
       display: flex;
       align-items: center;
       gap: 8px;
@@ -254,9 +254,9 @@ const htmlContent = `<!DOCTYPE html>
   <div class="grid-pattern"></div>
 
   <div class="container">
-    <!-- Top Bar with Official Logo -->
+    <!-- Top Bar with Authentic Official Happy Home Hospital Logo -->
     <div class="top-bar">
-      <img src="file://${path.resolve('assets/images/happy-home-logo-transparent-v2.png')}" class="logo-img" alt="Happy Home Hospital">
+      <img src="data:image/png;base64,${logoB64}" class="logo-img" alt="Happy Home Hospital">
       <div class="top-badges">
         <div class="badge-pill badge-emergency">
           <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#dc2626;"></span>
@@ -278,7 +278,7 @@ const htmlContent = `<!DOCTYPE html>
           Advanced Hospital Care &amp; <span>Emergency Response.</span>
         </h1>
         <p class="lead-text">
-          Happy Home Hospital provides 24/7 emergency stabilization, advanced neuro ICU telemetry, and rapid cardiac life support ambulances across Bhubaneswar.
+          Happy Home Hospital provides 24/7 emergency trauma resuscitation, advanced neuro ICU telemetry, and rapid cardiac life support ambulances across Bhubaneswar.
         </p>
         <div class="features-list">
           <div class="feature-item">
@@ -298,10 +298,10 @@ const htmlContent = `<!DOCTYPE html>
 
       <!-- Right Visual Card with Emergency Ambulance Photo -->
       <div class="visual-card">
-        <img src="file://${path.resolve('assets/images/card_corridor.jpg')}" alt="Happy Home Hospital Facility">
+        <img src="data:image/jpeg;base64,${ambB64}" alt="Happy Home Hospital Emergency Response Ambulance">
         <div class="card-overlay-badge">
           <div>
-            <div class="overlay-title">Happy Home Emergency Fleet</div>
+            <div class="overlay-title">Happy Home Emergency Ambulance Fleet</div>
             <div class="overlay-sub">Plot no.223, K-1 Kalinga Nagar, Bhubaneswar</div>
           </div>
           <div class="ambulance-tag">24/7 ON CALL</div>
@@ -316,10 +316,8 @@ const htmlContent = `<!DOCTYPE html>
         <span>•</span>
         <span>OPD Timings: <strong>Mon–Sat 9:00 AM – 8:00 PM</strong></span>
       </div>
-      <div class="bottom-cta">
-        <div class="call-btn">
-          <span>📞 Call 8249914673</span>
-        </div>
+      <div class="call-btn">
+        <span>📞 Call +91 8249914673</span>
       </div>
     </div>
   </div>
@@ -334,16 +332,16 @@ async function main() {
   });
 
   const page = await browser.newPage({ viewport: { width: 1200, height: 900 } });
-  await page.setContent(htmlContent, { waitUntil: 'networkidle' });
-  await page.waitForTimeout(1000);
+  await page.setContent(htmlContent, { waitUntil: 'load' });
+  await page.waitForTimeout(1200);
 
   await page.screenshot({
     path: OUT_PATH,
     type: 'jpeg',
-    quality: 95
+    quality: 96
   });
 
-  console.log('Saved banner to:', OUT_PATH);
+  console.log('Saved brand-aware hero banner to:', OUT_PATH);
   await browser.close();
 }
 
