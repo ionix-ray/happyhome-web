@@ -164,23 +164,6 @@
           bp.targetB = newTypes[1];
         }
 
-        // 2. Neuroscience & Brain Synaptic Network
-        var somaCount = Math.min(38, Math.max(20, Math.floor((width + height) / 60)));
-        var somaList = [];
-        for (var s = 0; s < somaCount; s++) {
-          somaList.push({
-            x: Math.random() * width,
-            y: Math.random() * height,
-            vx: (Math.random() - 0.5) * 0.32,
-            vy: (Math.random() - 0.5) * 0.32,
-            radius: Math.random() * 2.5 + 2.2,
-            pulse: Math.random() * 6.28,
-            charge: 0,
-            color: Math.random() > 0.45 ? '#38bdf8' : '#2dd4bf'
-          });
-        }
-
-        var actionPotentials = [];
         var sparks = [];
         var time = 0;
         var lastMutationTime = 0;
@@ -194,7 +177,7 @@
           ctx.clearRect(0, 0, width, height);
           time += 0.014;
 
-          // Expand interactive neuro-genesis click wave
+          // Expand interactive mutation click wave
           if (pointer.pulseR > 0 && pointer.pulseR < pointer.pulseMax) {
             pointer.pulseR += 8;
             var waveAlpha = (1 - pointer.pulseR / pointer.pulseMax) * 0.25;
@@ -213,16 +196,16 @@
             if (randLocus + 1 < basePairs.length) startMutation(randLocus + 1);
           }
 
-          // ── A. DRAW DIAGONAL DNA DOUBLE HELIX (FROM LEFT-END TO RIGHT-END CORNER) ──
-          var startX = -60, startY = -60;
-          var endX = width + 60, endY = height + 60;
+          // ── DRAW FULL-SCREEN DIAGONAL DNA DOUBLE HELIX ──
+          var startX = -80, startY = -80;
+          var endX = width + 80, endY = height + 80;
           var dirX = endX - startX;
           var dirY = endY - startY;
           var diagLen = Math.hypot(dirX, dirY);
           var normX = -dirY / diagLen; // perpendicular unit normal
           var normY = dirX / diagLen;
 
-          var helixRadius = Math.min(52, Math.min(width, height) * 0.052);
+          var helixRadius = Math.min(56, Math.min(width, height) * 0.055);
           var strand1Points = [];
           var strand2Points = [];
 
@@ -242,10 +225,10 @@
             // Interactive pointer magnetic flex
             if (pointer.active) {
               var dPointer = Math.hypot(baseX - pointer.x, baseY - pointer.y);
-              if (dPointer < 200) {
-                var pull = (1 - dPointer / 200) * 35;
-                baseX += (pointer.x - baseX) * (pull / 200);
-                baseY += (pointer.y - baseY) * (pull / 200);
+              if (dPointer < 220) {
+                var pull = (1 - dPointer / 220) * 38;
+                baseX += (pointer.x - baseX) * (pull / 220);
+                baseY += (pointer.y - baseY) * (pull / 220);
               }
             }
 
@@ -346,145 +329,11 @@
               ctx.quadraticCurveTo(pts[p - 1].x, pts[p - 1].y, xc, yc);
             }
             ctx.strokeStyle = strokeCol;
-            ctx.lineWidth = 1.4;
+            ctx.lineWidth = 1.6;
             ctx.stroke();
           }
-          drawStrand(strand1Points, 'rgba(56, 189, 248, 0.35)');
-          drawStrand(strand2Points, 'rgba(45, 143, 123, 0.35)');
-
-          // ── B. DRAW NEUROSCIENCE & BRAIN SYNAPTIC NETWORK FUSION ──
-          for (var s = 0; s < somaList.length; s++) {
-            var n = somaList[s];
-            n.x += n.vx;
-            n.y += n.vy;
-            if (n.x < 0 || n.x > width) n.vx *= -1;
-            if (n.y < 0 || n.y > height) n.vy *= -1;
-
-            if (pointer.active) {
-              var dPtr = Math.hypot(n.x - pointer.x, n.y - pointer.y);
-              if (dPtr < 170) {
-                var bridgeAlpha = (1 - dPtr / 170) * 0.55;
-                ctx.beginPath();
-                ctx.moveTo(n.x, n.y);
-                ctx.lineTo(pointer.x, pointer.y);
-                ctx.strokeStyle = 'rgba(56, 189, 248, ' + bridgeAlpha + ')';
-                ctx.lineWidth = 1.0;
-                ctx.stroke();
-                n.charge = Math.min(1.0, n.charge + 0.08);
-              }
-            }
-            if (n.charge > 0) n.charge -= 0.02;
-
-            // Connect nearby neurons with axons
-            for (var s2 = s + 1; s2 < somaList.length; s2++) {
-              var n2 = somaList[s2];
-              var dx = n.x - n2.x;
-              var dy = n.y - n2.y;
-              var dist = Math.hypot(dx, dy);
-
-              if (dist < 150) {
-                var alpha = (1 - dist / 150) * 0.22;
-                if (n.charge > 0 || n2.charge > 0) alpha += 0.25;
-
-                ctx.beginPath();
-                ctx.moveTo(n.x, n.y);
-                ctx.lineTo(n2.x, n2.y);
-                ctx.strokeStyle = 'rgba(56, 189, 248, ' + alpha + ')';
-                ctx.lineWidth = 0.9;
-                ctx.stroke();
-
-                if (Math.random() < 0.003 && actionPotentials.length < 24) {
-                  actionPotentials.push({
-                    x1: n.x, y1: n.y,
-                    x2: n2.x, y2: n2.y,
-                    t: 0,
-                    speed: Math.random() * 0.025 + 0.02,
-                    color: Math.random() > 0.4 ? '#38bdf8' : '#f59e0b'
-                  });
-                }
-              }
-            }
-
-            // Brain-Gene Synaptic Bridges: Connect nearby neurons to diagonal DNA strand
-            if (s % 2 === 0 && basePairs.length > 0) {
-              var locusIdx = Math.floor((n.x / width) * basePairs.length);
-              locusIdx = Math.max(0, Math.min(basePairs.length - 1, locusIdx));
-              var locus = basePairs[locusIdx];
-              if (locus && locus.lastX) {
-                var dLocus = Math.hypot(n.x - locus.lastX, n.y - locus.lastY);
-                if (dLocus < 190) {
-                  var synapseAlpha = (1 - dLocus / 190) * 0.26;
-                  ctx.beginPath();
-                  ctx.moveTo(n.x, n.y);
-                  ctx.lineTo(locus.lastX, locus.lastY);
-                  ctx.strokeStyle = 'rgba(45, 143, 123, ' + synapseAlpha + ')';
-                  ctx.lineWidth = 0.8;
-                  ctx.setLineDash([3, 3]);
-                  ctx.stroke();
-                  ctx.setLineDash([]);
-
-                  // Launch neuro-genetic action potential jump to DNA
-                  if (Math.random() < 0.005 && actionPotentials.length < 24) {
-                    actionPotentials.push({
-                      x1: n.x, y1: n.y,
-                      x2: locus.lastX, y2: locus.lastY,
-                      t: 0,
-                      speed: Math.random() * 0.03 + 0.02,
-                      color: '#fbbf24',
-                      isDnaTarget: true,
-                      targetLocus: locusIdx
-                    });
-                  }
-                }
-              }
-            }
-
-            // Brain dendritic micro-arbor branches
-            ctx.beginPath();
-            for (var b = 0; b < 3; b++) {
-              var branchA = n.pulse + (b * Math.PI * 2) / 3;
-              var bLen = n.radius * 2.2;
-              ctx.moveTo(n.x, n.y);
-              ctx.lineTo(n.x + Math.cos(branchA) * bLen, n.y + Math.sin(branchA) * bLen);
-            }
-            ctx.strokeStyle = 'rgba(56, 189, 248, 0.22)';
-            ctx.lineWidth = 0.8;
-            ctx.stroke();
-
-            // Soma cell body
-            var somaPulse = Math.sin(time * 2 + n.pulse) * 0.6;
-            ctx.beginPath();
-            ctx.arc(n.x, n.y, n.radius + somaPulse + n.charge * 1.5, 0, Math.PI * 2);
-            ctx.fillStyle = n.charge > 0.2 ? '#f59e0b' : n.color;
-            ctx.globalAlpha = 0.55;
-            ctx.fill();
-            ctx.globalAlpha = 1.0;
-          }
-
-          // ── C. RENDER ACTION POTENTIAL IMPULSES ──
-          for (var a = actionPotentials.length - 1; a >= 0; a--) {
-            var ap = actionPotentials[a];
-            ap.t += ap.speed;
-            if (ap.t >= 1) {
-              if (ap.isDnaTarget && ap.targetLocus !== undefined) {
-                startMutation(ap.targetLocus);
-              }
-              actionPotentials.splice(a, 1);
-              continue;
-            }
-            var apx = ap.x1 + (ap.x2 - ap.x1) * ap.t;
-            var apy = ap.y1 + (ap.y2 - ap.y1) * ap.t;
-
-            ctx.beginPath();
-            ctx.arc(apx, apy, 2.2, 0, Math.PI * 2);
-            ctx.fillStyle = ap.color;
-            ctx.fill();
-
-            ctx.beginPath();
-            ctx.arc(apx, apy, 4.5, 0, Math.PI * 2);
-            ctx.fillStyle = 'rgba(245, 158, 11, 0.25)';
-            ctx.fill();
-          }
+          drawStrand(strand1Points, 'rgba(56, 189, 248, 0.38)');
+          drawStrand(strand2Points, 'rgba(45, 143, 123, 0.38)');
 
           // ── D. RENDER MUTATION QUANTUM BIO-SPARKS ──
           for (var sp = sparks.length - 1; sp >= 0; sp--) {

@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hero Hospital Ambulance Composition</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 1200px;
+      height: 896px;
+      overflow: hidden;
+      position: relative;
+      background: #0f172a;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+    .base-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 1200px;
+      height: 896px;
+      object-fit: cover;
+    }
+
+    /* ── 1. HOSPITAL BUILDING SIGNBOARD ── */
+    .hospital-sign-panel {
+      position: absolute;
+      /* Located on the white frieze wall above the glass entrance doors */
+      left: 310px;
+      top: 500px;
+      width: 540px;
+      height: 116px;
+      background: #f4f7fa;
+      border-radius: 4px;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 20px;
+      /* Match slight camera angle and perspective */
+      transform: perspective(1000px) rotateY(-1.2deg) rotateX(0.5deg);
+    }
+    .hospital-sign-content {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      width: 100%;
+      height: 100%;
+    }
+    .hospital-sign-logo {
+      height: 94px;
+      width: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 2px 4px rgba(15, 23, 42, 0.12));
+    }
+    .hospital-sign-text {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .hospital-sign-sub {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: #0f172a;
+      text-transform: uppercase;
+      margin-top: 4px;
+      border-top: 1.5px solid #0284c7;
+      padding-top: 3px;
+    }
+
+    /* ── 2. EMERGENCY PORTICO SIGN ── */
+    .emergency-entrance-sign {
+      position: absolute;
+      left: 890px;
+      top: 535px;
+      width: 250px;
+      height: 48px;
+      background: #0f2744;
+      border: 2px solid #ffffff;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      transform: perspective(1000px) rotateY(-2deg);
+    }
+    .emergency-entrance-title {
+      font-size: 14px;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      color: #ffffff;
+    }
+    .emergency-entrance-sub {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #38bdf8;
+    }
+
+    /* ── 3. AMBULANCE ROOF LIGHT BOX ── */
+    .ambulance-roof-sign {
+      position: absolute;
+      left: 692px;
+      top: 668px;
+      width: 164px;
+      height: 38px;
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 3px;
+      box-shadow: inset 0 1px 3px rgba(255,255,255,0.8), 0 2px 6px rgba(0,0,0,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transform: perspective(600px) rotateY(-6deg) rotateX(1deg);
+    }
+    .ambulance-roof-sign span {
+      font-size: 19px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      color: #dc2626;
+    }
+    .ambulance-star {
+      width: 16px;
+      height: 16px;
+      fill: #0284c7;
+    }
+
+    /* ── 4. AMBULANCE WINDSHIELD VISOR ── */
+    .ambulance-visor-sign {
+      position: absolute;
+      left: 686px;
+      top: 704px;
+      width: 218px;
+      height: 25px;
+      background: #dc2626;
+      border: 1px solid #b91c1c;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      transform: perspective(600px) rotateY(-6deg) rotateX(2deg);
+    }
+
+    /* ── 5. AMBULANCE FRONT BONNET ── */
+    .ambulance-bonnet-sign {
+      position: absolute;
+      left: 636px;
+      top: 792px;
+      width: 182px;
+      height: 28px;
+      background: #ffffff;
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+      transform: perspective(600px) rotateY(-8deg) rotateX(4deg);
+    }
+    .ambulance-bonnet-sign span {
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      color: #dc2626;
+    }
+    .ambulance-bonnet-logo {
+      height: 20px;
+      width: auto;
+    }
+
+    /* ── 6. AMBULANCE SIDE BODY PANEL ── */
+    .ambulance-side-panel {
+      position: absolute;
+      left: 818px;
+      top: 672px;
+      width: 282px;
+      height: 72px;
+      background: #ffffff;
+      border-radius: 3px;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.03);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 4px 8px;
+      transform: perspective(800px) rotateY(-18deg) rotateX(-1deg);
+      border: 1px solid rgba(226, 232, 240, 0.6);
+    }
+    .amb-side-top {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .amb-side-logo {
+      height: 38px;
+      width: auto;
+      object-fit: contain;
+    }
+    .amb-side-info {
+      display: flex;
+      flex-direction: column;
+    }
+    .amb-side-brand {
+      font-size: 14px;
+      font-weight: 900;
+      letter-spacing: 0.5px;
+      color: #0f172a;
+      line-height: 1.1;
+    }
+    .amb-side-type {
+      font-size: 8.5px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      color: #0284c7;
+      text-transform: uppercase;
+    }
+    .amb-side-phone {
+      font-size: 8.5px;
+      font-weight: 800;
+      color: #dc2626;
+      letter-spacing: 0.5px;
+      margin-top: 1px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Base realistic photo -->
+  <img src="/Volumes/hex/happy-home/happyhome-web/assets/images/hero_hospital_ambulance.jpg" class="base-image" alt="Happy Home Hospital">
+
+  <!-- 1. Hospital Entrance Frieze Signboard with Official Logo -->
+  <div class="hospital-sign-panel">
+    <div class="hospital-sign-content">
+      <img src="/Volumes/hex/happy-home/happyhome-web/assets/images/happy-home-logo-transparent-v2.png" class="hospital-sign-logo" alt="Happy Home Hospital">
+      <div class="hospital-sign-text">
+        <div class="hospital-sign-sub">Bhubaneswar • 24/7 Emergency &amp; ICU Care</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Emergency Entrance Sign -->
+  <div class="emergency-entrance-sign">
+    <span class="emergency-entrance-title">EMERGENCY &amp; TRAUMA</span>
+    <span class="emergency-entrance-sub">24/7 RESUSCITATION UNIT</span>
+  </div>
+
+  <!-- 3. Ambulance Roof Lightbox -->
+  <div class="ambulance-roof-sign">
+    <svg class="ambulance-star" viewBox="0 0 24 24">
+      <path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M4.93 19.07l14.14-14.14" stroke="#0284c7" stroke-width="3" stroke-linecap="round"/>
+    </svg>
+    <span>AMBULANCE</span>
+  </div>
+
+  <!-- 4. Ambulance Visor Sign -->
+  <div class="ambulance-visor-sign">
+    HAPPY HOME HOSPITAL
+  </div>
+
+  <!-- 5. Ambulance Front Bonnet -->
+  <div class="ambulance-bonnet-sign">
+    <img src="/Volumes/hex/happy-home/happyhome-web/assets/images/fav-logo.png" class="ambulance-bonnet-logo" alt="Logo">
+    <span>ECNALUBMA</span>
+  </div>
+
+  <!-- 6. Ambulance Side Livery -->
+  <div class="ambulance-side-panel">
+    <div class="amb-side-top">
+      <img src="/Volumes/hex/happy-home/happyhome-web/assets/images/happy-home-logo-transparent-v2.png" class="amb-side-logo" alt="Logo">
+      <div class="amb-side-info">
+        <span class="amb-side-brand">HAPPY HOME</span>
+        <span class="amb-side-type">Cardiac Trauma ICU Ambulance</span>
+        <span class="amb-side-phone">24/7 Emergency: +91 8249914673</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
