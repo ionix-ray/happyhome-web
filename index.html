@@ -70,10 +70,181 @@
         }, 1200);
       }
 
+      function initBioCanvas() {
+        var canvas = document.getElementById('bio-canvas');
+        if (!canvas || canvas.dataset.initialized) return;
+        canvas.dataset.initialized = 'true';
+        var ctx = canvas.getContext('2d');
+        if (!ctx) return;
+
+        var width, height;
+        function resize() {
+          var rect = canvas.getBoundingClientRect();
+          width = canvas.width = rect.width;
+          height = canvas.height = rect.height;
+        }
+        resize();
+        window.addEventListener('resize', resize);
+
+        var nodeCount = Math.min(36, Math.max(16, Math.floor(width / 38)));
+        var nodes = [];
+        for (var i = 0; i < nodeCount; i++) {
+          nodes.push({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            vx: (Math.random() - 0.5) * 0.45,
+            vy: (Math.random() - 0.5) * 0.45,
+            radius: Math.random() * 2.2 + 1.2,
+            color: Math.random() > 0.5 ? '#36a1d7' : '#2d8f7b'
+          });
+        }
+
+        var isVisible = true;
+        if ('IntersectionObserver' in window) {
+          var heroObs = new IntersectionObserver(function(entries) {
+            isVisible = entries[0].isIntersecting;
+          }, { threshold: 0.05 });
+          heroObs.observe(canvas.parentElement || canvas);
+        }
+
+        var time = 0;
+        function render() {
+          if (isVisible && width > 0 && height > 0) {
+            ctx.clearRect(0, 0, width, height);
+            time += 0.015;
+
+            // 1. DNA double-helix wave stream
+            var strandPoints = 26;
+            for (var s = 0; s < strandPoints; s++) {
+              var prog = s / strandPoints;
+              var x = prog * width;
+              var waveY1 = height * 0.45 + Math.sin(time + prog * 6.28) * 32;
+              var waveY2 = height * 0.45 - Math.sin(time + prog * 6.28) * 32;
+
+              if (s % 3 === 0) {
+                ctx.beginPath();
+                ctx.moveTo(x, waveY1);
+                ctx.lineTo(x, waveY2);
+                ctx.strokeStyle = 'rgba(54, 161, 215, 0.15)';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+              }
+
+              ctx.beginPath();
+              ctx.arc(x, waveY1, 2, 0, Math.PI * 2);
+              ctx.fillStyle = 'rgba(54, 161, 215, 0.4)';
+              ctx.fill();
+
+              ctx.beginPath();
+              ctx.arc(x, waveY2, 2, 0, Math.PI * 2);
+              ctx.fillStyle = 'rgba(45, 143, 123, 0.4)';
+              ctx.fill();
+            }
+
+            // 2. Synaptic connections & rehabilitation nodes
+            for (var i = 0; i < nodes.length; i++) {
+              var n = nodes[i];
+              n.x += n.vx;
+              n.y += n.vy;
+              if (n.x < 0 || n.x > width) n.vx *= -1;
+              if (n.y < 0 || n.y > height) n.vy *= -1;
+
+              for (var j = i + 1; j < nodes.length; j++) {
+                var n2 = nodes[j];
+                var dx = n.x - n2.x;
+                var dy = n.y - n2.y;
+                var dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < 130) {
+                  var alpha = (1 - dist / 130) * 0.28;
+                  ctx.beginPath();
+                  ctx.moveTo(n.x, n.y);
+                  ctx.lineTo(n2.x, n2.y);
+                  ctx.strokeStyle = 'rgba(54, 161, 215, ' + alpha + ')';
+                  ctx.lineWidth = 0.9;
+                  ctx.stroke();
+
+                  // Synapse neural sparks
+                  if ((i + j) % 5 === 0 && Math.sin(time * 2 + i) > 0.7) {
+                    var sparkPos = (Math.sin(time * 3 + j) + 1) / 2;
+                    var sx = n.x + (n2.x - n.x) * sparkPos;
+                    var sy = n.y + (n2.y - n.y) * sparkPos;
+                    ctx.beginPath();
+                    ctx.arc(sx, sy, 1.8, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(245, 158, 11, 0.6)';
+                    ctx.fill();
+                  }
+                }
+              }
+
+              ctx.beginPath();
+              ctx.arc(n.x, n.y, n.radius, 0, Math.PI * 2);
+              ctx.fillStyle = n.color;
+              ctx.globalAlpha = 0.45;
+              ctx.fill();
+              ctx.globalAlpha = 1.0;
+            }
+          }
+          requestAnimationFrame(render);
+        }
+        render();
+      }
+
+      function initCounters() {
+        if (!('IntersectionObserver' in window)) return;
+        var counterObserver = new IntersectionObserver(function(entries) {
+          entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+              var el = entry.target;
+              if (el.dataset.animated) return;
+              el.dataset.animated = 'true';
+              var target = parseFloat(el.dataset.target);
+              var suffix = el.dataset.suffix || '';
+              if (isNaN(target)) return;
+
+              var isFloat = target % 1 !== 0;
+              var duration = 1600;
+              var start = target > 1900 ? 1980 : 0;
+              var startTime = null;
+
+              function step(timestamp) {
+                if (!startTime) startTime = timestamp;
+                var progress = Math.min((timestamp - startTime) / duration, 1);
+                var ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+                var current = start + (target - start) * ease;
+                el.innerText = (isFloat ? current.toFixed(1) : Math.floor(current)) + suffix;
+                if (progress < 1) {
+                  requestAnimationFrame(step);
+                } else {
+                  el.innerText = (isFloat ? target.toFixed(1) : target) + suffix;
+                }
+              }
+              requestAnimationFrame(step);
+              counterObserver.unobserve(el);
+            }
+          });
+        }, { threshold: 0.1 });
+
+        function scanCounters() {
+          document.querySelectorAll('.dynamic-counter:not([data-bound])').forEach(function(el) {
+            el.setAttribute('data-bound', 'true');
+            counterObserver.observe(el);
+          });
+        }
+        scanCounters();
+        var dynObserver = new MutationObserver(scanCounters);
+        if (document.body) dynObserver.observe(document.body, { childList: true, subtree: true });
+      }
+
+      function setupInteractive() {
+        initScrollObserver();
+        initBioCanvas();
+        initCounters();
+      }
+
       var observer = new MutationObserver(function() {
         if (document.getElementById('app')) {
           cleanup();
-          initScrollObserver();
+          setupInteractive();
           observer.disconnect();
         }
       });
@@ -81,7 +252,7 @@
       window.addEventListener('DOMContentLoaded', function() {
         if (document.getElementById('app')) {
           cleanup();
-          initScrollObserver();
+          setupInteractive();
         }
       });
     })();

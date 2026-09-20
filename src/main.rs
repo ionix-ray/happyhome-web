@@ -11,6 +11,7 @@ pub mod domain;
 mod state;
 
 use crate::domain::config::SiteConfig;
+use components::common::{DividerType, WaveDivider};
 use components::icons::{
     CarbonActivityPulseIcon, CloseIcon, HospitalIcon, MapPinIcon, MenuIcon, MoonIcon,
     StethoscopeIcon, SunIcon,
@@ -51,19 +52,26 @@ fn App() -> Element {
                 NavBar {}
             }
 
-            // Main sections
+            // Main sections with organic wave transitions
             main { id: "main-content",
                 components::hero::Hero {}
                 components::about::About {}
+                WaveDivider { variant: DividerType::ToBg2, inverted: false }
                 components::services::Services {}
                 components::departments::Departments {}
+                WaveDivider { variant: DividerType::ToTeam, inverted: true }
                 components::team::Team {}
                 components::why_us::WhyUs {}
+                WaveDivider { variant: DividerType::ToBg2, inverted: false }
                 components::plans::Plans {}
+                WaveDivider { variant: DividerType::ToWhite, inverted: true }
                 components::testimonials::Testimonials {}
                 components::appointment::Appointment {}
+                WaveDivider { variant: DividerType::ToBg2, inverted: false }
                 components::faq::Faq {}
+                WaveDivider { variant: DividerType::ToWhite, inverted: true }
                 components::contact::Contact {}
+                WaveDivider { variant: DividerType::ToFooter, inverted: false }
             }
 
             // Footer

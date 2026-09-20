@@ -18,10 +18,15 @@ async function capture() {
   await page.goto(BASE_URL, { waitUntil: 'networkidle' });
   await page.waitForSelector('nav', { timeout: 10000 });
 
-  // 0. Hero with Single-line TopBar and Running facts ticker
+  // 0. Hero with Single-line TopBar, Bio-canvas, and dynamic counters
   await page.screenshot({ path: path.join(SCREENSHOT_DIR, '01_hero_desktop_v2.png') });
 
-  // 1. Services section with upper AI image half + lower text half
+  // 0.5 About section with Dr. Vijay Sahu's branded embroidered coat
+  await page.locator('#about').scrollIntoViewIfNeeded();
+  await page.waitForTimeout(600);
+  await page.screenshot({ path: path.join(SCREENSHOT_DIR, '03_about_doctor_branding.png') });
+
+  // 1. Services section with upper AI image half + lower text half + wave divider
   await page.locator('#services').scrollIntoViewIfNeeded();
   await page.waitForTimeout(600);
   await page.screenshot({ path: path.join(SCREENSHOT_DIR, '05_services_split_cards.png') });
@@ -35,6 +40,16 @@ async function capture() {
   await page.locator('#departments').scrollIntoViewIfNeeded();
   await page.waitForTimeout(600);
   await page.screenshot({ path: path.join(SCREENSHOT_DIR, '07_departments_split_cards.png') });
+
+  // 4. Dark Mode Hero & Wave Transitions
+  const themeBtn = page.locator('button[aria-label="Toggle theme"]').first();
+  await themeBtn.click();
+  await page.waitForTimeout(400);
+  await page.locator('#home').scrollIntoViewIfNeeded();
+  await page.screenshot({ path: path.join(SCREENSHOT_DIR, '02_dark_mode_hero_bio.png') });
+  await themeBtn.click();
+  await page.waitForTimeout(400);
+
 
   // Mobile 375
   const contextMobile = await browser.newContext({ viewport: { width: 375, height: 812 } });

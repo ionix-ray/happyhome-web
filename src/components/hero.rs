@@ -36,29 +36,35 @@ pub fn Hero() -> Element {
         phone.trim_start_matches('+').replace([' ', '-'], "")
     );
 
-    let stats: &[(&str, &str)] = match brand {
+    let stats: &[(&str, &str, &str, &str)] = match brand {
         BrandMode::Hospital => &[
-            ("24/7", "Emergency ICU"),
-            ("30+", "Dedicated Beds"),
-            ("98.6%", "Patient Recovery"),
-            ("2021", "Serving Odisha"),
+            ("24/7", "24", "/7", "Emergency ICU"),
+            ("30+", "30", "+", "Dedicated Beds"),
+            ("98.6%", "98.6", "%", "Patient Recovery"),
+            ("2021", "2021", "", "Serving Odisha"),
         ],
         BrandMode::Rehab => &[
-            ("30", "Specialized Beds"),
-            ("1:1", "Therapist Attention"),
-            ("1000+", "Smiles Restored"),
-            ("24/7", "Medical Supervision"),
+            ("30", "30", "", "Specialized Beds"),
+            ("1:1", "1", ":1", "Therapist Attention"),
+            ("1000+", "1000", "+", "Smiles Restored"),
+            ("24/7", "24", "/7", "Medical Supervision"),
         ],
     };
 
     rsx! {
         section {
             id: "home",
-            class: "hero-wrap pt-12 sm:pt-16 pb-16 overflow-hidden",
+            class: "hero-wrap pt-12 sm:pt-16 pb-16 overflow-hidden relative",
             role: "banner",
             "aria-labelledby": "hero-heading",
 
-            div { class: "container-x",
+            // Dynamic Bio-Synapse & Neural Double-Helix interactive canvas
+            canvas {
+                id: "bio-canvas",
+                class: "absolute inset-0 w-full h-full pointer-events-none z-0 opacity-70 dark:opacity-40",
+            }
+
+            div { class: "container-x relative z-10",
                 div { class: "grid grid-cols-1 lg:grid-cols-12 gap-12 items-center",
 
                     // ── Left Column: Copy & CTAs ──────────────────────────
@@ -112,13 +118,18 @@ pub fn Hero() -> Element {
                             }
                         }
 
-                        // Stats strip with staggered delay
+                        // Stats strip with staggered delay & dynamic rolling counters
                         div { class: "grid grid-cols-2 sm:grid-cols-4 gap-3 w-full max-w-xl peak-in-up delay-300",
-                            for (_idx, (num, lbl)) in stats.iter().enumerate() {
+                            for (_idx, (fallback, target, suffix, lbl)) in stats.iter().enumerate() {
                                 div {
                                     key: "{lbl}",
                                     class: "stat-pill rounded-2xl p-4 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-md",
-                                    div { class: "num text-2xl sm:text-3xl font-normal", "{num}" }
+                                    div {
+                                        class: "num text-2xl sm:text-3xl font-normal dynamic-counter",
+                                        "data-target": "{target}",
+                                        "data-suffix": "{suffix}",
+                                        "{fallback}"
+                                    }
                                     div { class: "text-[11px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 mt-1", "{lbl}" }
                                 }
                             }
