@@ -136,12 +136,19 @@ fn NavBar() -> Element {
 
             div { class: "container-x flex items-center justify-between py-3",
 
-                // Official Brand Logo — Crisp Transparent Vector SVG
+                // Official Brand Logo — Real transparent PNG, zero border, zero bg patch
                 a {
-                    class: "flex items-center gap-2 shrink-0 group focus:outline-none py-1",
+                    class: "flex items-center shrink-0 focus:outline-none py-1",
                     href: "#home",
                     "aria-label": "Happy Home Hospital And Rehab Home",
-                    components::icons::HappyHomeLogo { height: 44 }
+                    img {
+                        src: "/assets/images/happy-home-logo-nav.png",
+                        alt: "Happy Home Hospital And Rehab",
+                        height: "60",
+                        class: "h-14 w-auto object-contain select-none dark:brightness-[1.12] dark:contrast-[1.1]",
+                        loading: "eager",
+                        decoding: "async"
+                    }
                 }
 
                 // Desktop Nav links
