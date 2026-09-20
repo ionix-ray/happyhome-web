@@ -1,7 +1,7 @@
 //! Services section displaying specialized clinical & rehabilitation offerings.
 
 use crate::components::common::SectionHeader;
-use crate::components::icons::{ArrowRightIcon, DynamicIcon};
+use crate::components::icons::{ArrowRightIcon, DynamicIcon, HospitalIcon, StethoscopeIcon};
 use crate::domain::config::SiteConfig;
 use crate::state::{BrandMode, BrandModeSignal};
 use dioxus::prelude::*;
@@ -9,7 +9,7 @@ use dioxus::prelude::*;
 #[component]
 pub fn Services() -> Element {
     let config = use_context::<SiteConfig>();
-    let brand_signal = use_context::<BrandModeSignal>();
+    let mut brand_signal = use_context::<BrandModeSignal>();
     let brand = *brand_signal.0.read();
 
     let (tag, title, highlight, subtitle, services) = match brand {
@@ -45,6 +45,36 @@ pub fn Services() -> Element {
                     center: true,
                 }
 
+                // In-Page Interactive Dual-Track Explorer Tabs
+                div { class: "flex justify-center mb-12",
+                    div {
+                        class: "inline-flex p-1.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-md",
+                        role: "tablist",
+                        "aria-label": "Select clinical track",
+
+                        button {
+                            class: if brand == BrandMode::Hospital {
+                                "px-5 sm:px-6 py-2.5 rounded-xl bg-gradient-to-r from-blue-700 to-sky-600 text-white font-bold text-xs uppercase tracking-wider shadow-sm transition-all flex items-center gap-2"
+                            } else {
+                                "px-5 sm:px-6 py-2.5 rounded-xl text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white font-bold text-xs uppercase tracking-wider transition-all flex items-center gap-2"
+                            },
+                            onclick: move |_| *brand_signal.0.write() = BrandMode::Hospital,
+                            HospitalIcon { size: 16, color: "currentColor" }
+                            span { "Hospital Wing (6 Specialties)" }
+                        }
+                        button {
+                            class: if brand == BrandMode::Rehab {
+                                "px-5 sm:px-6 py-2.5 rounded-xl bg-gradient-to-r from-teal-700 to-emerald-600 text-white font-bold text-xs uppercase tracking-wider shadow-sm transition-all flex items-center gap-2"
+                            } else {
+                                "px-5 sm:px-6 py-2.5 rounded-xl text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white font-bold text-xs uppercase tracking-wider transition-all flex items-center gap-2"
+                            },
+                            onclick: move |_| *brand_signal.0.write() = BrandMode::Rehab,
+                            StethoscopeIcon { size: 16, color: "currentColor" }
+                            span { "Neuro-Rehab Centre (9 Programs)" }
+                        }
+                    }
+                }
+
                 div { class: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8",
                     for (idx, service) in services.into_iter().enumerate() {
                         {
@@ -53,14 +83,22 @@ pub fn Services() -> Element {
                                 1 => "delay-200",
                                 _ => "delay-300",
                             };
+                            let badge_cls = match idx % 6 {
+                                0 => "badge-cyan",
+                                1 => "badge-teal",
+                                2 => "badge-indigo",
+                                3 => "badge-amber",
+                                4 => "badge-rose",
+                                _ => "badge-purple",
+                            };
                             rsx! {
                                 div {
                                     key: "{service.slug}",
-                                    class: " p-8 flex flex-col justify-between group peak-in-up {delay_cls}",
+                                    class: "cure-card p-8 flex flex-col justify-between group peak-in-up {delay_cls}",
 
                                     div {
-                                        div { class: "icon-ring mb-6 group-hover:scale-110 transition-transform duration-300 shadow-sm",
-                                            DynamicIcon { name: service.icon_key.clone(), size: 26, color: "var(--c-brand)" }
+                                        div { class: "icon-badge {badge_cls} mb-6",
+                                            DynamicIcon { name: service.icon_key.clone(), size: 26, color: "currentColor" }
                                         }
                                         h3 { class: "text-xl font-bold mb-3 text-slate-900 dark:text-white group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors",
                                             "{service.name}"

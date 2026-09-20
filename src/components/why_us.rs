@@ -53,17 +53,23 @@ pub fn WhyUs() -> Element {
                                 2 => "delay-300",
                                 _ => "delay-400",
                             };
+                            let badge_cls = match idx % 4 {
+                                0 => "badge-cyan",
+                                1 => "badge-teal",
+                                2 => "badge-indigo",
+                                _ => "badge-amber",
+                            };
                             rsx! {
                                 div {
                                     key: "{item.title}",
-                                    class: " p-8 flex flex-col justify-between border-t-4 border-t-sky-500 hover:-translate-y-2 transition-all duration-300 peak-in-up {delay_cls}",
+                                    class: "cure-card p-8 flex flex-col justify-between hover:-translate-y-2 transition-all duration-300 peak-in-up {delay_cls}",
 
                                     div {
                                         div { class: "flex items-center justify-between mb-6",
-                                            div { class: "icon-ring shadow-sm",
-                                                DynamicIcon { name: item.icon_key, size: 24, color: "var(--c-brand)" }
+                                            div { class: "icon-badge {badge_cls}",
+                                                DynamicIcon { name: item.icon_key, size: 24, color: "currentColor" }
                                             }
-                                            span { class: "text-2xl font-black text-slate-200 dark:text-slate-800",
+                                            span { class: "text-2xl font-black text-slate-300 dark:text-slate-700",
                                                 "0{idx + 1}"
                                             }
                                         }

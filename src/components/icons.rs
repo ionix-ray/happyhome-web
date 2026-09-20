@@ -858,20 +858,20 @@ pub fn HappyHomeLogo(#[props(default = 42)] height: u32) -> Element {
                 path { d: "M0 -54 C12 -44 14 -32 0 -22 C-14 -32 -12 -44 0 -54Z", fill: "#36a1d7", opacity: "0.95" }
                 path { d: "M0 54 C12 44 14 32 0 22 C-14 32 -12 44 0 54Z", fill: "#134cb3", opacity: "0.95" }
                 path { d: "M54 0 C44 12 32 14 22 0 C32 -14 44 -12 54 0Z", fill: "#2563eb", opacity: "0.95" }
-                path { d: "-54 0 C-44 12 -32 14 -22 0 C-32 -14 -44 -12 -54 0Z", fill: "#2563eb", opacity: "0.95" }
+                path { d: "M-54 0 C-44 12 -32 14 -22 0 C-32 -14 -44 -12 -54 0Z", fill: "#2563eb", opacity: "0.95" }
 
                 g { transform: "rotate(30)",
                     path { d: "M0 -54 C12 -44 14 -32 0 -22 C-14 -32 -12 -44 0 -54Z", fill: "#36a1d7", opacity: "0.9" }
                     path { d: "M0 54 C12 44 14 32 0 22 C-14 32 -12 44 0 54Z", fill: "#134cb3", opacity: "0.9" }
                     path { d: "M54 0 C44 12 32 14 22 0 C32 -14 44 -12 54 0Z", fill: "#2563eb", opacity: "0.9" }
-                    path { d: "-54 0 C-44 12 -32 14 -22 0 C-32 -14 -44 -12 -54 0Z", fill: "#2563eb", opacity: "0.9" }
+                    path { d: "M-54 0 C-44 12 -32 14 -22 0 C-32 -14 -44 -12 -54 0Z", fill: "#2563eb", opacity: "0.9" }
                 }
 
                 g { transform: "rotate(60)",
                     path { d: "M0 -54 C12 -44 14 -32 0 -22 C-14 -32 -12 -44 0 -54Z", fill: "#36a1d7", opacity: "0.9" }
                     path { d: "M0 54 C12 44 14 32 0 22 C-14 32 -12 44 0 54Z", fill: "#134cb3", opacity: "0.9" }
                     path { d: "M54 0 C44 12 32 14 22 0 C32 -14 44 -12 54 0Z", fill: "#2563eb", opacity: "0.9" }
-                    path { d: "-54 0 C-44 12 -32 14 -22 0 C-32 -14 -44 -12 -54 0Z", fill: "#2563eb", opacity: "0.9" }
+                    path { d: "M-54 0 C-44 12 -32 14 -22 0 C-32 -14 -44 -12 -54 0Z", fill: "#2563eb", opacity: "0.9" }
                 }
 
                 // Concentric circles

@@ -40,10 +40,10 @@ pub fn Contact() -> Element {
                 div { class: "grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12",
 
                     // Card 1: Address
-                    div { class: " p-8 flex flex-col justify-between group peak-in-up delay-100",
+                    div { class: "cure-card p-8 flex flex-col justify-between group peak-in-up delay-100",
                         div {
-                            div { class: "icon-ring mb-4 group-hover:scale-110 transition-transform duration-300 shadow-sm",
-                                MapPinIcon { size: 24, color: "var(--c-brand)" }
+                            div { class: "icon-badge badge-cyan mb-4",
+                                MapPinIcon { size: 24, color: "currentColor" }
                             }
                             h3 { class: "text-lg font-bold text-slate-900 dark:text-white mb-2 group-hover:text-sky-600 transition-colors", "Hospital Address" }
                             p { class: "text-sm text-slate-700 dark:text-slate-200 leading-relaxed mb-4 font-medium", "{address}" }
@@ -58,10 +58,10 @@ pub fn Contact() -> Element {
                     }
 
                     // Card 2: Contact Numbers
-                    div { class: " p-8 flex flex-col justify-between group peak-in-up delay-200",
+                    div { class: "cure-card p-8 flex flex-col justify-between group peak-in-up delay-200",
                         div {
-                            div { class: "icon-ring mb-4 group-hover:scale-110 transition-transform duration-300 shadow-sm",
-                                PhoneIcon { size: 24, color: "var(--c-brand)" }
+                            div { class: "icon-badge badge-teal mb-4",
+                                PhoneIcon { size: 24, color: "currentColor" }
                             }
                             h3 { class: "text-lg font-bold text-slate-900 dark:text-white mb-2 group-hover:text-sky-600 transition-colors", "Phone & WhatsApp" }
                             p { class: "text-sm text-slate-700 dark:text-slate-200 leading-relaxed mb-2 font-medium",
@@ -84,10 +84,10 @@ pub fn Contact() -> Element {
                     }
 
                     // Card 3: Hours & Email
-                    div { class: " p-8 flex flex-col justify-between group peak-in-up delay-300",
+                    div { class: "cure-card p-8 flex flex-col justify-between group peak-in-up delay-300",
                         div {
-                            div { class: "icon-ring mb-4 group-hover:scale-110 transition-transform duration-300 shadow-sm",
-                                ClockIcon { size: 24, color: "var(--c-brand)" }
+                            div { class: "icon-badge badge-indigo mb-4",
+                                ClockIcon { size: 24, color: "currentColor" }
                             }
                             h3 { class: "text-lg font-bold text-slate-900 dark:text-white mb-2 group-hover:text-sky-600 transition-colors", "Hours & Support" }
                             p { class: "text-sm text-slate-700 dark:text-slate-200 leading-relaxed mb-2 font-semibold", "{hours}" }

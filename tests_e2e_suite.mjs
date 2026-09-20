@@ -76,27 +76,27 @@ async function runBrowserTests(browserName, executablePath) {
     const isCleanTitle = title.includes('Happy Home Hospital') && title.indexOf('Happy Home') === title.lastIndexOf('Happy Home');
     record('Page Title Non-Duplicated & Clean', isCleanTitle, `Title: "${title}"`);
 
-    // 4. Logo natural width
-    const logoImg = page.locator('nav img[alt*="Happy Home"]');
-    const logoLoaded = await logoImg.evaluate(img => img.complete && img.naturalWidth > 0);
-    record('Official Brand Logo Verified', logoLoaded);
+    // 4. Vector SVG Logo Verified
+    const logoEl = page.locator('nav a[aria-label*="Happy Home"] svg, nav img[alt*="Happy Home"]').first();
+    const logoLoaded = (await logoEl.count()) > 0;
+    record('Official Brand Logo Verified (Crisp Vector/SVG)', logoLoaded);
 
     // Save Hero Desktop Screenshot
     const prefix = browserName.toLowerCase().replace(/\s+/g, '_');
     await page.screenshot({ path: path.join(SCREENSHOT_DIR, `${prefix}_01_hero.png`) });
 
-    // 5. Dual-Brand Mode Switching
-    const rehabBtn = page.locator('button:has-text("Rehab Centre")').first();
+    // 5. Dual-Brand Mode Switching in Navbar
+    const rehabBtn = page.locator('nav button:has-text("Rehab")').first();
     await rehabBtn.click();
     await page.waitForTimeout(300);
     const rehabBrand = await page.locator('#app').getAttribute('data-brand');
-    record('Switch to Rehab Centre Mode', rehabBrand === 'rehab');
+    record('Switch to Rehab Centre Mode via Nav Pill', rehabBrand === 'rehab');
 
-    const hospBtn = page.locator('button:has-text("Hospital")').first();
+    const hospBtn = page.locator('nav button:has-text("Hospital")').first();
     await hospBtn.click();
     await page.waitForTimeout(300);
     const hospBrand = await page.locator('#app').getAttribute('data-brand');
-    record('Switch to Hospital Mode', hospBrand === 'hospital');
+    record('Switch to Hospital Mode via Nav Pill', hospBrand === 'hospital');
 
     // 6. Theme Toggle & Dark Mode Contrast
     const themeBtn = page.locator('button[aria-label="Toggle theme"]').first();
@@ -108,7 +108,6 @@ async function runBrowserTests(browserName, executablePath) {
     // Check Hero H1 color in dark mode
     const h1Color = await page.locator('#hero-heading').evaluate(el => window.getComputedStyle(el).color);
     console.log(`[${browserName}] Hero H1 computed color in Dark Mode:`, h1Color);
-    // rgb(248, 250, 252) is #f8fafc (Slate 50)
     const isBrightText = h1Color.includes('248, 250, 252') || h1Color.includes('255, 255, 255');
     record('Dark Mode Hero Heading High Contrast (WCAG AAA)', isBrightText, `Color: ${h1Color}`);
     await page.screenshot({ path: path.join(SCREENSHOT_DIR, `${prefix}_02_dark_mode.png`) });
@@ -117,7 +116,28 @@ async function runBrowserTests(browserName, executablePath) {
     await themeBtn.click();
     await page.waitForTimeout(300);
 
-    // 7. Doctor Cards & Interactive Modal Dialog
+    // 7. Services Section & Dual-Track Explorer Tabs
+    await page.locator('#services').scrollIntoViewIfNeeded();
+    await page.waitForTimeout(400);
+    const serviceCards = page.locator('#services .cure-card');
+    const serviceCount = await serviceCards.count();
+    record('Services Section Cure-Cards Rendered', serviceCount >= 4, `Found: ${serviceCount}`);
+
+    const rehabTab = page.locator('#services button:has-text("Addiction & Rehab")').first();
+    if (await rehabTab.count() > 0) {
+      await rehabTab.click();
+      await page.waitForTimeout(300);
+      record('Services In-Page Rehab Explorer Tab Clickable', true);
+    }
+
+    // 8. Universal Cure-Cards & Duotone Badges Layout
+    const totalCureCards = await page.locator('.cure-card').count();
+    record('Universal Cure-Card Layout Across Sections', totalCureCards >= 12, `Total Cards: ${totalCureCards}`);
+
+    const iconBadges = await page.locator('.icon-badge').count();
+    record('Colorful Duotone Badges Rendered', iconBadges >= 8, `Total Badges: ${iconBadges}`);
+
+    // 9. Doctor Cards & Interactive Modal Dialog
     await page.locator('#team').scrollIntoViewIfNeeded();
     await page.waitForTimeout(400);
     const docCards = page.locator('#team div[class*="group"]');
@@ -143,7 +163,7 @@ async function runBrowserTests(browserName, executablePath) {
       record('Doctor Modal Closes Cleanly', modalClosed);
     }
 
-    // 8. Appointment Form Interactive Input
+    // 10. Appointment Form Interactive Input
     await page.locator('#appointment').scrollIntoViewIfNeeded();
     await page.waitForTimeout(400);
 
@@ -161,7 +181,7 @@ async function runBrowserTests(browserName, executablePath) {
     record('Appointment Form Interactive Input', true);
     await page.screenshot({ path: path.join(SCREENSHOT_DIR, `${prefix}_04_appointment_section.png`) });
 
-    // 9. Zero Console & Network Errors
+    // 11. Zero Console & Network Errors
     record('Zero Console Errors', consoleErrors.length === 0, `Errors: ${JSON.stringify(consoleErrors)}`);
     record('Zero Asset 404s', networkErrors.length === 0, `Failed: ${JSON.stringify(networkErrors)}`);
 

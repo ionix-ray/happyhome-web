@@ -13,7 +13,7 @@ pub struct CardProps {
 pub fn Card(props: CardProps) -> Element {
     rsx! {
         div {
-            class: " p-6 {props.class}",
+            class: "cure-card p-6 {props.class}",
             {props.children}
         }
     }

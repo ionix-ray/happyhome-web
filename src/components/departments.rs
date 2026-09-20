@@ -83,7 +83,7 @@ pub fn Departments() -> Element {
                             rsx! {
                                 div {
                                     key: "{dept.name}",
-                                    class: " p-8 flex flex-col justify-between group hover:border-sky-500 transition-all peak-in-up {delay_cls}",
+                                    class: "cure-card p-8 flex flex-col justify-between group transition-all peak-in-up {delay_cls}",
 
                                     div {
                                         div { class: "flex items-center justify-between mb-4",

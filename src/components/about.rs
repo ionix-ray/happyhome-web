@@ -68,7 +68,7 @@ pub fn About() -> Element {
 
                     // Right Column: Founder Doctor Card (slide from right on scroll)
                     div { class: "lg:col-span-5 peak-in-right delay-150",
-                        div { class: " p-8 bg-slate-50 dark:bg-[#111a2e] border-2 border-sky-500/20 relative overflow-hidden",
+                        div { class: "cure-card p-8 relative overflow-hidden border-2 border-sky-500/30",
                             div { class: "flex flex-col sm:flex-row items-center sm:items-start gap-6 mb-6",
                                 img {
                                     src: "{founder_img}",

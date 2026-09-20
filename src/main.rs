@@ -136,44 +136,12 @@ fn NavBar() -> Element {
 
             div { class: "container-x flex items-center justify-between py-3",
 
-                // Official Brand Logo — happy-home-final-logo.png
+                // Official Brand Logo — Crisp Transparent Vector SVG
                 a {
-                    class: "flex items-center gap-3 shrink-0 group focus:outline-none",
+                    class: "flex items-center gap-2 shrink-0 group focus:outline-none py-1",
                     href: "#home",
                     "aria-label": "Happy Home Hospital And Rehab Home",
-                    img {
-                        src: "/assets/images/happy-home-final-logo.png",
-                        alt: "Happy Home Hospital & Rehab",
-                        class: "h-10 sm:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-[1.03]",
-                    }
-                }
-
-                // Brand toggle pill (Hospital vs Rehab mode)
-                div {
-                    class: "hidden md:inline-flex p-1 bg-slate-100 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-bold",
-                    role: "group",
-                    "aria-label": "Select medical mode",
-
-                    button {
-                        class: if *brand.read() == BrandMode::Hospital {
-                            "px-4 py-1.5 rounded-lg bg-emerald-700 text-white shadow-sm transition-all inline-flex items-center gap-1.5"
-                        } else {
-                            "px-4 py-1.5 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all inline-flex items-center gap-1.5"
-                        },
-                        onclick: move |_| *brand.write() = BrandMode::Hospital,
-                        HospitalIcon { size: 14, color: "currentColor" }
-                        span { "Hospital" }
-                    }
-                    button {
-                        class: if *brand.read() == BrandMode::Rehab {
-                            "px-4 py-1.5 rounded-lg bg-emerald-700 text-white shadow-sm transition-all inline-flex items-center gap-1.5"
-                        } else {
-                            "px-4 py-1.5 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all inline-flex items-center gap-1.5"
-                        },
-                        onclick: move |_| *brand.write() = BrandMode::Rehab,
-                        StethoscopeIcon { size: 14, color: "currentColor" }
-                        span { "Rehab Centre" }
-                    }
+                    components::icons::HappyHomeLogo { height: 44 }
                 }
 
                 // Desktop Nav links
@@ -182,18 +150,46 @@ fn NavBar() -> Element {
                         a {
                             key: "{name}",
                             href: "{href}",
-                            class: "hover:text-emerald-700 dark:hover:text-emerald-400 transition-colors",
+                            class: "hover:text-sky-600 dark:hover:text-sky-400 transition-colors py-1",
                             "{name}"
                         }
                     }
                 }
 
-                // Right controls: Theme toggle, Appointment CTA, Mobile burger
-                div { class: "flex items-center gap-3",
+                // Right controls: Brand toggle, Theme toggle, Appointment CTA, Mobile burger
+                div { class: "flex items-center gap-2.5 sm:gap-3",
+
+                    // Brand toggle pill (Hospital vs Rehab mode at end of navbar)
+                    div {
+                        class: "hidden md:inline-flex p-1 bg-slate-100 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-bold shadow-inner",
+                        role: "group",
+                        "aria-label": "Select medical mode",
+
+                        button {
+                            class: if *brand.read() == BrandMode::Hospital {
+                                "px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-blue-700 to-sky-600 text-white shadow-sm transition-all inline-flex items-center gap-1.5 text-[11px] uppercase tracking-wider"
+                            } else {
+                                "px-3.5 py-1.5 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all inline-flex items-center gap-1.5 text-[11px] uppercase tracking-wider"
+                            },
+                            onclick: move |_| *brand.write() = BrandMode::Hospital,
+                            HospitalIcon { size: 13, color: "currentColor" }
+                            span { "Hospital" }
+                        }
+                        button {
+                            class: if *brand.read() == BrandMode::Rehab {
+                                "px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-teal-700 to-emerald-600 text-white shadow-sm transition-all inline-flex items-center gap-1.5 text-[11px] uppercase tracking-wider"
+                            } else {
+                                "px-3.5 py-1.5 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all inline-flex items-center gap-1.5 text-[11px] uppercase tracking-wider"
+                            },
+                            onclick: move |_| *brand.write() = BrandMode::Rehab,
+                            StethoscopeIcon { size: 13, color: "currentColor" }
+                            span { "Rehab Centre" }
+                        }
+                    }
 
                     // Theme toggle
                     button {
-                        class: "p-2 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-emerald-600 transition-colors flex items-center justify-center",
+                        class: "p-2 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-sky-500 transition-colors flex items-center justify-center hover:bg-slate-50 dark:hover:bg-slate-800",
                         onclick: move |_| {
                             let cur = *theme.read();
                             *theme.write() = cur.toggle();
@@ -209,7 +205,7 @@ fn NavBar() -> Element {
 
                     // Book appointment CTA
                     a {
-                        class: "btn-solid hidden sm:inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider carbon-btn-hover",
+                        class: "btn-solid hidden sm:inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider carbon-btn-hover shadow-md",
                         href: "#appointment",
                         StethoscopeIcon { size: 14, color: "#fff" }
                         "Book Appointment"
@@ -217,7 +213,7 @@ fn NavBar() -> Element {
 
                     // Mobile Menu Hamburger Button
                     button {
-                        class: "lg:hidden p-2 rounded-xl text-slate-700 dark:text-slate-200 flex items-center justify-center",
+                        class: "lg:hidden p-2 rounded-xl text-slate-700 dark:text-slate-200 flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-800",
                         onclick: move |_| *mobile_nav_signal.0.write() = !is_mobile_open,
                         "aria-label": "Toggle mobile navigation",
                         if is_mobile_open {

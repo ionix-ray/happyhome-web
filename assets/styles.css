@@ -212,6 +212,118 @@ h1.text-white, h2.text-white, h3.text-white, h4.text-white, h5.text-white, h6.te
   background: linear-gradient(90deg, #101a29 0%, #134cb3 55%, #36a1d7 100%);
 }
 
+/* ── Production-Grade Card Layouts ────────────────────────────── */
+.card, .cure-card {
+  background: var(--c-bg-card);
+  border: 1px solid var(--c-line);
+  border-radius: 1.5rem; /* rounded-3xl */
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.04), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.card:hover, .cure-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 35px -10px rgba(54, 161, 215, 0.18), 0 8px 16px -4px rgba(19, 76, 179, 0.1);
+  border-color: rgba(54, 161, 215, 0.45);
+}
+
+.dark .card, .dark .cure-card,
+[data-theme="dark"] .card, [data-theme="dark"] .cure-card {
+  background: var(--c-bg-card);
+  border-color: var(--c-line);
+  box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.45);
+}
+
+.dark .card:hover, .dark .cure-card:hover,
+[data-theme="dark"] .card:hover, [data-theme="dark"] .cure-card:hover {
+  box-shadow: 0 20px 40px -10px rgba(56, 189, 248, 0.22), 0 0 20px rgba(56, 189, 248, 0.12);
+  border-color: rgba(56, 189, 248, 0.4);
+}
+
+/* Colorful Duotone Icon Badges */
+.icon-badge {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 6px 16px -4px rgba(0, 0, 0, 0.12);
+}
+
+.group:hover .icon-badge {
+  transform: scale(1.1) rotate(-3deg);
+}
+
+.badge-cyan {
+  background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+  color: #0284c7;
+  border: 1px solid #7dd3fc;
+}
+.dark .badge-cyan {
+  background: linear-gradient(135deg, rgba(2, 132, 199, 0.25) 0%, rgba(56, 189, 248, 0.15) 100%);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+}
+
+.badge-teal {
+  background: linear-gradient(135deg, #ccfbf1 0%, #99f6e4 100%);
+  color: #0d9488;
+  border: 1px solid #5eead4;
+}
+.dark .badge-teal {
+  background: linear-gradient(135deg, rgba(13, 148, 136, 0.25) 0%, rgba(45, 212, 191, 0.15) 100%);
+  color: #2dd4bf;
+  border: 1px solid rgba(45, 212, 191, 0.35);
+}
+
+.badge-indigo {
+  background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+  color: #4f46e5;
+  border: 1px solid #a5b4fc;
+}
+.dark .badge-indigo {
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.25) 0%, rgba(129, 140, 248, 0.15) 100%);
+  color: #818cf8;
+  border: 1px solid rgba(129, 140, 248, 0.35);
+}
+
+.badge-amber {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  color: #d97706;
+  border: 1px solid #fcd34d;
+}
+.dark .badge-amber {
+  background: linear-gradient(135deg, rgba(217, 119, 6, 0.25) 0%, rgba(251, 191, 36, 0.15) 100%);
+  color: #fbbf24;
+  border: 1px solid rgba(251, 191, 36, 0.35);
+}
+
+.badge-rose {
+  background: linear-gradient(135deg, #ffe4e6 0%, #fecdd3 100%);
+  color: #e11d48;
+  border: 1px solid #fda4af;
+}
+.dark .badge-rose {
+  background: linear-gradient(135deg, rgba(225, 29, 72, 0.25) 0%, rgba(251, 113, 133, 0.15) 100%);
+  color: #fb7185;
+  border: 1px solid rgba(251, 113, 133, 0.35);
+}
+
+.badge-purple {
+  background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%);
+  color: #9333ea;
+  border: 1px solid #d8b4fe;
+}
+.dark .badge-purple {
+  background: linear-gradient(135deg, rgba(147, 51, 234, 0.25) 0%, rgba(192, 132, 252, 0.15) 100%);
+  color: #c084fc;
+  border: 1px solid rgba(192, 132, 252, 0.35);
+}
+
 /* Buttons */
 .btn-solid {
   background: linear-gradient(135deg, #134cb3 0%, #36a1d7 100%);
@@ -520,13 +632,20 @@ h1.text-white, h2.text-white, h3.text-white, h4.text-white, h5.text-white, h6.te
 /* 1. Base Peak-in States (GPU-accelerated, composite-friendly) */
 /* Restrained orchestration: pure CSS scroll-driven animations */
 
-.peak-in-up,
-.peak-in-left,
-.peak-in-right,
-.peak-in-down,
+.peak-in-up {
+  animation: peakInUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.peak-in-left {
+  animation: peakInLeft 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.peak-in-right {
+  animation: peakInRight 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.peak-in-down {
+  animation: peakInDown 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
 .peak-in-scale {
-  opacity: 1;
-  transform: none;
+  animation: peakInScale 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 @supports (animation-timeline: view()) {
@@ -538,7 +657,7 @@ h1.text-white, h2.text-white, h3.text-white, h4.text-white, h5.text-white, h6.te
     animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
     animation-fill-mode: both;
     animation-timeline: view();
-    animation-range: entry 5% cover 20%;
+    animation-range: entry 5% cover 25%;
   }
 
   .peak-in-up { animation-name: peakInUp; }
