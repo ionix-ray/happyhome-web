@@ -53,6 +53,33 @@ pub fn Hero() -> Element {
         ],
     };
 
+    let (hero_img, hero_img_alt, hero_card_title, hero_card_sub, badge_doc_name, badge_doc_role, badge_doc_img, badge_stat_num, badge_stat_lbl, is_hospital) = match brand {
+        BrandMode::Hospital => (
+            "/assets/images/hero_hospital_ambulance.jpg",
+            "Happy Home Hospital Bhubaneswar — 24/7 Emergency Ambulance & Critical Care Entrance",
+            "Happy Home Multispecialty Hospital & Emergency",
+            "Plot no.223, K-1 Kalinga Nagar, Bhubaneswar · 24/7 Trauma & Ambulance",
+            "Dr. Sambit Dash",
+            "Chief of Critical Care & ICU",
+            "/assets/images/dr_sambit_dash.jpg",
+            "24/7 Emergency",
+            "Cardiac Trauma Ambulance on Standby",
+            true,
+        ),
+        BrandMode::Rehab => (
+            "/assets/images/hero_banner.jpg",
+            "Happy Home Inpatient Neuro-Rehabilitation Center Bhubaneswar",
+            "Happy Home Inpatient Neuro & Spine Rehab",
+            "Plot no.223, K-1 Kalinga Nagar, Bhubaneswar · Dedicated 30-Bed Recovery Facility",
+            "Dr. Vijay Kumar Sahu",
+            "Founder & Managing Director",
+            "/assets/images/dr_vijay_sahu.jpg",
+            "30 Inpatient Beds",
+            "1:1 Daily Physio & Neuro Rehab",
+            false,
+        ),
+    };
+
     rsx! {
         section {
             id: "home",
@@ -138,39 +165,43 @@ pub fn Hero() -> Element {
                         // Main facility image card with organic healing breath aura
                         div { class: "relative rounded-[2rem] overflow-hidden border-4 border-white dark:border-slate-800 shadow-2xl aspect-[4/5] bg-cover bg-center group",
                             img {
-                                src: "assets/images/hero_banner.jpg",
-                                alt: "Happy Home Hospital and Rehabilitation Center Bhubaneswar",
+                                src: "{hero_img}",
+                                alt: "{hero_img_alt}",
                                 class: "w-full h-full object-cover group-hover:scale-105 transition-transform duration-700",
                             }
 
                             // Gradient overlay with hospital title
                             div { class: "absolute bottom-0 inset-x-0 p-6 bg-gradient-to-t from-slate-950/90 via-slate-950/40 to-transparent text-white",
-                                div { class: "text-base font-bold", "Happy Home Hospital & Inpatient Rehab" }
-                                div { class: "text-xs text-white/90 mt-1", "Plot no.223, Kalinga Nagar, Bhubaneswar · Open 24/7" }
+                                div { class: "text-base font-bold", "{hero_card_title}" }
+                                div { class: "text-xs text-white/90 mt-1", "{hero_card_sub}" }
                             }
                         }
 
-                        // Floating Badge Top Right (Doctor founder preview)
+                        // Floating Badge Top Right (Doctor preview)
                         div { class: "absolute -top-6 -right-2 sm:-right-6 bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-700 p-3.5 flex items-center gap-3 backdrop-blur-md",
                             img {
-                                src: "assets/images/dr_vijay_sahu.jpg",
-                                alt: "Dr. Vijay Kumar Sahu",
+                                src: "{badge_doc_img}",
+                                alt: "{badge_doc_name}",
                                 class: "w-12 h-12 rounded-xl object-cover object-top border-2 border-sky-500",
                             }
                             div {
-                                div { class: "font-extrabold text-xs text-slate-900 dark:text-white", "Dr. Vijay Kumar Sahu" }
-                                div { class: "text-[10px] font-bold text-sky-600 dark:text-sky-400", "Founder & Managing Director" }
+                                div { class: "font-extrabold text-xs text-slate-900 dark:text-white", "{badge_doc_name}" }
+                                div { class: "text-[10px] font-bold text-sky-600 dark:text-sky-400", "{badge_doc_role}" }
                             }
                         }
 
-                        // Floating Badge Bottom Left (Inpatient trust badge with Carbon Heartbeat)
+                        // Floating Badge Bottom Left (Trust badge)
                         div { class: "absolute -bottom-6 -left-2 sm:-left-6 bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-700 p-4 flex items-center gap-3",
                             div { class: "icon-ring !w-11 !h-11 shrink-0 bg-rose-50 dark:bg-rose-950/50",
-                                CarbonHeartHealthIcon { size: 22 }
+                                if is_hospital {
+                                    CarbonEmergencySirenIcon { size: 22 }
+                                } else {
+                                    CarbonHospitalBedIcon { size: 22 }
+                                }
                             }
                             div {
-                                div { class: "font-extrabold text-sm text-slate-900 dark:text-white", "30 Inpatient Beds" }
-                                div { class: "text-[11px] font-semibold text-slate-600 dark:text-slate-300", "Dedicated Neuro & Spine Wards" }
+                                div { class: "font-extrabold text-sm text-slate-900 dark:text-white", "{badge_stat_num}" }
+                                div { class: "text-[11px] font-semibold text-slate-600 dark:text-slate-300", "{badge_stat_lbl}" }
                             }
                         }
                     }
