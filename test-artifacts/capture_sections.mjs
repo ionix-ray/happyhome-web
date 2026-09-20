@@ -50,6 +50,10 @@ async function capture() {
   await themeBtn.click();
   await page.waitForTimeout(400);
 
+  // 5. Footer with visible logo and ISO/accreditations strip
+  await page.locator('footer').scrollIntoViewIfNeeded();
+  await page.waitForTimeout(600);
+  await page.screenshot({ path: path.join(SCREENSHOT_DIR, '08_footer_certifications.png') });
 
   // Mobile 375
   const contextMobile = await browser.newContext({ viewport: { width: 375, height: 812 } });

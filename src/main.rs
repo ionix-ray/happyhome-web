@@ -13,7 +13,7 @@ mod state;
 use crate::domain::config::SiteConfig;
 use components::common::{DividerType, WaveDivider};
 use components::icons::{
-    CarbonActivityPulseIcon, CloseIcon, HospitalIcon, MapPinIcon, MenuIcon, MoonIcon,
+    CarbonActivityPulseIcon, CarbonTimeClockIcon, CloseIcon, HospitalIcon, MapPinIcon, MenuIcon, MoonIcon,
     StethoscopeIcon, SunIcon,
 };
 use state::{init_global_state, BrandMode, BrandModeSignal, MobileNavSignal, ThemeSignal};
@@ -41,6 +41,12 @@ fn App() -> Element {
             "data-theme": "{theme_str}",
             "data-brand": "{brand_str}",
             class: if theme_str == "dark" { "dark bg-slate-950 text-slate-100 min-h-screen" } else { "bg-white text-slate-900 min-h-screen" },
+
+            // Dynamic Site-Wide Multi-Colour Gene Mutation & Neuro-Synapse Canvas
+            canvas {
+                id: "bio-canvas",
+                class: "bio-canvas-fixed",
+            }
 
             // Accessibility skip link
             a { class: "skip-link", href: "#main-content", "Skip to main content" }
@@ -109,7 +115,8 @@ fn TopBar() -> Element {
                     span { "Plot no.223, K-1 Kalinga Nagar, Bhubaneswar" }
                 }
                 div { class: "flex items-center gap-1.5 text-white/90",
-                    span { "🕐 {config.contact.hours}" }
+                    CarbonTimeClockIcon { size: 14 }
+                    span { "{config.contact.hours}" }
                 }
             }
             // Mobile: Ticker marquee infinite scroll with 2 copies of deduplicated string
@@ -127,7 +134,10 @@ fn TopBar() -> Element {
                             "Kalinga Nagar, Bhubaneswar"
                         }
                         span { "·" }
-                        span { "{config.contact.hours}" }
+                        span { class: "inline-flex items-center gap-1",
+                            CarbonTimeClockIcon { size: 12 }
+                            span { "{config.contact.hours}" }
+                        }
                         span { "·" }
                     }
                     span { class: "inline-flex items-center gap-4 pr-8",
@@ -142,7 +152,10 @@ fn TopBar() -> Element {
                             "Kalinga Nagar, Bhubaneswar"
                         }
                         span { "·" }
-                        span { "{config.contact.hours}" }
+                        span { class: "inline-flex items-center gap-1",
+                            CarbonTimeClockIcon { size: 12 }
+                            span { "{config.contact.hours}" }
+                        }
                         span { "·" }
                     }
                 }

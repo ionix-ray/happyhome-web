@@ -1,7 +1,9 @@
 //! Hero section with dual-brand dynamic copy, stats pills, and hospital visuals.
 
 use crate::components::icons::{
-    ArrowRightIcon, CarbonActivityPulseIcon, CarbonHeartHealthIcon, StethoscopeIcon, WhatsAppIcon,
+    ArrowRightIcon, CarbonActivityPulseIcon, CarbonChartTrendIcon, CarbonCognitiveIcon,
+    CarbonEmergencySirenIcon, CarbonHeartHealthIcon, CarbonHospitalBedIcon, CarbonPartnershipIcon,
+    CarbonShieldQualityIcon, CarbonSmilesHeartIcon, StethoscopeIcon, WhatsAppIcon,
 };
 use crate::domain::config::SiteConfig;
 use crate::state::{BrandMode, BrandModeSignal};
@@ -57,12 +59,6 @@ pub fn Hero() -> Element {
             class: "hero-wrap pt-12 sm:pt-16 pb-16 overflow-hidden relative",
             role: "banner",
             "aria-labelledby": "hero-heading",
-
-            // Dynamic Bio-Synapse & Neural Double-Helix interactive canvas
-            canvas {
-                id: "bio-canvas",
-                class: "absolute inset-0 w-full h-full pointer-events-none z-0 opacity-70 dark:opacity-40",
-            }
 
             div { class: "container-x relative z-10",
                 div { class: "grid grid-cols-1 lg:grid-cols-12 gap-12 items-center",
@@ -181,65 +177,79 @@ pub fn Hero() -> Element {
                 }
             }
 
-            // Running Facts & Stats Marquee Ticker
+            // Running Facts & Stats Marquee Ticker (Multi-colour IBM Carbon icons, strictly NO emojis)
             div { class: "mt-12 facts-ticker-wrap select-none",
                 div { class: "facts-ticker-content",
-                    span { class: "facts-item text-sky-700 dark:text-sky-300",
-                        span { "🚨 24/7 Emergency & Neuro ICU" }
+                    span { class: "facts-item inline-flex items-center gap-2 text-sky-700 dark:text-sky-300",
+                        CarbonEmergencySirenIcon { size: 16 }
+                        span { "24/7 Emergency & Neuro ICU" }
                     }
                     span { class: "text-slate-400 dark:text-slate-600", "·" }
-                    span { class: "facts-item text-teal-700 dark:text-teal-300",
-                        span { "🛏️ 30 Dedicated Inpatient Beds" }
+                    span { class: "facts-item inline-flex items-center gap-2 text-teal-700 dark:text-teal-300",
+                        CarbonHospitalBedIcon { size: 16 }
+                        span { "30 Dedicated Inpatient Beds" }
                     }
                     span { class: "text-slate-400 dark:text-slate-600", "·" }
-                    span { class: "facts-item text-indigo-700 dark:text-indigo-300",
-                        span { "📈 98.6% Patient Recovery Rate" }
+                    span { class: "facts-item inline-flex items-center gap-2 text-indigo-700 dark:text-indigo-300",
+                        CarbonChartTrendIcon { size: 16 }
+                        span { "98.6% Patient Recovery Rate" }
                     }
                     span { class: "text-slate-400 dark:text-slate-600", "·" }
-                    span { class: "facts-item text-amber-700 dark:text-amber-300",
-                        span { "🛡️ NABH Quality Norms" }
+                    span { class: "facts-item inline-flex items-center gap-2 text-amber-700 dark:text-amber-300",
+                        CarbonShieldQualityIcon { size: 16 }
+                        span { "NABH Quality Norms" }
                     }
                     span { class: "text-slate-400 dark:text-slate-600", "·" }
-                    span { class: "facts-item text-rose-700 dark:text-rose-300",
-                        span { "🧠 Specialized Neuro & Spine Rehab" }
+                    span { class: "facts-item inline-flex items-center gap-2 text-rose-700 dark:text-rose-300",
+                        CarbonCognitiveIcon { size: 16 }
+                        span { "Specialized Neuro & Spine Rehab" }
                     }
                     span { class: "text-slate-400 dark:text-slate-600", "·" }
-                    span { class: "facts-item text-teal-700 dark:text-teal-300",
-                        span { "🤝 1:1 Daily Physiotherapy" }
+                    span { class: "facts-item inline-flex items-center gap-2 text-teal-700 dark:text-teal-300",
+                        CarbonPartnershipIcon { size: 16 }
+                        span { "1:1 Daily Physiotherapy" }
                     }
                     span { class: "text-slate-400 dark:text-slate-600", "·" }
-                    span { class: "facts-item text-sky-700 dark:text-sky-300",
-                        span { "❤️ 1,000+ Smiles Restored Since 2021" }
+                    span { class: "facts-item inline-flex items-center gap-2 text-sky-700 dark:text-sky-300",
+                        CarbonSmilesHeartIcon { size: 16 }
+                        span { "1,000+ Smiles Restored Since 2021" }
                     }
                     span { class: "text-slate-400 dark:text-slate-600", "·" }
 
                     // Duplicate items for seamless continuous ticker loop
-                    span { class: "facts-item text-sky-700 dark:text-sky-300",
-                        span { "🚨 24/7 Emergency & Neuro ICU" }
+                    span { class: "facts-item inline-flex items-center gap-2 text-sky-700 dark:text-sky-300",
+                        CarbonEmergencySirenIcon { size: 16 }
+                        span { "24/7 Emergency & Neuro ICU" }
                     }
                     span { class: "text-slate-400 dark:text-slate-600", "·" }
-                    span { class: "facts-item text-teal-700 dark:text-teal-300",
-                        span { "🛏️ 30 Dedicated Inpatient Beds" }
+                    span { class: "facts-item inline-flex items-center gap-2 text-teal-700 dark:text-teal-300",
+                        CarbonHospitalBedIcon { size: 16 }
+                        span { "30 Dedicated Inpatient Beds" }
                     }
                     span { class: "text-slate-400 dark:text-slate-600", "·" }
-                    span { class: "facts-item text-indigo-700 dark:text-indigo-300",
-                        span { "📈 98.6% Patient Recovery Rate" }
+                    span { class: "facts-item inline-flex items-center gap-2 text-indigo-700 dark:text-indigo-300",
+                        CarbonChartTrendIcon { size: 16 }
+                        span { "98.6% Patient Recovery Rate" }
                     }
                     span { class: "text-slate-400 dark:text-slate-600", "·" }
-                    span { class: "facts-item text-amber-700 dark:text-amber-300",
-                        span { "🛡️ NABH Quality Norms" }
+                    span { class: "facts-item inline-flex items-center gap-2 text-amber-700 dark:text-amber-300",
+                        CarbonShieldQualityIcon { size: 16 }
+                        span { "NABH Quality Norms" }
                     }
                     span { class: "text-slate-400 dark:text-slate-600", "·" }
-                    span { class: "facts-item text-rose-700 dark:text-rose-300",
-                        span { "🧠 Specialized Neuro & Spine Rehab" }
+                    span { class: "facts-item inline-flex items-center gap-2 text-rose-700 dark:text-rose-300",
+                        CarbonCognitiveIcon { size: 16 }
+                        span { "Specialized Neuro & Spine Rehab" }
                     }
                     span { class: "text-slate-400 dark:text-slate-600", "·" }
-                    span { class: "facts-item text-teal-700 dark:text-teal-300",
-                        span { "🤝 1:1 Daily Physiotherapy" }
+                    span { class: "facts-item inline-flex items-center gap-2 text-teal-700 dark:text-teal-300",
+                        CarbonPartnershipIcon { size: 16 }
+                        span { "1:1 Daily Physiotherapy" }
                     }
                     span { class: "text-slate-400 dark:text-slate-600", "·" }
-                    span { class: "facts-item text-sky-700 dark:text-sky-300",
-                        span { "❤️ 1,000+ Smiles Restored Since 2021" }
+                    span { class: "facts-item inline-flex items-center gap-2 text-sky-700 dark:text-sky-300",
+                        CarbonSmilesHeartIcon { size: 16 }
+                        span { "1,000+ Smiles Restored Since 2021" }
                     }
                     span { class: "text-slate-400 dark:text-slate-600", "·" }
                 }

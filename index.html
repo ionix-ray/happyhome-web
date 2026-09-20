@@ -77,113 +77,362 @@
         var ctx = canvas.getContext('2d');
         if (!ctx) return;
 
-        var width, height;
+        var width = window.innerWidth;
+        var height = window.innerHeight;
+        var dpr = Math.min(window.devicePixelRatio || 1, 2);
+
         function resize() {
-          var rect = canvas.getBoundingClientRect();
-          width = canvas.width = rect.width;
-          height = canvas.height = rect.height;
+          width = window.innerWidth;
+          height = window.innerHeight;
+          dpr = Math.min(window.devicePixelRatio || 1, 2);
+          canvas.width = Math.floor(width * dpr);
+          canvas.height = Math.floor(height * dpr);
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         }
         resize();
         window.addEventListener('resize', resize);
 
-        var nodeCount = Math.min(36, Math.max(16, Math.floor(width / 38)));
-        var nodes = [];
-        for (var i = 0; i < nodeCount; i++) {
-          nodes.push({
-            x: Math.random() * width,
-            y: Math.random() * height,
-            vx: (Math.random() - 0.5) * 0.45,
-            vy: (Math.random() - 0.5) * 0.45,
-            radius: Math.random() * 2.2 + 1.2,
-            color: Math.random() > 0.5 ? '#36a1d7' : '#2d8f7b'
+        // Biochemical Nucleotides: Authentic biological color palette
+        var NUCLEOTIDES = {
+          A: { name: 'Adenine',  color: '#10b981', rgba: '16, 185, 129' },   // Emerald Green
+          T: { name: 'Thymine',  color: '#f43f5e', rgba: '244, 63, 94' },    // Ruby Coral
+          C: { name: 'Cytosine', color: '#06b6d4', rgba: '6, 182, 212' },    // Electric Cyan
+          G: { name: 'Guanine',  color: '#8b5cf6', rgba: '139, 92, 246' }    // Royal Amethyst
+        };
+
+        // Pointer tracking for interactive neuro-excitation
+        var pointer = { x: -1000, y: -1000, active: false, pulseR: 0, pulseMax: 0 };
+        function setPointer(e) {
+          pointer.x = e.clientX;
+          pointer.y = e.clientY;
+          pointer.active = true;
+        }
+        window.addEventListener('mousemove', setPointer);
+        window.addEventListener('touchmove', function(e) {
+          if (e.touches && e.touches[0]) setPointer(e.touches[0]);
+        }, { passive: true });
+        window.addEventListener('mouseleave', function() {
+          pointer.active = false;
+        });
+
+        // Click / Tap excites neuro-genesis ripple wave
+        window.addEventListener('click', function(e) {
+          pointer.x = e.clientX;
+          pointer.y = e.clientY;
+          pointer.pulseR = 10;
+          pointer.pulseMax = Math.min(width, height) * 0.45;
+          triggerLocalMutation(pointer.x, pointer.y);
+        });
+
+        // 1. DNA Double Helix Data
+        var rungCount = Math.min(52, Math.max(28, Math.floor(width / 32)));
+        var basePairs = [];
+        var pairTypes = [['A', 'T'], ['T', 'A'], ['C', 'G'], ['G', 'C']];
+        for (var p = 0; p < rungCount; p++) {
+          var pair = pairTypes[Math.floor(Math.random() * pairTypes.length)];
+          basePairs.push({
+            typeA: pair[0],
+            typeB: pair[1],
+            mutating: 0,
+            mutationSpeed: 0.024,
+            targetA: pair[0],
+            targetB: pair[1]
           });
         }
 
-        var isVisible = true;
-        if ('IntersectionObserver' in window) {
-          var heroObs = new IntersectionObserver(function(entries) {
-            isVisible = entries[0].isIntersecting;
-          }, { threshold: 0.05 });
-          heroObs.observe(canvas.parentElement || canvas);
-        }
-
-        var time = 0;
-        function render() {
-          if (isVisible && width > 0 && height > 0) {
-            ctx.clearRect(0, 0, width, height);
-            time += 0.015;
-
-            // 1. DNA double-helix wave stream
-            var strandPoints = 26;
-            for (var s = 0; s < strandPoints; s++) {
-              var prog = s / strandPoints;
-              var x = prog * width;
-              var waveY1 = height * 0.45 + Math.sin(time + prog * 6.28) * 32;
-              var waveY2 = height * 0.45 - Math.sin(time + prog * 6.28) * 32;
-
-              if (s % 3 === 0) {
-                ctx.beginPath();
-                ctx.moveTo(x, waveY1);
-                ctx.lineTo(x, waveY2);
-                ctx.strokeStyle = 'rgba(54, 161, 215, 0.15)';
-                ctx.lineWidth = 1;
-                ctx.stroke();
-              }
-
-              ctx.beginPath();
-              ctx.arc(x, waveY1, 2, 0, Math.PI * 2);
-              ctx.fillStyle = 'rgba(54, 161, 215, 0.4)';
-              ctx.fill();
-
-              ctx.beginPath();
-              ctx.arc(x, waveY2, 2, 0, Math.PI * 2);
-              ctx.fillStyle = 'rgba(45, 143, 123, 0.4)';
-              ctx.fill();
-            }
-
-            // 2. Synaptic connections & rehabilitation nodes
-            for (var i = 0; i < nodes.length; i++) {
-              var n = nodes[i];
-              n.x += n.vx;
-              n.y += n.vy;
-              if (n.x < 0 || n.x > width) n.vx *= -1;
-              if (n.y < 0 || n.y > height) n.vy *= -1;
-
-              for (var j = i + 1; j < nodes.length; j++) {
-                var n2 = nodes[j];
-                var dx = n.x - n2.x;
-                var dy = n.y - n2.y;
-                var dist = Math.sqrt(dx * dx + dy * dy);
-                if (dist < 130) {
-                  var alpha = (1 - dist / 130) * 0.28;
-                  ctx.beginPath();
-                  ctx.moveTo(n.x, n.y);
-                  ctx.lineTo(n2.x, n2.y);
-                  ctx.strokeStyle = 'rgba(54, 161, 215, ' + alpha + ')';
-                  ctx.lineWidth = 0.9;
-                  ctx.stroke();
-
-                  // Synapse neural sparks
-                  if ((i + j) % 5 === 0 && Math.sin(time * 2 + i) > 0.7) {
-                    var sparkPos = (Math.sin(time * 3 + j) + 1) / 2;
-                    var sx = n.x + (n2.x - n.x) * sparkPos;
-                    var sy = n.y + (n2.y - n.y) * sparkPos;
-                    ctx.beginPath();
-                    ctx.arc(sx, sy, 1.8, 0, Math.PI * 2);
-                    ctx.fillStyle = 'rgba(245, 158, 11, 0.6)';
-                    ctx.fill();
-                  }
-                }
-              }
-
-              ctx.beginPath();
-              ctx.arc(n.x, n.y, n.radius, 0, Math.PI * 2);
-              ctx.fillStyle = n.color;
-              ctx.globalAlpha = 0.45;
-              ctx.fill();
-              ctx.globalAlpha = 1.0;
+        function triggerLocalMutation(px, py) {
+          for (var p = 0; p < basePairs.length; p++) {
+            var prog = p / basePairs.length;
+            var bx = prog * width;
+            var by = height * 0.38;
+            var d = Math.hypot(bx - px, by - py);
+            if (d < 260) {
+              startMutation(p);
             }
           }
+        }
+
+        function startMutation(idx) {
+          var bp = basePairs[idx];
+          if (!bp || bp.mutating > 0) return;
+          bp.mutating = 0.01;
+          var current = bp.typeA;
+          var newTypes = current === 'A' || current === 'T'
+            ? (Math.random() > 0.5 ? ['C', 'G'] : ['G', 'C'])
+            : (Math.random() > 0.5 ? ['A', 'T'] : ['T', 'A']);
+          bp.targetA = newTypes[0];
+          bp.targetB = newTypes[1];
+        }
+
+        // 2. Neuroscience Synaptic Network
+        var somaCount = Math.min(36, Math.max(18, Math.floor(width / 42)));
+        var somaList = [];
+        for (var s = 0; s < somaCount; s++) {
+          somaList.push({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            vx: (Math.random() - 0.5) * 0.35,
+            vy: (Math.random() - 0.5) * 0.35,
+            radius: Math.random() * 2.5 + 2.0,
+            pulse: Math.random() * 6.28,
+            charge: 0,
+            color: Math.random() > 0.4 ? '#38bdf8' : '#2dd4bf'
+          });
+        }
+
+        var actionPotentials = [];
+        var sparks = [];
+        var time = 0;
+        var lastMutationTime = 0;
+
+        function render() {
+          if (document.hidden) {
+            requestAnimationFrame(render);
+            return;
+          }
+
+          ctx.clearRect(0, 0, width, height);
+          time += 0.014;
+
+          // Expand interactive neuro-genesis click wave
+          if (pointer.pulseR > 0 && pointer.pulseR < pointer.pulseMax) {
+            pointer.pulseR += 8;
+            var waveAlpha = (1 - pointer.pulseR / pointer.pulseMax) * 0.25;
+            ctx.beginPath();
+            ctx.arc(pointer.x, pointer.y, pointer.pulseR, 0, Math.PI * 2);
+            ctx.strokeStyle = 'rgba(56, 189, 248, ' + waveAlpha + ')';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+          }
+
+          // Periodic random gene mutation event sweep
+          if (time - lastMutationTime > 1.8) {
+            lastMutationTime = time;
+            var randLocus = Math.floor(Math.random() * basePairs.length);
+            startMutation(randLocus);
+            if (randLocus + 1 < basePairs.length) startMutation(randLocus + 1);
+          }
+
+          // ── A. DRAW DNA DOUBLE HELIX WITH MULTICOLOUR MUTATING CODONS ──
+          var helixRadius = Math.min(54, width * 0.045);
+          var strand1Points = [];
+          var strand2Points = [];
+
+          for (var i = 0; i < basePairs.length; i++) {
+            var bp = basePairs[i];
+            var prog = i / basePairs.length;
+            var x = prog * width;
+
+            var baseY = height * (0.34 + 0.12 * Math.sin(prog * 2.6 + time * 0.22));
+
+            if (pointer.active) {
+              var dPointer = Math.hypot(x - pointer.x, baseY - pointer.y);
+              if (dPointer < 180) {
+                var pull = (1 - dPointer / 180) * 26;
+                baseY += (pointer.y > baseY ? pull : -pull);
+              }
+            }
+
+            var angle = prog * Math.PI * 8.5 + time * 1.5;
+            var sinA = Math.sin(angle);
+            var cosA = Math.cos(angle);
+
+            var y1 = baseY + sinA * helixRadius;
+            var y2 = baseY - sinA * helixRadius;
+            var depth = cosA;
+
+            strand1Points.push({ x: x, y: y1, depth: depth });
+            strand2Points.push({ x: x, y: y2, depth: -depth });
+
+            if (bp.mutating > 0) {
+              bp.mutating += bp.mutationSpeed;
+              if (bp.mutating >= 0.5 && bp.typeA !== bp.targetA) {
+                bp.typeA = bp.targetA;
+                bp.typeB = bp.targetB;
+                for (var k = 0; k < 5; k++) {
+                  var spAngle = Math.random() * Math.PI * 2;
+                  var spSpeed = Math.random() * 2.2 + 0.8;
+                  sparks.push({
+                    x: x,
+                    y: baseY,
+                    vx: Math.cos(spAngle) * spSpeed,
+                    vy: Math.sin(spAngle) * spSpeed,
+                    color: NUCLEOTIDES[bp.typeA].color,
+                    alpha: 1.0,
+                    size: Math.random() * 2.4 + 1.2,
+                    decay: 0.03
+                  });
+                }
+              }
+              if (bp.mutating >= 1.0) {
+                bp.mutating = 0;
+              }
+            }
+
+            var colA = NUCLEOTIDES[bp.typeA];
+            var colB = NUCLEOTIDES[bp.typeB];
+
+            var depthAlpha = 0.25 + (depth + 1) * 0.28;
+            if (bp.mutating > 0) {
+              depthAlpha = Math.min(1.0, depthAlpha + Math.sin(bp.mutating * Math.PI) * 0.6);
+            }
+
+            var midX = x;
+            var midY = (y1 + y2) / 2;
+
+            ctx.beginPath();
+            ctx.moveTo(x, y1);
+            ctx.lineTo(midX, midY);
+            ctx.strokeStyle = 'rgba(' + colA.rgba + ', ' + depthAlpha + ')';
+            ctx.lineWidth = bp.mutating > 0 ? 2.5 : (depth > 0 ? 1.8 : 1.1);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(midX, midY);
+            ctx.lineTo(x, y2);
+            ctx.strokeStyle = 'rgba(' + colB.rgba + ', ' + depthAlpha + ')';
+            ctx.lineWidth = bp.mutating > 0 ? 2.5 : (depth > 0 ? 1.8 : 1.1);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(midX, midY, bp.mutating > 0 ? 3.0 : 1.5, 0, Math.PI * 2);
+            ctx.fillStyle = bp.mutating > 0 ? '#fbbf24' : 'rgba(255, 255, 255, ' + depthAlpha + ')';
+            ctx.fill();
+
+            var beadR = depth > 0 ? 3.2 : 2.0;
+            ctx.beginPath();
+            ctx.arc(x, y1, beadR, 0, Math.PI * 2);
+            ctx.fillStyle = colA.color;
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.arc(x, y2, beadR, 0, Math.PI * 2);
+            ctx.fillStyle = colB.color;
+            ctx.fill();
+          }
+
+          function drawStrand(pts, strokeCol) {
+            if (pts.length < 2) return;
+            ctx.beginPath();
+            ctx.moveTo(pts[0].x, pts[0].y);
+            for (var p = 1; p < pts.length; p++) {
+              var xc = (pts[p].x + pts[p - 1].x) / 2;
+              var yc = (pts[p].y + pts[p - 1].y) / 2;
+              ctx.quadraticCurveTo(pts[p - 1].x, pts[p - 1].y, xc, yc);
+            }
+            ctx.strokeStyle = strokeCol;
+            ctx.lineWidth = 1.4;
+            ctx.stroke();
+          }
+          drawStrand(strand1Points, 'rgba(56, 189, 248, 0.35)');
+          drawStrand(strand2Points, 'rgba(45, 143, 123, 0.35)');
+
+          // ── B. DRAW NEUROSCIENCE SYNAPTIC NETWORK & ACTION POTENTIALS ──
+          for (var s = 0; s < somaList.length; s++) {
+            var n = somaList[s];
+            n.x += n.vx;
+            n.y += n.vy;
+            if (n.x < 0 || n.x > width) n.vx *= -1;
+            if (n.y < 0 || n.y > height) n.vy *= -1;
+
+            if (pointer.active) {
+              var dPtr = Math.hypot(n.x - pointer.x, n.y - pointer.y);
+              if (dPtr < 160) {
+                var bridgeAlpha = (1 - dPtr / 160) * 0.55;
+                ctx.beginPath();
+                ctx.moveTo(n.x, n.y);
+                ctx.lineTo(pointer.x, pointer.y);
+                ctx.strokeStyle = 'rgba(56, 189, 248, ' + bridgeAlpha + ')';
+                ctx.lineWidth = 1.0;
+                ctx.stroke();
+
+                n.charge = Math.min(1.0, n.charge + 0.08);
+              }
+            }
+            if (n.charge > 0) n.charge -= 0.02;
+
+            for (var s2 = s + 1; s2 < somaList.length; s2++) {
+              var n2 = somaList[s2];
+              var dx = n.x - n2.x;
+              var dy = n.y - n2.y;
+              var dist = Math.hypot(dx, dy);
+
+              if (dist < 145) {
+                var alpha = (1 - dist / 145) * 0.22;
+                if (n.charge > 0 || n2.charge > 0) alpha += 0.25;
+
+                ctx.beginPath();
+                ctx.moveTo(n.x, n.y);
+                ctx.lineTo(n2.x, n2.y);
+                ctx.strokeStyle = 'rgba(56, 189, 248, ' + alpha + ')';
+                ctx.lineWidth = 0.9;
+                ctx.stroke();
+
+                if (Math.random() < 0.003 && actionPotentials.length < 24) {
+                  actionPotentials.push({
+                    x1: n.x, y1: n.y,
+                    x2: n2.x, y2: n2.y,
+                    t: 0,
+                    speed: Math.random() * 0.025 + 0.02,
+                    color: Math.random() > 0.4 ? '#38bdf8' : '#f59e0b'
+                  });
+                }
+              }
+            }
+
+            var somaPulse = Math.sin(time * 2 + n.pulse) * 0.6;
+            ctx.beginPath();
+            ctx.arc(n.x, n.y, n.radius + somaPulse + n.charge * 1.5, 0, Math.PI * 2);
+            ctx.fillStyle = n.charge > 0.2 ? '#f59e0b' : n.color;
+            ctx.globalAlpha = 0.55;
+            ctx.fill();
+            ctx.globalAlpha = 1.0;
+          }
+
+          // ── C. RENDER ACTION POTENTIAL IMPULSES ──
+          for (var a = actionPotentials.length - 1; a >= 0; a--) {
+            var ap = actionPotentials[a];
+            ap.t += ap.speed;
+            if (ap.t >= 1) {
+              actionPotentials.splice(a, 1);
+              continue;
+            }
+            var apx = ap.x1 + (ap.x2 - ap.x1) * ap.t;
+            var apy = ap.y1 + (ap.y2 - ap.y1) * ap.t;
+
+            ctx.beginPath();
+            ctx.arc(apx, apy, 2.2, 0, Math.PI * 2);
+            ctx.fillStyle = ap.color;
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.arc(apx, apy, 4.5, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(245, 158, 11, 0.25)';
+            ctx.fill();
+          }
+
+          // ── D. RENDER MUTATION QUANTUM BIO-SPARKS ──
+          for (var sp = sparks.length - 1; sp >= 0; sp--) {
+            var spark = sparks[sp];
+            spark.x += spark.vx;
+            spark.y += spark.vy;
+            spark.vx *= 0.96;
+            spark.vy *= 0.96;
+            spark.alpha -= spark.decay;
+
+            if (spark.alpha <= 0) {
+              sparks.splice(sp, 1);
+              continue;
+            }
+
+            ctx.beginPath();
+            ctx.arc(spark.x, spark.y, spark.size, 0, Math.PI * 2);
+            ctx.fillStyle = spark.color;
+            ctx.globalAlpha = spark.alpha;
+            ctx.fill();
+            ctx.globalAlpha = 1.0;
+          }
+
           requestAnimationFrame(render);
         }
         render();

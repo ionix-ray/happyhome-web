@@ -212,9 +212,36 @@ h1.text-white, h2.text-white, h3.text-white, h4.text-white, h5.text-white, h6.te
   background: linear-gradient(90deg, #101a29 0%, #134cb3 55%, #36a1d7 100%);
 }
 
-/* ── Production-Grade Card Layouts ────────────────────────────── */
+/* ── Site-Wide Ambient Bio-Neuro Canvas ────────────────────────── */
+#bio-canvas, .bio-canvas-fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.52;
+  transition: opacity 0.4s ease;
+}
+
+[data-theme="dark"] #bio-canvas,
+.dark #bio-canvas,
+[data-theme="dark"] .bio-canvas-fixed,
+.dark .bio-canvas-fixed {
+  opacity: 0.38;
+}
+
+header, main, footer {
+  position: relative;
+  z-index: 10;
+}
+
+/* ── Production-Grade Card Layouts with Frosted Diffusion ─────── */
 .card, .cure-card {
-  background: var(--c-bg-card);
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
   border: 1px solid var(--c-line);
   border-radius: 1.5rem; /* rounded-3xl */
   box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.04), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
@@ -231,7 +258,9 @@ h1.text-white, h2.text-white, h3.text-white, h4.text-white, h5.text-white, h6.te
 
 .dark .card, .dark .cure-card,
 [data-theme="dark"] .card, [data-theme="dark"] .cure-card {
-  background: var(--c-bg-card);
+  background: rgba(17, 26, 46, 0.90);
+  backdrop-filter: blur(24px) saturate(150%);
+  -webkit-backdrop-filter: blur(24px) saturate(150%);
   border-color: var(--c-line);
   box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.45);
 }
@@ -410,7 +439,9 @@ h1.text-white, h2.text-white, h3.text-white, h4.text-white, h5.text-white, h6.te
 }
 
 .stat-pill {
-  background: var(--c-bg-card);
+  background: rgba(255, 255, 255, 0.90);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--c-line);
   box-shadow: 0 6px 20px -8px rgba(15, 23, 42, 0.06);
   transition: transform 0.2s ease, border-color 0.2s ease;
@@ -418,6 +449,12 @@ h1.text-white, h2.text-white, h3.text-white, h4.text-white, h5.text-white, h6.te
 .stat-pill:hover {
   transform: translateY(-2px);
   border-color: var(--c-brand);
+}
+.dark .stat-pill,
+[data-theme="dark"] .stat-pill {
+  background: rgba(17, 26, 46, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 }
 .stat-pill .num {
   font-family: 'DM Serif Display', Georgia, serif;
@@ -550,9 +587,17 @@ h1.text-white, h2.text-white, h3.text-white, h4.text-white, h5.text-white, h6.te
 /* Plan Cards */
 .plan-card {
   border: 1.5px solid var(--c-line);
-  background: var(--c-bg-card);
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
   border-radius: 1.5rem;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.dark .plan-card:not(.featured),
+[data-theme="dark"] .plan-card:not(.featured) {
+  background: rgba(17, 26, 46, 0.90);
+  backdrop-filter: blur(24px) saturate(150%);
+  -webkit-backdrop-filter: blur(24px) saturate(150%);
 }
 .plan-card.featured {
   background: linear-gradient(145deg, #101a29 0%, #134cb3 70%, #1e5cb8 100%);
@@ -580,10 +625,18 @@ h1.text-white, h2.text-white, h3.text-white, h4.text-white, h5.text-white, h6.te
 
 /* Testimonial Card */
 .testi-card {
-  background: var(--c-bg-card);
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
   border: 1px solid var(--c-line);
   border-radius: 1.25rem;
   position: relative;
+}
+.dark .testi-card,
+[data-theme="dark"] .testi-card {
+  background: rgba(17, 26, 46, 0.90);
+  backdrop-filter: blur(24px) saturate(150%);
+  -webkit-backdrop-filter: blur(24px) saturate(150%);
 }
 .testi-card::before {
   content: '“';
@@ -853,7 +906,9 @@ h1.text-white, h2.text-white, h3.text-white, h4.text-white, h5.text-white, h6.te
 .cure-card-split {
   display: flex;
   flex-direction: column;
-  background: var(--c-bg-card);
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
   border: 1px solid var(--c-line);
   border-radius: 1.5rem;
   overflow: hidden;
@@ -868,12 +923,16 @@ h1.text-white, h2.text-white, h3.text-white, h4.text-white, h5.text-white, h6.te
   border-color: rgba(54, 161, 215, 0.5);
 }
 
+.dark .cure-card-split,
 [data-theme="dark"] .cure-card-split {
-  background: var(--c-bg-card);
+  background: rgba(17, 26, 46, 0.90);
+  backdrop-filter: blur(24px) saturate(150%);
+  -webkit-backdrop-filter: blur(24px) saturate(150%);
   border-color: var(--c-line);
   box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.45);
 }
 
+.dark .cure-card-split:hover,
 [data-theme="dark"] .cure-card-split:hover {
   box-shadow: 0 22px 45px -10px rgba(56, 189, 248, 0.25), 0 0 20px rgba(56, 189, 248, 0.15);
   border-color: rgba(56, 189, 248, 0.45);

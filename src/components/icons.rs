@@ -1082,3 +1082,233 @@ pub fn CarbonRenewIcon(
         }
     }
 }
+
+/// IBM Carbon Alarm / Siren — Multi-colour (Emergency ICU)
+#[component]
+pub fn CarbonEmergencySirenIcon(
+    #[props(default = 16)] size: u32,
+) -> Element {
+    rsx! {
+        svg {
+            xmlns: "http://www.w3.org/2000/svg",
+            width: "{size}", height: "{size}",
+            view_box: "0 0 32 32",
+            fill: "none",
+            class: "shrink-0 inline-block",
+            // Base stand in sky cyan
+            path { d: "M10 28h12v2H10z", fill: "#38bdf8" }
+            // Main siren dome in vivid ruby red
+            path {
+                d: "M16 4a9 9 0 0 0-9 9v7h18v-7a9 9 0 0 0-9-9zm-7 14v-5a7 7 0 0 1 14 0v5H9z",
+                fill: "#ef4444",
+            }
+            // Warning flash rays in warm amber
+            rect { x: "15", y: "0", width: "2", height: "3", rx: "1", fill: "#f59e0b" }
+            rect { x: "4", y: "7", width: "2", height: "3", rx: "1", transform: "rotate(-45 5 8.5)", fill: "#f59e0b" }
+            rect { x: "26", y: "7", width: "2", height: "3", rx: "1", transform: "rotate(45 27 8.5)", fill: "#f59e0b" }
+            // Inner core beacon glow
+            circle { cx: "16", cy: "15", r: "3", fill: "#fca5a5" }
+        }
+    }
+}
+
+/// IBM Carbon Hospital Bed — Multi-colour (Dedicated Inpatient Beds)
+#[component]
+pub fn CarbonHospitalBedIcon(
+    #[props(default = 16)] size: u32,
+) -> Element {
+    rsx! {
+        svg {
+            xmlns: "http://www.w3.org/2000/svg",
+            width: "{size}", height: "{size}",
+            view_box: "0 0 32 32",
+            fill: "none",
+            class: "shrink-0 inline-block",
+            // Bed frame & posts in deep ocean teal
+            path {
+                d: "M25 16H17a2.002 2.002 0 0 0-2 2v6H4V14H2v16h2v-4h24v4h2V21a5.006 5.006 0 0 0-5-5zm3 8H17v-6h8a3.003 3.003 0 0 1 3 3z",
+                fill: "#0d9488",
+            }
+            // Patient head / pillow in vibrant sky cyan
+            circle { cx: "9.5", cy: "18.5", r: "2.5", fill: "#38bdf8" }
+            path { d: "M9.5 15a3.5 3.5 0 1 0 3.5 3.5A3.5 3.5 0 0 0 9.5 15zm0 5a1.5 1.5 0 1 1 1.5-1.5 1.502 1.502 0 0 1-1.5 1.5z", fill: "#0284c7" }
+            // Medical cross above bed in vibrant coral rose
+            polygon {
+                points: "21 6 17 6 17 2 15 2 15 6 11 6 11 8 15 8 15 12 17 12 17 8 21 8 21 6",
+                fill: "#f43f5e",
+            }
+        }
+    }
+}
+
+/// IBM Carbon Chart Line Trend — Multi-colour (Patient Recovery Rate)
+#[component]
+pub fn CarbonChartTrendIcon(
+    #[props(default = 16)] size: u32,
+) -> Element {
+    rsx! {
+        svg {
+            xmlns: "http://www.w3.org/2000/svg",
+            width: "{size}", height: "{size}",
+            view_box: "0 0 32 32",
+            fill: "none",
+            class: "shrink-0 inline-block",
+            // Grid axes in indigo
+            path { d: "M2 2v26a2 2 0 0 0 2 2h26v-2H4V2H2z", fill: "#6366f1" }
+            // Dynamic upward recovery curve in bright emerald
+            path {
+                d: "M4.67 28l6.39-12 7.3 6.49a2 2 0 0 0 1.7.47 2 2 0 0 0 1.42-1.07L27 10.9 25.18 10 19.69 21l-7.3-6.49a2 2 0 0 0-1.68-.51 2 2 0 0 0-1.42 1L4 25v3h.67z",
+                fill: "#10b981",
+            }
+            // Peak achievement star / node in bright amber
+            circle { cx: "26.5", cy: "10.5", r: "2.5", fill: "#f59e0b" }
+        }
+    }
+}
+
+/// IBM Carbon Shield Quality / Security Check — Multi-colour (NABH Quality Norms)
+#[component]
+pub fn CarbonShieldQualityIcon(
+    #[props(default = 16)] size: u32,
+) -> Element {
+    rsx! {
+        svg {
+            xmlns: "http://www.w3.org/2000/svg",
+            width: "{size}", height: "{size}",
+            view_box: "0 0 32 32",
+            fill: "none",
+            class: "shrink-0 inline-block",
+            // Shield perimeter in royal sapphire blue
+            path {
+                d: "M16 30L9.82 26.71A10.98 10.98 0 0 1 4 17V4a2.002 2.002 0 0 1 2-2h20a2.002 2.002 0 0 1 2 2v17a10.98 10.98 0 0 1-5.82 9.71zM6 4v13a8.99 8.99 0 0 0 4.77 7.94L16 27.73l5.23-2.79A8.99 8.99 0 0 0 26 17V4H6z",
+                fill: "#2563eb",
+            }
+            // Soft protective shield body fill
+            path {
+                d: "M6 4v13a8.99 8.99 0 0 0 4.77 7.94L16 27.73l5.23-2.79A8.99 8.99 0 0 0 26 17V4H6z",
+                fill: "#3b82f6",
+                fill_opacity: "0.18",
+            }
+            // Certified checkmark in vibrant emerald
+            polygon {
+                points: "14 16.59 11.41 14 10 15.41 14 19.41 22 11.41 20.59 10 14 16.59",
+                fill: "#10b981",
+            }
+        }
+    }
+}
+
+/// IBM Carbon Cognitive / Neural Brain — Multi-colour (Specialized Neuro & Spine Rehab)
+#[component]
+pub fn CarbonCognitiveIcon(
+    #[props(default = 16)] size: u32,
+) -> Element {
+    rsx! {
+        svg {
+            xmlns: "http://www.w3.org/2000/svg",
+            width: "{size}", height: "{size}",
+            view_box: "0 0 32 32",
+            fill: "none",
+            class: "shrink-0 inline-block",
+            // Brain neural contours in violet/purple
+            path {
+                d: "M30 13a11 11 0 0 0-11-11h-8a9 9 0 0 0-9 9v3a5 5 0 0 0 5 5h1.1A5 5 0 0 0 13 23h1.38l4 7 1.73-1-4-6.89A2 2 0 0 0 14.38 21H13a3 3 0 0 1 0-6h1v-2h-1a5 5 0 0 0-4.9 4H7a3 3 0 0 1-3-3v-1h2a3 3 0 0 0 3-3V8H7v1a1 1 0 0 1-1 1H4.08A7 7 0 0 1 11 4h6v2a1 1 0 0 1-1 1h-2v2h2a3 3 0 0 0 3-3V4a9 9 0 0 1 8.05 5H26a3 3 0 0 0-3 3v1h2v-1a1 1 0 0 1 1-1h1.77A8.76 8.76 0 0 1 28 13v1a5 5 0 0 1-5 5h-3v2h3a7 7 0 0 0 3-.68V21a3 3 0 0 1-3 3h-1v2h1a5 5 0 0 0 5-5v-2.11A7 7 0 0 0 30 14z",
+                fill: "#8b5cf6",
+            }
+            // Synapse node sparks in bright electric cyan
+            circle { cx: "16", cy: "11", r: "2", fill: "#06b6d4" }
+            circle { cx: "21", cy: "14", r: "1.5", fill: "#38bdf8" }
+            circle { cx: "10", cy: "14", r: "1.5", fill: "#a78bfa" }
+        }
+    }
+}
+
+/// IBM Carbon Partnership / Collaborative Care — Multi-colour (1:1 Daily Physiotherapy)
+#[component]
+pub fn CarbonPartnershipIcon(
+    #[props(default = 16)] size: u32,
+) -> Element {
+    rsx! {
+        svg {
+            xmlns: "http://www.w3.org/2000/svg",
+            width: "{size}", height: "{size}",
+            view_box: "0 0 32 32",
+            fill: "none",
+            class: "shrink-0 inline-block",
+            // Patient head in cyan
+            circle { cx: "8", cy: "5", r: "3", fill: "#0284c7" }
+            circle { cx: "8", cy: "5", r: "1.5", fill: "#bae6fd" }
+            // Therapist head in emerald teal
+            circle { cx: "24", cy: "5", r: "3", fill: "#0d9488" }
+            circle { cx: "24", cy: "5", r: "1.5", fill: "#99f6e4" }
+            // Supporting therapeutic handshake & link in warm amber + teal
+            path {
+                d: "M26 30h-4a2 2 0 0 1-2-2v-7h2v7h4v-9h2v-6a1 1 0 0 0-1-1h-2.42L16 20l-4.58-8H5a1 1 0 0 0-1 1v6h2v9h4v-7h2v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-7a2 2 0 0 1-2-2v-6a3 3 0 0 1 3-3h7.58L16 16l3.42-6H27a3 3 0 0 1 3 3v6a2 2 0 0 1-2 2v7a2 2 0 0 1-2 2z",
+                fill: "#0891b2",
+            }
+            // Clasp clasp node in warm amber
+            circle { cx: "16", cy: "17", r: "2", fill: "#f59e0b" }
+        }
+    }
+}
+
+/// IBM Carbon Smiles & Healing Heart — Multi-colour (1,000+ Smiles Restored)
+#[component]
+pub fn CarbonSmilesHeartIcon(
+    #[props(default = 16)] size: u32,
+) -> Element {
+    rsx! {
+        svg {
+            xmlns: "http://www.w3.org/2000/svg",
+            width: "{size}", height: "{size}",
+            view_box: "0 0 32 32",
+            fill: "none",
+            class: "shrink-0 inline-block",
+            // Radiant healing heart in rose
+            path {
+                d: "M16 29s-12-7.5-12-16a7 7 0 0 1 12-4.5A7 7 0 0 1 28 13c0 8.5-12 16-12 16z",
+                fill: "#f43f5e",
+            }
+            // Inner smile curve in golden sunshine amber
+            path {
+                d: "M11 16c1.2 2.5 3.3 3.5 5 3.5s3.8-1 5-3.5",
+                stroke: "#fef08a",
+                stroke_width: "2",
+                stroke_linecap: "round",
+            }
+            // Eyes of the smile
+            circle { cx: "12.5", cy: "13.5", r: "1.2", fill: "#ffffff" }
+            circle { cx: "19.5", cy: "13.5", r: "1.2", fill: "#ffffff" }
+        }
+    }
+}
+
+/// IBM Carbon Time & Clock — Multi-colour (OPD & Clinic Hours)
+#[component]
+pub fn CarbonTimeClockIcon(
+    #[props(default = 14)] size: u32,
+) -> Element {
+    rsx! {
+        svg {
+            xmlns: "http://www.w3.org/2000/svg",
+            width: "{size}", height: "{size}",
+            view_box: "0 0 32 32",
+            fill: "none",
+            class: "shrink-0 inline-block",
+            // Top stopwatch button in sky cyan
+            rect { x: "13", y: "2", width: "6", height: "2", rx: "1", fill: "#38bdf8" }
+            // Clock outer dial ring in brilliant sky blue
+            path {
+                d: "M28 9l-1.42-1.41-2.25 2.25a10.94 10.94 0 1 0 1.18 1.65zM16 26a9 9 0 1 1 9-9 9 9 0 0 1-9 9z",
+                fill: "#38bdf8",
+            }
+            // Dial center glow
+            circle { cx: "16", cy: "17", r: "7", fill: "#0284c7", fill_opacity: "0.2" }
+            // Clock hands pointing in golden amber
+            rect { x: "15", y: "11", width: "2", height: "7", rx: "1", fill: "#f59e0b" }
+            rect { x: "16", y: "16", width: "5", height: "2", rx: "1", fill: "#f59e0b" }
+            circle { cx: "16", cy: "17", r: "1.5", fill: "#ffffff" }
+        }
+    }
+}
+

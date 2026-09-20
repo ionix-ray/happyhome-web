@@ -36,17 +36,10 @@ pub fn About() -> Element {
 
                 div { class: "grid grid-cols-1 lg:grid-cols-12 gap-12 items-center mb-16",
 
-                    // Left Column: Story & Milestones (slide from left on scroll)
+                    // Left Column: Milestones Checkpoint Timeline (slide from left on scroll)
                     div { class: "lg:col-span-7 space-y-6 reveal-init reveal-stagger-1",
-                        p { class: "text-base sm:text-lg text-slate-700 dark:text-slate-300 leading-relaxed",
-                            "Happy Home Hospital & Rehab was established in 2021 in Ghatikia, Bhubaneswar, with a singular mission: to provide world-class, multi-disciplinary inpatient rehabilitation for patients recovering from severe neurological insults, spine surgeries, brain trauma, and chronic immobilizing conditions."
-                        }
-                        p { class: "text-sm sm:text-base text-slate-600 dark:text-slate-400 leading-relaxed",
-                            "Unlike general nursing homes or standard outpatient clinics, Happy Home is a purpose-built 30-bed medical rehabilitation facility. Here, resident physicians, neuro-physiotherapists, speech language pathologists, and critical care nurses work together around the clock to prevent secondary complications like bedsores and contractures while accelerating neural recovery."
-                        }
-
-                        // Milestones timeline with staggered items
-                        div { class: "pt-6 space-y-4",
+                        // Milestones checkpoint timeline
+                        div { class: "space-y-6",
                             for (_idx, (year, title, desc)) in milestones.iter().enumerate() {
                                 div {
                                     key: "{year}",
