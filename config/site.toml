@@ -81,30 +81,30 @@ tagline = "Helping You To Bring Back Your Smile"
 
 [[rehab.team]]
 name = "Dr. Vijay Kumar Sahu"
-role = "Founder & Managing Director"
-title = "MPT (Neuro Rehabilitation)"
-specialty = "Specialist in Neuro Rehabilitation, Stroke Recovery & Long-term Critical Care"
+role = "Founder & Chief Inpatient Neuro Specialist"
+title = "MPT (Neurological Rehabilitation, SVNIRTAR)"
+specialty = "Pioneering intensive 1:1 neuroplasticity protocols for stroke hemiplegia, paraplegia, and tracheostomy weaning in Odisha."
 image_url = "assets/images/dr_vijay_sahu.jpg"
 
 [[rehab.team]]
 name = "Dr. Sambit Dash"
-role = "Senior Consultant (Anesthesiology & Critical Care)"
-title = "MD"
-specialty = "Expert in Post-Trauma Stabilization, Neuro Disorders & Critical Step-Down"
+role = "Medical Director — Step-Down ICU & Emergency"
+title = "MBBS, MD (Critical Care Medicine, SCB Medical College)"
+specialty = "Oversees 24/7 medical telemetry, secondary complication prevention, and vital stability for long-stay inpatients."
 image_url = "assets/images/dr_sambit_dash.jpg"
 
 [[rehab.team]]
 name = "Dr. Ananya Pattnaik"
-role = "Senior Consultant Neurologist"
-title = "MD, DM (Neurology)"
-specialty = "Specialist in Stroke, Parkinson's Disease, Cognitive Recovery & Dementia Care"
+role = "Consultant Neuro-Physician & Cognitive Specialist"
+title = "MBBS, MD, DM (Neurology, AIIMS New Delhi)"
+specialty = "Expert in post-TBI cognitive restoration, Parkinsonian tremors, and neuro-pharmacological patient optimization."
 image_url = "assets/images/dr_ananya_pattnaik.jpg"
 
 [[rehab.team]]
 name = "Dr. Jajati Keshari Jena"
-role = "Chief of Physiotherapy & Rehabilitation"
-title = "MPT (Neuro Rehabilitation)"
-specialty = "Specialist in Spinal Cord Injury, Gait Training & Orthopedic Mobility"
+role = "Chief of Physiotherapy & Gait Kinematics"
+title = "BPT, MPT (Neurosciences), MIAP"
+specialty = "Lead specialist in robotic balance retraining, functional electrical stimulation (FES), and bodyweight-supported gait recovery."
 image_url = "assets/images/dr_jajati_jena.jpg"
 
 [[rehab.services]]
@@ -225,30 +225,30 @@ tagline = "Your health, guided by experts"
 
 [[hospital.team]]
 name = "Dr. Vijay Kumar Sahu"
-role = "Founder & Managing Director"
-title = "MPT (Neuro Rehabilitation)"
-specialty = "Neuro & Spine Rehabilitation Lead, Critical Care Management"
+role = "Managing Director & Chief of Neuro Rehabilitation"
+title = "MPT (Neurological Sciences, SVNIRTAR)"
+specialty = "Over 15+ years clinical expertise in post-craniotomy, severe stroke, and spinal trauma inpatient recovery."
 image_url = "assets/images/dr_vijay_sahu.jpg"
 
 [[hospital.team]]
 name = "Dr. Sambit Dash"
-role = "Chief of Anesthesiology & Critical Care"
-title = "MD"
-specialty = "Critical Care ICU, Trauma Resuscitation, Perioperative Care"
+role = "Chief Consultant — Critical Care & Anesthesiology"
+title = "MBBS, MD (Anesthesiology & Critical Care, SCB Medical College)"
+specialty = "Specialist in acute neuro-trauma stabilization, invasive hemodynamic monitoring, and difficult airway weaning in ICU."
 image_url = "assets/images/dr_sambit_dash.jpg"
 
 [[hospital.team]]
 name = "Dr. Ananya Pattnaik"
-role = "Senior Consultant Neurologist"
-title = "MD, DM (Neurology)"
-specialty = "Stroke, Epilepsy, Neuromuscular Disorders, Neuro-Critical Consultations"
+role = "Senior Consultant — Neurology & Stroke Care"
+title = "MBBS, MD (Medicine), DM (Neurology, AIIMS New Delhi)"
+specialty = "Consultant in hyperacute ischemic stroke thrombolysis, epilepsy, spasticity, and neuromuscular rehabilitation."
 image_url = "assets/images/dr_ananya_pattnaik.jpg"
 
 [[hospital.team]]
 name = "Dr. Jajati Keshari Jena"
-role = "Senior Consultant Orthopedics & Joint Care"
-title = "MPT (Neuro Rehabilitation)"
-specialty = "Post-Surgical Joint Care, Spinal Decompression Recovery & Pain Clinic"
+role = "Senior Consultant — Orthopedic Rehabilitation & Spine"
+title = "BPT, MPT (Musculoskeletal & Sports Rehabilitation)"
+specialty = "Specialist in post-arthroplasty joint rehabilitation, spinal decompression recovery, and chronic pain management."
 image_url = "assets/images/dr_jajati_jena.jpg"
 
 [[hospital.services]]

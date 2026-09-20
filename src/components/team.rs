@@ -57,7 +57,7 @@ pub fn Team() -> Element {
                             rsx! {
                                 div {
                                     key: "{doctor.name}",
-                                    class: " overflow-hidden flex flex-col justify-between group peak-in-up {delay_cls}",
+                                    class: "cure-card overflow-hidden flex flex-col justify-between group peak-in-up {delay_cls}",
 
                                     // Photo container with realistic image
                                     div { class: "relative aspect-[3/4] overflow-hidden bg-slate-100 dark:bg-slate-800",
@@ -67,7 +67,7 @@ pub fn Team() -> Element {
                                             class: "w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105",
                                             decoding: "async",
                                         }
-                                        div { class: "absolute top-3 left-3 bg-white/95 dark:bg-slate-900/95 text-sky-700 dark:text-sky-300 text-xs font-bold px-3 py-1 rounded-full shadow-md backdrop-blur-sm border border-slate-200/60 dark:border-slate-700/60",
+                                        div { class: "absolute top-3 left-3 bg-white/95 dark:bg-slate-900/95 text-sky-700 dark:text-sky-300 text-[11px] font-bold px-3 py-1 rounded-full shadow-md backdrop-blur-md border border-slate-200/60 dark:border-slate-700/60 max-w-[90%] truncate",
                                             "{doctor.title}"
                                         }
                                     }
