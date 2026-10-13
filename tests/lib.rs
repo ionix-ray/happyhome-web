@@ -181,7 +181,56 @@ mod regression_tests {
         let config: SiteConfig = toml::from_str(TOML_STR).expect("site.toml must parse");
 
         assert!(config.footer.quick_links.len() >= 4);
-        assert!(config.footer.legal_links.len() >= 2);
+        // No-JS single-page app: every footer link must resolve in-page.
+        // Bare paths (e.g. /terms-conditions/) 404 without a router.
+        for link in config
+            .footer
+            .quick_links
+            .iter()
+            .chain(config.footer.legal_links.iter())
+        {
+            assert!(
+                link.url.starts_with('#'),
+                "footer link must be an in-page anchor, got: {}",
+                link.url
+            );
+        }
+    }
+
+    /// UI design-spec guardrail: ambient brand-aware dynamic background must
+    /// exist, derive from the dual-brand palette, and respect reduced motion.
+    #[test]
+    fn test_regression_ambient_brand_background_with_reduced_motion_guard() {
+        const CSS: &str = include_str!("../assets/styles.css");
+        assert!(
+            CSS.contains("#app::before"),
+            "ambient dynamic background layer missing from styles.css"
+        );
+        assert!(
+            CSS.contains("@keyframes ambientBrandDrift"),
+            "brand-aware drift animation missing from styles.css"
+        );
+        assert!(
+            CSS.contains("var(--c-brand)"),
+            "background must derive from brand palette vars (not hardcoded colors)"
+        );
+        // Reduced-motion kill switch scoped to the ambient layer.
+        // Reduced-motion kill switch must cover the ambient layer.
+        let mut rm_guarded = false;
+        let mut idx = 0usize;
+        while let Some(pos) = CSS[idx..].find("@media (prefers-reduced-motion: reduce)") {
+            let abs = idx + pos;
+            let window = &CSS[abs..(abs + 700).min(CSS.len())];
+            if window.contains("#app::before") && window.contains("animation: none") {
+                rm_guarded = true;
+                break;
+            }
+            idx = abs + 1;
+        }
+        assert!(
+            rm_guarded,
+            "ambient animation must be disabled under prefers-reduced-motion"
+        );
     }
 
     #[test]
@@ -195,6 +244,54 @@ mod regression_tests {
         assert!(
             TOML_STR.contains("WHERE HEALING BEGINS")
                 || TOML_STR.contains("Helping You To Bring Back Your Smile")
+        );
+    }
+
+    #[test]
+    fn test_regression_no_lazy_loading_in_components() {
+        const SERVICES_RS: &str = include_str!("../src/components/services.rs");
+        const WHY_US_RS: &str = include_str!("../src/components/why_us.rs");
+        const FOOTER_RS: &str = include_str!("../src/components/footer.rs");
+
+        assert!(
+            !SERVICES_RS.contains("loading: \"lazy\""),
+            "services.rs must not use lazy loading"
+        );
+        assert!(
+            !WHY_US_RS.contains("loading: \"lazy\""),
+            "why_us.rs must not use lazy loading"
+        );
+        assert!(
+            !FOOTER_RS.contains("loading: \"lazy\""),
+            "footer.rs must not use lazy loading"
+        );
+    }
+
+    #[test]
+    fn test_regression_hero_surrounding_capabilities_and_gene_helix() {
+        const HERO_RS: &str = include_str!("../src/components/hero.rs");
+        const CSS: &str = include_str!("../assets/styles.css");
+
+        assert!(
+            HERO_RS.contains("gene-helix") || HERO_RS.contains("GeneHelix"),
+            "hero.rs must contain Gene Helix component/element"
+        );
+        assert!(
+            CSS.contains("helixOscillate") || CSS.contains("helix-node"),
+            "styles.css must contain gene helix keyframe animations"
+        );
+        assert!(
+            !HERO_RS.contains("badge_doc_name"),
+            "hero.rs must remove doctor badge on the hero image"
+        );
+        assert!(HERO_RS.contains("24×7 Emergency"), "hero must contain 24×7 Emergency");
+        assert!(HERO_RS.contains("Critical Neuro ICU"), "hero must contain Critical Neuro ICU");
+        assert!(HERO_RS.contains("Digital Diagnostics"), "hero must contain Digital Diagnostics");
+        assert!(HERO_RS.contains("Trauma Stabilization"), "hero must contain Trauma Stabilization");
+        assert!(HERO_RS.contains("NABH Quality Norms"), "hero must contain NABH Quality Norms");
+        assert!(
+            CSS.contains("animate-float") || CSS.contains("floatSlow"),
+            "styles.css must contain floating keyframes for capability cards"
         );
     }
 
@@ -294,6 +391,73 @@ mod infosec_security_tests {
         assert_eq!(sanitized.name, "John &amp; Jane Doe &lt;Family&gt;");
         assert_eq!(sanitized.service, "Rehab &quot;Standard&quot;");
         assert!(sanitized.message.contains("&#x27;special&#x27;"));
+    }
+
+    /// No-JS application shell: only Playwright test cases may use JavaScript.
+    /// The shipped index.html must contain zero executable scripts; all reveal,
+    /// loader, counter and canvas behaviour is CSS-only or Rust/WASM.
+    /// The only permitted script tags are non-executable JSON-LD data blocks
+    /// (type="application/ld+json") — inert structured data for crawlers.
+    #[test]
+    fn test_index_html_contains_no_script_tags() {
+        const INDEX_HTML: &str = include_str!("../index.html");
+        let mut cursor = 0usize;
+        let mut data_blocks = 0usize;
+        while let Some(pos) = INDEX_HTML[cursor..].find("<script") {
+            let abs = cursor + pos;
+            let tag_end = INDEX_HTML[abs..]
+                .find('>')
+                .map(|i| abs + i)
+                .unwrap_or(INDEX_HTML.len());
+            let tag = &INDEX_HTML[abs..=tag_end.min(INDEX_HTML.len() - 1)];
+            assert!(
+                tag.contains("type=\"application/ld+json\""),
+                "index.html must not contain executable <script> tags (JS allowed only in Playwright TC), found: {tag}"
+            );
+            data_blocks += 1;
+            cursor = tag_end + 1;
+        }
+        assert!(
+            data_blocks >= 1,
+            "index.html must embed JSON-LD structured data for crawlers"
+        );
+    }
+
+    /// Title ownership contract: dx 0.7.9 appends the configured
+    /// `[web.app].title` (default `"dioxus | ⛺"`) after any existing
+    /// `<title>` text. The source shell must therefore keep an EMPTY
+    /// `<title></title>` so the built output carries exactly one clean
+    /// title — the #1 on-page SEO signal must never be polluted or duplicated.
+    #[test]
+    fn test_index_title_owned_by_dioxus_config() {
+        const INDEX_HTML: &str = include_str!("../index.html");
+        const DX_TOML: &str = include_str!("../Dioxus.toml");
+
+        let occurrences = INDEX_HTML.matches("<title>").count();
+        assert_eq!(
+            occurrences, 1,
+            "index.html must contain exactly one <title> element"
+        );
+
+        let start = INDEX_HTML
+            .find("<title>")
+            .expect("index.html must keep a <title> element for dx to fill");
+        let end = INDEX_HTML[start..]
+            .find("</title>")
+            .expect("index.html <title> must be closed")
+            + start;
+        let inner = &INDEX_HTML[start + "<title>".len()..end];
+        assert!(
+            inner.trim().is_empty(),
+            "index.html <title> must stay empty; dx appends Dioxus.toml title text after it (found: {inner:?})"
+        );
+
+        assert!(
+            DX_TOML.contains(
+                "title = \"Happy Home Hospital And Rehab | Bhubaneswar | Neuro Rehabilitation Centre\""
+            ),
+            "Dioxus.toml [web.app] must configure the exact page title"
+        );
     }
 
     /// OWASP Top 10 for LLM/AI (LLM01: Prompt Injection & LLM06: Sensitive Information Disclosure)

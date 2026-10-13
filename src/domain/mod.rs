@@ -1,4 +1,5 @@
 pub mod config;
+pub mod seo;
 pub mod types;
 pub mod validation;
 
@@ -68,8 +69,6 @@ mod tests {
         [site]
         name = "Test Site"
         tagline = "Test Tagline"
-        logo_url = ""
-        favicon_url = ""
         "#;
         let config: SiteConfig = toml::from_str(toml_str).unwrap();
         assert_eq!(config.site.name, "Test Site");
@@ -238,5 +237,62 @@ mod tests {
         assert_eq!(config.emergency.phone, "+91 8249914673");
         assert!(config.contact.address.contains("Bhubaneswar"));
         assert!(config.contact.address.contains("Ghatikia"));
+    }
+
+    #[test]
+    fn test_validate_contact_form_empty_service() {
+        let input = ContactFormInput {
+            name: "John".into(),
+            phone: "1234567890".into(),
+            email: "a@b.com".into(),
+            service: "".into(),
+            message: "Help".into(),
+        };
+        assert_eq!(
+            validate_contact_form(&input).unwrap_err(),
+            ValidationError::EmptyService
+        );
+    }
+
+    #[test]
+    fn test_validate_contact_form_service_too_long() {
+        let input = ContactFormInput {
+            name: "John".into(),
+            phone: "1234567890".into(),
+            email: "a@b.com".into(),
+            service: "x".repeat(201),
+            message: "Help".into(),
+        };
+        assert_eq!(
+            validate_contact_form(&input).unwrap_err(),
+            ValidationError::ServiceTooLong
+        );
+    }
+
+    #[test]
+    fn test_validate_contact_form_xss_in_email_phone_service() {
+        for (field, value) in [
+            ("email", "a@b.com<script>alert(1)</script>"),
+            ("phone", "1234567<img src=x onerror=alert(1)>"),
+            ("service", "Rehab <iframe src='javascript:document.cookie'>"),
+        ] {
+            let mut input = ContactFormInput {
+                name: "John".into(),
+                phone: "1234567890".into(),
+                email: "a@b.com".into(),
+                service: "Rehab".into(),
+                message: "Help".into(),
+            };
+            match field {
+                "email" => input.email = value.into(),
+                "phone" => input.phone = value.into(),
+                _ => input.service = value.into(),
+            }
+            assert_eq!(
+                validate_contact_form(&input).unwrap_err(),
+                ValidationError::DisallowedContent,
+                "field: {field}"
+            );
+        }
     }
 }

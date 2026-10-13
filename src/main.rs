@@ -13,8 +13,8 @@ mod state;
 use crate::domain::config::SiteConfig;
 use components::common::{DividerType, WaveDivider};
 use components::icons::{
-    CarbonActivityPulseIcon, CarbonTimeClockIcon, CloseIcon, HospitalIcon, MapPinIcon, MenuIcon, MoonIcon,
-    StethoscopeIcon, SunIcon,
+    CarbonActivityPulseIcon, CarbonTimeClockIcon, CloseIcon, HospitalIcon, MapPinIcon, MenuIcon,
+    MoonIcon, StethoscopeIcon, SunIcon,
 };
 use state::{init_global_state, BrandMode, BrandModeSignal, MobileNavSignal, ThemeSignal};
 
@@ -27,10 +27,23 @@ fn load_config() -> SiteConfig {
 // ── Root application component ────────────────────────────────────────────────
 #[component]
 fn App() -> Element {
+    // Remove the static boot loader without JavaScript: pure Rust/WASM DOM
+    // call once the app mounts (JS is allowed only in Playwright TC).
+    #[cfg(target_arch = "wasm32")]
+    use_effect(|| {
+        if let Some(document) = web_sys::window().and_then(|w| w.document()) {
+            if let Some(loader) = document.get_element_by_id("app-loading") {
+                loader.remove();
+            }
+        }
+        // Wire the one-shot card entrances (peak-in on first view, then static).
+        crate::components::common::fx::attach_scroll_entrances();
+    });
+
     // Provide compile-time config context
     use_context_provider(load_config);
 
-    let (brand_mode, theme, _mobile_nav, _modal, _active, _toast) = init_global_state();
+    let (brand_mode, theme, _mobile_nav, _modal, _toast) = init_global_state();
 
     let brand_str = brand_mode.0.read().as_str();
     let theme_str = theme.0.read().as_str();
@@ -42,11 +55,10 @@ fn App() -> Element {
             "data-brand": "{brand_str}",
             class: if theme_str == "dark" { "dark bg-slate-950 text-slate-100 min-h-screen" } else { "bg-white text-slate-900 min-h-screen" },
 
-            // Dynamic Site-Wide Multi-Colour Gene Mutation & Neuro-Synapse Canvas
-            canvas {
-                id: "bio-canvas",
-                class: "bio-canvas-fixed",
-            }
+            // Bundled stylesheets (dx includes asset!() files in the bundle;
+            // raw /assets/* URLs are NOT served, so never link them directly).
+            document::Stylesheet { href: asset!("/assets/tailwind.min.css") }
+            document::Stylesheet { href: asset!("/assets/styles.css") }
 
             // Accessibility skip link
             a { class: "skip-link", href: "#main-content", "Skip to main content" }
@@ -58,15 +70,18 @@ fn App() -> Element {
                 NavBar {}
             }
 
-            // Main sections with organic wave transitions
+            // Main sections with organic wave transitions.
+            // Order: hero → specialities (advertise hard) → trust & proof
+            // → conversion → about as the closing story before the footer.
             main { id: "main-content",
                 components::hero::Hero {}
-                components::about::About {}
                 WaveDivider { variant: DividerType::ToBg2, inverted: false }
                 components::services::Services {}
-                components::departments::Departments {}
-                WaveDivider { variant: DividerType::ToTeam, inverted: true }
+                WaveDivider { variant: DividerType::ToWhite, inverted: true }
+                components::wings::Wings {}
+                WaveDivider { variant: DividerType::ToBg2, inverted: false }
                 components::team::Team {}
+                WaveDivider { variant: DividerType::ToWhite, inverted: true }
                 components::why_us::WhyUs {}
                 WaveDivider { variant: DividerType::ToBg2, inverted: false }
                 components::plans::Plans {}
@@ -77,6 +92,8 @@ fn App() -> Element {
                 components::faq::Faq {}
                 WaveDivider { variant: DividerType::ToWhite, inverted: true }
                 components::contact::Contact {}
+                WaveDivider { variant: DividerType::ToBg2, inverted: false }
+                components::about::About {}
                 WaveDivider { variant: DividerType::ToFooter, inverted: false }
             }
 
@@ -177,11 +194,10 @@ fn NavBar() -> Element {
 
     let nav_links: &[(&str, &str)] = &[
         ("Home", "#home"),
-        ("About", "#about"),
         ("Services", "#services"),
-        ("Departments", "#departments"),
         ("Doctors", "#team"),
         ("Why Us", "#why-us"),
+        ("About", "#about"),
         ("Contact", "#contact"),
     ];
 
@@ -198,7 +214,7 @@ fn NavBar() -> Element {
                     href: "#home",
                     "aria-label": "Happy Home Hospital And Rehab Home",
                     img {
-                        src: "/assets/images/happy-home-logo-nav.png",
+                        src: asset!("/assets/images/happy-home-logo-nav.png"),
                         alt: "Happy Home Hospital And Rehab",
                         height: "56",
                         class: "h-12 sm:h-14 w-auto object-contain select-none dark:brightness-[1.12] dark:contrast-[1.1]",
@@ -273,7 +289,7 @@ fn NavBar() -> Element {
                     // Mobile Menu Hamburger Button
                     button {
                         class: "lg:hidden p-2 rounded-xl text-slate-700 dark:text-slate-200 flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-800",
-                        onclick: move |_| *mobile_nav_signal.0.write() = !is_mobile_open,
+                        onclick: move |_| mobile_nav_signal.0.with_mut(|v| *v = !*v),
                         "aria-label": "Toggle mobile navigation",
                         if is_mobile_open {
                             CloseIcon { size: 20, color: "currentColor" }
@@ -297,11 +313,10 @@ fn MobileNavDrawer() -> Element {
 
     let nav_links: &[(&str, &str)] = &[
         ("Home", "#home"),
-        ("About", "#about"),
         ("Services", "#services"),
-        ("Departments", "#departments"),
         ("Doctors", "#team"),
         ("Why Us", "#why-us"),
+        ("About", "#about"),
         ("Contact", "#contact"),
     ];
 
@@ -318,7 +333,7 @@ fn MobileNavDrawer() -> Element {
             class: "mobile-drawer-panel lg:hidden p-6 space-y-6",
             div { class: "flex items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-800",
                 img {
-                    src: "/assets/images/happy-home-logo-nav.png",
+                    src: asset!("/assets/images/happy-home-logo-nav.png"),
                     alt: "Happy Home Hospital",
                     class: "h-10 w-auto object-contain",
                 }
@@ -388,5 +403,38 @@ fn MobileNavDrawer() -> Element {
 
 fn main() {
     console_error_panic_hook::set_once();
+    inject_clarity();
     dioxus::launch(App);
 }
+
+// ── Analytics: Microsoft Clarity (config-gated, injected at runtime) ─────────
+// The HTML shell stays script-free (infosec guardrail); WASM appends the
+// loader only when [analytics].clarity_project_id is set in site.toml.
+#[cfg(target_arch = "wasm32")]
+fn inject_clarity() {
+    let snippet = domain::seo::render_clarity_snippet(&load_config());
+    let Some(doc) = web_sys::window().and_then(|w| w.document()) else {
+        return;
+    };
+    // Expose wiring state so e2e can assert consistency with config.
+    if let Some(root) = doc.document_element() {
+        let state = if snippet.is_some() {
+            "enabled"
+        } else {
+            "disabled"
+        };
+        let _ = root.set_attribute("data-analytics-clarity", state);
+    }
+    if let Some(snippet) = snippet {
+        let Some(head) = doc.head() else {
+            return;
+        };
+        if let Ok(script) = doc.create_element("script") {
+            script.set_text_content(Some(&snippet));
+            let _ = head.append_child(&script);
+        }
+    }
+}
+
+#[cfg(not(target_arch = "wasm32"))]
+fn inject_clarity() {}

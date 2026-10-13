@@ -18,35 +18,59 @@ pub fn Appointment() -> Element {
     let brand = *brand_signal.0.read();
     let preselected_doc = modal_doctor_signal.0.read().clone().unwrap_or_default();
 
+    let default_service = match brand {
+        BrandMode::Hospital => "Emergency & Critical Care".to_string(),
+        BrandMode::Rehab => "Stroke Recovery & Paralysis Management".to_string(),
+    };
+    let default_doctor = if !preselected_doc.is_empty() {
+        preselected_doc.clone()
+    } else {
+        "Dr. Vijay Kumar Sahu (Founder & Director)".to_string()
+    };
+
     let mut name = use_signal(String::new);
     let mut phone = use_signal(String::new);
     let mut email = use_signal(String::new);
-    let mut service = use_signal(|| match brand {
-        BrandMode::Hospital => "Emergency & Critical Care".to_string(),
-        BrandMode::Rehab => "Stroke Recovery & Paralysis Management".to_string(),
-    });
-    let mut doctor = use_signal(|| {
-        if !preselected_doc.is_empty() {
-            preselected_doc
-        } else {
-            "Dr. Vijay Kumar Sahu (Founder & Director)".to_string()
-        }
-    });
+    let mut service = use_signal(|| default_service.clone());
+    let mut doctor = use_signal(|| default_doctor.clone());
     let mut message = use_signal(String::new);
     let mut error_msg = use_signal(|| None::<String>);
+    let mut submitting = use_signal(|| false);
+
+    let default_service = match brand {
+        BrandMode::Hospital => "Emergency & Critical Care".to_string(),
+        BrandMode::Rehab => "Stroke Recovery & Paralysis Management".to_string(),
+    };
+    let default_doctor = if !preselected_doc.is_empty() {
+        preselected_doc.clone()
+    } else {
+        "Dr. Vijay Kumar Sahu (Founder & Director)".to_string()
+    };
+
+    // Resync selections if brand or preselected doctor changes after mount.
+    use_effect({
+        let default_service = default_service.clone();
+        let default_doctor = default_doctor.clone();
+        move || {
+            let _ = brand_signal.0.read();
+            let _ = modal_doctor_signal.0.read();
+            *service.write() = default_service.clone();
+            *doctor.write() = default_doctor.clone();
+        }
+    });
 
     let phone_link = format!("tel:{}", config.emergency.phone.replace([' ', '-'], ""));
     let whatsapp_link = format!("https://wa.me/{}?text=Hello%20Happy%20Home%20Hospital,%20I%20want%20to%20enquire%20about%20an%20appointment.", config.emergency.whatsapp_phone.trim_start_matches('+'));
 
     let on_submit = move |_e: Event<FormData>| {
+        if *submitting.read() {
+            return;
+        }
+        *submitting.write() = true;
         let input = ContactFormInput {
             name: name.read().clone(),
             phone: phone.read().clone(),
-            email: if email.read().is_empty() {
-                "patient@happyhomehospital.com".to_string()
-            } else {
-                email.read().clone()
-            },
+            email: email.read().clone(),
             service: service.read().clone(),
             message: format!("Doctor: {} | Notes: {}", doctor.read(), message.read()),
         };
@@ -60,12 +84,16 @@ pub fn Appointment() -> Element {
                 );
                 *name.write() = String::new();
                 *phone.write() = String::new();
+                *email.write() = String::new();
+                *service.write() = default_service.clone();
+                *doctor.write() = default_doctor.clone();
                 *message.write() = String::new();
             }
             Err(err) => {
                 *error_msg.write() = Some(format!("Please verify details: {}", err));
             }
         }
+        *submitting.write() = false;
     };
 
     rsx! {
@@ -249,9 +277,10 @@ pub fn Appointment() -> Element {
                             div { class: "pt-2",
                                 button {
                                     r#type: "submit",
+                                    disabled: *submitting.read(),
                                     class: "btn-solid carbon-btn-hover w-full py-4 rounded-xl text-base font-bold tracking-wide shadow-xl flex items-center justify-center gap-2 transition-all",
                                     StethoscopeIcon { size: 18, color: "#fff" }
-                                    "Confirm Consultation Request"
+                                    if *submitting.read() { "Submitting…" } else { "Confirm Consultation Request" }
                                 }
                                 p { class: "text-[11px] text-center text-slate-400 mt-3",
                                     "Your medical information is held strictly confidential under HIPAA & NABH healthcare norms."

@@ -6,7 +6,7 @@ use dioxus::prelude::*;
 
 #[component]
 pub fn About() -> Element {
-    let founder_img = "assets/images/dr_vijay_sahu.jpg";
+    let founder_img = asset!("/assets/images/dr_vijay_sahu.jpg");
     let founder_name = "Dr. Vijay Kumar Sahu";
     let founder_title = "Founder & Managing Director";
     let founder_deg = "MPT (Neuro Rehabilitation), Specialized in Neuro & Spine Care";
@@ -22,7 +22,7 @@ pub fn About() -> Element {
     rsx! {
         section {
             id: "about",
-            class: "py-20 bg-white dark:bg-slate-900",
+            class: "py-20 bg-slate-50 dark:bg-[#162238]",
             "aria-labelledby": "about-heading",
 
             div { class: "container-x",

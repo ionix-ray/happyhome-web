@@ -983,7 +983,7 @@ pub fn CarbonActivityPulseIcon(
 #[component]
 pub fn CarbonHeartHealthIcon(
     #[props(default = 24)] size: u32,
-    #[props(default = "#ef4444")] color: &'static str,
+    #[props(default = "#f43f5e")] color: &'static str,
 ) -> Element {
     rsx! {
         svg {
@@ -991,22 +991,26 @@ pub fn CarbonHeartHealthIcon(
             width: "{size}", height: "{size}",
             view_box: "0 0 32 32",
             fill: "none",
-            class: "animate-heartbeat",
+            class: "animate-heartbeat shrink-0 inline-block",
+            // Radiant cardiac heart chamber in soft rose
             path {
                 d: "M16 28 C14 26 4 18 4 11 A7 7 0 0 1 16 7 A7 7 0 0 1 28 11 C28 18 18 26 16 28 Z",
                 fill: "{color}",
-                fill_opacity: "0.15",
+                fill_opacity: "0.18",
                 stroke: "{color}",
                 stroke_width: "2",
                 stroke_linejoin: "round",
             }
+            // Precision ECG waveform pulse across the cardiac chamber
             path {
-                d: "M10 12h3l2-3 3 6 2-3h3",
-                stroke: "{color}",
-                stroke_width: "2",
+                d: "M9 16h3.5l2-5 3.5 10 2-5h3",
+                stroke: "#38bdf8",
+                stroke_width: "2.2",
                 stroke_linecap: "round",
                 stroke_linejoin: "round",
             }
+            // Vital rhythm indicator pulse node
+            circle { cx: "16", cy: "16", r: "1.5", fill: "#fbbf24" }
         }
     }
 }
@@ -1060,34 +1064,57 @@ pub fn CarbonHealingSparkIcon(
     }
 }
 
+/// IBM Carbon Renew / Surgical Post-Op Rehabilitation Cycle — Multi-colour
 #[component]
 pub fn CarbonRenewIcon(
     #[props(default = 24)] size: u32,
     #[props(default = "currentColor")] color: &'static str,
 ) -> Element {
+    let _ = color;
     rsx! {
         svg {
             xmlns: "http://www.w3.org/2000/svg",
             width: "{size}", height: "{size}",
             view_box: "0 0 32 32",
             fill: "none",
-            stroke: "{color}",
-            stroke_width: "2.5",
-            stroke_linecap: "round",
-            stroke_linejoin: "round",
-            path { d: "M26 12A12 12 0 0 0 7.5 8.5L4 12" }
-            path { d: "M4 4v8h8" }
-            path { d: "M6 20a12 12 0 0 0 18.5 3.5L28 20" }
-            path { d: "M28 28v-8h-8" }
+            class: "shrink-0 inline-block",
+            // Top renewal arc in Coastal Cyan
+            path {
+                d: "M26 12A12 12 0 0 0 7.5 8.5L4 12",
+                stroke: "#38bdf8",
+                stroke_width: "2.5",
+                stroke_linecap: "round",
+            }
+            path {
+                d: "M4 4v8h8",
+                stroke: "#0284c7",
+                stroke_width: "2.5",
+                stroke_linecap: "round",
+                stroke_linejoin: "round",
+            }
+            // Bottom recovery arc in Emerald Teal
+            path {
+                d: "M6 20a12 12 0 0 0 18.5 3.5L28 20",
+                stroke: "#34d399",
+                stroke_width: "2.5",
+                stroke_linecap: "round",
+            }
+            path {
+                d: "M28 28v-8h-8",
+                stroke: "#059669",
+                stroke_width: "2.5",
+                stroke_linecap: "round",
+                stroke_linejoin: "round",
+            }
+            // Central rehabilitation balance node in Warm Amber
+            circle { cx: "16", cy: "16", r: "2.5", fill: "#f59e0b" }
         }
     }
 }
 
 /// IBM Carbon Alarm / Siren — Multi-colour (Emergency ICU)
 #[component]
-pub fn CarbonEmergencySirenIcon(
-    #[props(default = 16)] size: u32,
-) -> Element {
+pub fn CarbonEmergencySirenIcon(#[props(default = 16)] size: u32) -> Element {
     rsx! {
         svg {
             xmlns: "http://www.w3.org/2000/svg",
@@ -1114,9 +1141,7 @@ pub fn CarbonEmergencySirenIcon(
 
 /// IBM Carbon Hospital Bed — Multi-colour (Dedicated Inpatient Beds)
 #[component]
-pub fn CarbonHospitalBedIcon(
-    #[props(default = 16)] size: u32,
-) -> Element {
+pub fn CarbonHospitalBedIcon(#[props(default = 16)] size: u32) -> Element {
     rsx! {
         svg {
             xmlns: "http://www.w3.org/2000/svg",
@@ -1143,9 +1168,7 @@ pub fn CarbonHospitalBedIcon(
 
 /// IBM Carbon Chart Line Trend — Multi-colour (Patient Recovery Rate)
 #[component]
-pub fn CarbonChartTrendIcon(
-    #[props(default = 16)] size: u32,
-) -> Element {
+pub fn CarbonChartTrendIcon(#[props(default = 16)] size: u32) -> Element {
     rsx! {
         svg {
             xmlns: "http://www.w3.org/2000/svg",
@@ -1168,9 +1191,7 @@ pub fn CarbonChartTrendIcon(
 
 /// IBM Carbon Shield Quality / Security Check — Multi-colour (NABH Quality Norms)
 #[component]
-pub fn CarbonShieldQualityIcon(
-    #[props(default = 16)] size: u32,
-) -> Element {
+pub fn CarbonShieldQualityIcon(#[props(default = 16)] size: u32) -> Element {
     rsx! {
         svg {
             xmlns: "http://www.w3.org/2000/svg",
@@ -1200,9 +1221,7 @@ pub fn CarbonShieldQualityIcon(
 
 /// IBM Carbon Cognitive / Neural Brain — Multi-colour (Specialized Neuro & Spine Rehab)
 #[component]
-pub fn CarbonCognitiveIcon(
-    #[props(default = 16)] size: u32,
-) -> Element {
+pub fn CarbonCognitiveIcon(#[props(default = 16)] size: u32) -> Element {
     rsx! {
         svg {
             xmlns: "http://www.w3.org/2000/svg",
@@ -1225,9 +1244,7 @@ pub fn CarbonCognitiveIcon(
 
 /// IBM Carbon Partnership / Collaborative Care — Multi-colour (1:1 Daily Physiotherapy)
 #[component]
-pub fn CarbonPartnershipIcon(
-    #[props(default = 16)] size: u32,
-) -> Element {
+pub fn CarbonPartnershipIcon(#[props(default = 16)] size: u32) -> Element {
     rsx! {
         svg {
             xmlns: "http://www.w3.org/2000/svg",
@@ -1254,9 +1271,7 @@ pub fn CarbonPartnershipIcon(
 
 /// IBM Carbon Smiles & Healing Heart — Multi-colour (1,000+ Smiles Restored)
 #[component]
-pub fn CarbonSmilesHeartIcon(
-    #[props(default = 16)] size: u32,
-) -> Element {
+pub fn CarbonSmilesHeartIcon(#[props(default = 16)] size: u32) -> Element {
     rsx! {
         svg {
             xmlns: "http://www.w3.org/2000/svg",
@@ -1285,9 +1300,7 @@ pub fn CarbonSmilesHeartIcon(
 
 /// IBM Carbon Time & Clock — Multi-colour (OPD & Clinic Hours)
 #[component]
-pub fn CarbonTimeClockIcon(
-    #[props(default = 14)] size: u32,
-) -> Element {
+pub fn CarbonTimeClockIcon(#[props(default = 14)] size: u32) -> Element {
     rsx! {
         svg {
             xmlns: "http://www.w3.org/2000/svg",
@@ -1312,3 +1325,258 @@ pub fn CarbonTimeClockIcon(
     }
 }
 
+/// IBM Carbon Spinal Column — Multi-colour (Spinal Cord Injury Rehab)
+#[component]
+pub fn CarbonSpineIcon(#[props(default = 16)] size: u32) -> Element {
+    rsx! {
+        svg {
+            xmlns: "http://www.w3.org/2000/svg",
+            width: "{size}", height: "{size}",
+            view_box: "0 0 32 32",
+            fill: "none",
+            class: "shrink-0 inline-block",
+            // Nerve roots in warm amber
+            path { d: "M11 5.5H6M11 13H5.5M11 20.5H6M11 27.5H6.5", stroke: "#f59e0b", stroke_width: "1.75", stroke_linecap: "round" }
+            path { d: "M21 5.5h5M21 13h5.5M21 20.5h5M21 27.5h4.5", stroke: "#f59e0b", stroke_width: "1.75", stroke_linecap: "round" }
+            // Vertebral bodies alternating indigo / violet
+            rect { x: "12", y: "3", width: "8", height: "5", rx: "2", fill: "#6366f1" }
+            rect { x: "12", y: "10.5", width: "8", height: "5", rx: "2", fill: "#818cf8" }
+            rect { x: "12", y: "18", width: "8", height: "5", rx: "2", fill: "#6366f1" }
+            rect { x: "12", y: "25.5", width: "8", height: "4.5", rx: "2", fill: "#818cf8" }
+            // Intervertebral discs in sky cyan
+            rect { x: "13", y: "8.3", width: "6", height: "1.9", rx: "0.95", fill: "#38bdf8" }
+            rect { x: "13", y: "15.8", width: "6", height: "1.9", rx: "0.95", fill: "#38bdf8" }
+            rect { x: "13", y: "23.3", width: "6", height: "1.9", rx: "0.95", fill: "#38bdf8" }
+        }
+    }
+}
+
+/// IBM Carbon Lungs — Multi-colour (Tracheostomy & Respiratory Support)
+#[component]
+pub fn CarbonLungsIcon(#[props(default = 16)] size: u32) -> Element {
+    rsx! {
+        svg {
+            xmlns: "http://www.w3.org/2000/svg",
+            width: "{size}", height: "{size}",
+            view_box: "0 0 32 32",
+            fill: "none",
+            class: "shrink-0 inline-block",
+            // Air particles in warm amber
+            circle { cx: "6.5", cy: "9", r: "1.5", fill: "#f59e0b" }
+            circle { cx: "25.5", cy: "7.5", r: "1.2", fill: "#fbbf24" }
+            // Trachea + bronchi in emerald teal
+            path {
+                d: "M16 4v7M16 11l-3.5 4M16 11l3.5 4",
+                stroke: "#14b8a6",
+                stroke_width: "3",
+                stroke_linecap: "round",
+                stroke_linejoin: "round",
+            }
+            // Left lobe in sky cyan
+            path {
+                d: "M12.5 15C9 15 5.5 18 4.5 22.5C4 25 5.7 27.2 8 27.2C11.5 27.2 14 24 14 20.3V15Z",
+                fill: "#38bdf8",
+            }
+            // Right lobe in deep sky blue
+            path {
+                d: "M19.5 15C23 15 26.5 18 27.5 22.5C28 25 26.3 27.2 24 27.2C20.5 27.2 18 24 18 20.3V15Z",
+                fill: "#0ea5e9",
+            }
+        }
+    }
+}
+
+/// IBM Carbon Adhesive Bandage — Multi-colour (Bedsore & Wound Care)
+#[component]
+pub fn CarbonWoundCareIcon(#[props(default = 16)] size: u32) -> Element {
+    rsx! {
+        svg {
+            xmlns: "http://www.w3.org/2000/svg",
+            width: "{size}", height: "{size}",
+            view_box: "0 0 32 32",
+            fill: "none",
+            class: "shrink-0 inline-block",
+            // Strips rotated into a tilted adhesive bandage
+            rect { x: "2", y: "12", width: "28", height: "8", rx: "4", fill: "#f59e0b", transform: "rotate(-35 16 16)" }
+            // Sterile pad in cream
+            rect { x: "11", y: "13.5", width: "10", height: "5", rx: "1.5", fill: "#fef3c7", transform: "rotate(-35 16 16)" }
+            // Medical cross in rose, rotating with the strip
+            rect { x: "14", y: "15.25", width: "4", height: "1.5", rx: "0.75", fill: "#f43f5e", transform: "rotate(-35 16 16)" }
+            rect { x: "15.25", y: "14", width: "1.5", height: "4", rx: "0.75", fill: "#f43f5e", transform: "rotate(-35 16 16)" }
+        }
+    }
+}
+
+/// IBM Carbon Tremor Hand — Multi-colour (Parkinson's & Dementia Rehab)
+#[component]
+pub fn CarbonTremorHandIcon(#[props(default = 16)] size: u32) -> Element {
+    rsx! {
+        svg {
+            xmlns: "http://www.w3.org/2000/svg",
+            width: "{size}", height: "{size}",
+            view_box: "0 0 32 32",
+            fill: "none",
+            class: "shrink-0 inline-block",
+            // Tremor motion arcs in sky cyan
+            path { d: "M26.5 10a5 5 0 0 1 0 8", stroke: "#38bdf8", stroke_width: "2", stroke_linecap: "round", fill: "none" }
+            path { d: "M29 7.5a9 9 0 0 1 0 13", stroke: "#7dd3fc", stroke_width: "2", stroke_linecap: "round", fill: "none" }
+            // Thumb in violet
+            rect { x: "4", y: "17", width: "6", height: "3.5", rx: "1.75", fill: "#a78bfa", transform: "rotate(-30 7 18.75)" }
+            // Fingers alternating violet / indigo
+            rect { x: "9", y: "6", width: "3", height: "11", rx: "1.5", fill: "#a78bfa" }
+            rect { x: "13", y: "4", width: "3", height: "13", rx: "1.5", fill: "#818cf8" }
+            rect { x: "17", y: "5", width: "3", height: "12", rx: "1.5", fill: "#a78bfa" }
+            rect { x: "21", y: "8", width: "3", height: "9", rx: "1.5", fill: "#818cf8" }
+            // Palm in deep indigo
+            rect { x: "8", y: "15", width: "17", height: "13", rx: "5", fill: "#6366f1" }
+        }
+    }
+}
+
+/// IBM Carbon Stroke Brain — Multi-colour (Stroke Recovery & Paralysis)
+#[component]
+pub fn CarbonStrokeBrainIcon(#[props(default = 16)] size: u32) -> Element {
+    rsx! {
+        svg {
+            xmlns: "http://www.w3.org/2000/svg",
+            width: "{size}", height: "{size}",
+            view_box: "0 0 32 32",
+            fill: "none",
+            class: "shrink-0 inline-block",
+            // Left hemisphere in soft rose
+            path {
+                d: "M15 6C11 6 8 9 8 12.5C5 14 4 17 5 19.5C4.2 22 5.5 24.5 7.5 25.5C8.4 27.7 10.5 29 13 29C14.2 29 15 28.5 15 28V6Z",
+                fill: "#fb7185",
+            }
+            // Right hemisphere in vivid rose
+            path {
+                d: "M17 6C21 6 24 9 24 12.5C27 14 28 17 27 19.5C27.8 22 26.5 24.5 24.5 25.5C23.6 27.7 21.5 29 19 29C17.8 29 17 28.5 17 28V6Z",
+                fill: "#f43f5e",
+            }
+            // Central fissure in blush
+            path { d: "M16 6V29", stroke: "#fecdd3", stroke_width: "1.5", stroke_linecap: "round" }
+            // Gyri folds in blush
+            path { d: "M11 9.5c-1.8 1.6-1.8 3.9 0 5.5", stroke: "#ffe4e6", stroke_width: "1.5", stroke_linecap: "round", fill: "none" }
+            path { d: "M21 9.5c1.8 1.6 1.8 3.9 0 5.5", stroke: "#ffe4e6", stroke_width: "1.5", stroke_linecap: "round", fill: "none" }
+            // Stroke lightning bolt in warm amber
+            path {
+                d: "M18.5 10.5L13.5 18.5H17L15.5 24.5L21 16H17.5Z",
+                fill: "#f59e0b",
+                stroke: "#fef3c7",
+                stroke_width: "0.75",
+            }
+        }
+    }
+}
+
+/// IBM Carbon Vitals Monitor — Multi-colour (Critical Care & HDU)
+#[component]
+pub fn CarbonVitalsMonitorIcon(#[props(default = 16)] size: u32) -> Element {
+    rsx! {
+        svg {
+            xmlns: "http://www.w3.org/2000/svg",
+            width: "{size}", height: "{size}",
+            view_box: "0 0 32 32",
+            fill: "none",
+            class: "shrink-0 inline-block",
+            // Stand in muted slate
+            rect { x: "13", y: "26", width: "6", height: "3", rx: "1", fill: "#64748b" }
+            rect { x: "9", y: "29", width: "14", height: "2.5", rx: "1.25", fill: "#94a3b8" }
+            // Monitor frame in deep slate
+            rect { x: "3", y: "4", width: "26", height: "23", rx: "3", fill: "#334155" }
+            // Screen glass in white
+            rect { x: "5", y: "6", width: "22", height: "15", rx: "2", fill: "#f8fafc" }
+            // ECG waveform in emerald
+            path {
+                d: "M7 14H10.5L12.5 9.5L15.5 18.5L17.5 14H25",
+                stroke: "#10b981",
+                stroke_width: "2",
+                stroke_linecap: "round",
+                stroke_linejoin: "round",
+                fill: "none",
+            }
+            // Control bars + alarm LED
+            rect { x: "5", y: "22.5", width: "6", height: "2.5", rx: "1.25", fill: "#38bdf8" }
+            rect { x: "13", y: "22.5", width: "5", height: "2.5", rx: "1.25", fill: "#10b981" }
+            circle { cx: "24", cy: "23.75", r: "1.75", fill: "#f59e0b" }
+        }
+    }
+}
+
+/// IBM Carbon Laboratory Flask — Multi-colour (Diagnostics & Laboratory)
+#[component]
+pub fn CarbonLabFlaskIcon(#[props(default = 16)] size: u32) -> Element {
+    rsx! {
+        svg {
+            xmlns: "http://www.w3.org/2000/svg",
+            width: "{size}", height: "{size}",
+            view_box: "0 0 32 32",
+            fill: "none",
+            class: "shrink-0 inline-block",
+            // Evaporating sample dots in amber / rose
+            circle { cx: "25", cy: "8", r: "1.5", fill: "#f59e0b" }
+            circle { cx: "27.5", cy: "12.5", r: "1", fill: "#f43f5e" }
+            // Reagent liquid in emerald
+            path {
+                d: "M11.6 21.5H20.4L22.3 25.5A3 3 0 0 1 20 30H12A3 3 0 0 1 9.6 25.5L11.6 21.5Z",
+                fill: "#10b981",
+            }
+            // Bubbles inside the liquid
+            circle { cx: "13", cy: "25", r: "1.6", fill: "#fef08a" }
+            circle { cx: "17.5", cy: "26.5", r: "1.2", fill: "#ffffff" }
+            circle { cx: "15.5", cy: "23", r: "1", fill: "#f59e0b" }
+            // Glass outline in sky cyan
+            path {
+                d: "M12 4H20M14.5 4V15L9.4 25.6A3 3 0 0 0 12 30H20A3 3 0 0 0 22.6 25.6L17.5 15V4",
+                stroke: "#38bdf8",
+                stroke_width: "2.5",
+                stroke_linecap: "round",
+                stroke_linejoin: "round",
+                fill: "none",
+            }
+        }
+    }
+}
+
+/// Multi-colour Carbon icon for a speciality card, keyed by SiteConfig slug.
+/// Every single one of the 15 specialties across Hospital and Rehab wings
+/// has a unique, distinct IBM Carbon Design clinical SVG glyph.
+#[component]
+pub fn CarbonServiceIcon(slug: String, #[props(default = 20)] size: u32) -> Element {
+    match slug.as_str() {
+        // Hospital wing (6 specialties)
+        "emergency-trauma" => rsx! { CarbonEmergencySirenIcon { size } },
+        "critical-care-hdu" => rsx! { CarbonVitalsMonitorIcon { size } },
+        "multispecialty-opd" => rsx! { CarbonTimeClockIcon { size } },
+        "diagnostic-laboratory" => rsx! { CarbonLabFlaskIcon { size } },
+        "advanced-physiotherapy" => rsx! { CarbonPartnershipIcon { size } },
+        "oncology-palliative" => rsx! { CarbonSmilesHeartIcon { size } },
+        // Rehab wing (9 programs)
+        "post-neuro-surgery-rehabilitation" => rsx! { CarbonHospitalBedIcon { size } },
+        "spinal-cord-injury-rehabilitation" => rsx! { CarbonSpineIcon { size } },
+        "traumatic-brain-injury-tbi-care" => rsx! { CarbonCognitiveIcon { size } },
+        "advanced-bedsore-wound-care" => rsx! { CarbonWoundCareIcon { size } },
+        "tracheostomy-respiratory-support-care" => rsx! { CarbonLungsIcon { size } },
+        "cancer-palliative-critical-care-management" => rsx! { CarbonHeartHealthIcon { size } },
+        "parkinsons-disease-dementia-rehabilitation" => rsx! { CarbonTremorHandIcon { size } },
+        "stroke-recovery-paralysis-management" => rsx! { CarbonStrokeBrainIcon { size } },
+        "post-general-abdominal-orthopedic-ctvs-surgery-rehabilitation" => {
+            rsx! { CarbonRenewIcon { size } }
+        }
+        _ => rsx! { CarbonShieldQualityIcon { size } },
+    }
+}
+
+/// Multi-colour Carbon icon for Why Us cards, keyed by icon_key.
+#[component]
+pub fn CarbonWhyUsIcon(icon_key: String, #[props(default = 20)] size: u32) -> Element {
+    match icon_key.as_str() {
+        "ambulance" | "emergency" => rsx! { CarbonEmergencySirenIcon { size } },
+        "shield" | "quality" => rsx! { CarbonShieldQualityIcon { size } },
+        "hospital-full" | "hospital" => rsx! { CarbonHospitalBedIcon { size } },
+        "plan" | "chart" => rsx! { CarbonChartTrendIcon { size } },
+        "clock-medical" | "clock" => rsx! { CarbonTimeClockIcon { size } },
+        "wound" => rsx! { CarbonWoundCareIcon { size } },
+        _ => rsx! { CarbonShieldCheckIcon { size } },
+    }
+}

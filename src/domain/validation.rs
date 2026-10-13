@@ -13,6 +13,10 @@ pub enum ValidationError {
     InvalidPhone,
     #[error("Email cannot be empty")]
     EmptyEmail,
+    #[error("Service must be selected")]
+    EmptyService,
+    #[error("Service exceeds maximum length of 200 characters")]
+    ServiceTooLong,
     #[error("Invalid email format")]
     InvalidEmail,
     #[error("Message exceeds maximum length of 1000 characters")]
@@ -34,16 +38,25 @@ pub fn validate_contact_form(form: &ContactFormInput) -> Result<ContactForm, Val
     let name = form.name.trim();
     let phone = form.phone.trim();
     let email = form.email.trim();
+    let service = form.service.trim();
     let message = form.message.trim();
+
+    // XSS screen on every raw field first, so payloads fail as
+    // DisallowedContent regardless of which format check would fire.
+    if contains_xss_payload(name)
+        || contains_xss_payload(phone)
+        || contains_xss_payload(email)
+        || contains_xss_payload(service)
+        || contains_xss_payload(message)
+    {
+        return Err(ValidationError::DisallowedContent);
+    }
 
     if name.is_empty() {
         return Err(ValidationError::EmptyName);
     }
     if name.len() > 100 {
         return Err(ValidationError::NameTooLong);
-    }
-    if contains_xss_payload(name) {
-        return Err(ValidationError::DisallowedContent);
     }
 
     if phone.is_empty() {
@@ -60,18 +73,22 @@ pub fn validate_contact_form(form: &ContactFormInput) -> Result<ContactForm, Val
         return Err(ValidationError::InvalidEmail);
     }
 
+    if service.is_empty() {
+        return Err(ValidationError::EmptyService);
+    }
+    if service.len() > 200 {
+        return Err(ValidationError::ServiceTooLong);
+    }
+
     if message.len() > 1000 {
         return Err(ValidationError::MessageTooLong);
-    }
-    if contains_xss_payload(message) {
-        return Err(ValidationError::DisallowedContent);
     }
 
     Ok(ContactForm {
         name: sanitize_text(name),
         phone: phone.to_string(),
         email: email.to_string(),
-        service: sanitize_text(&form.service),
+        service: sanitize_text(service),
         message: sanitize_text(message),
     })
 }

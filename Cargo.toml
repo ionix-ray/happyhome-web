@@ -7,8 +7,14 @@ edition = "2021"
 console_error_panic_hook = "0.1.7"
 dioxus = { version = "=0.7.9", features = ["web"] }
 serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
 toml = "0.8"
 thiserror = "1.0"
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+wasm-bindgen = "0.2"
+js-sys = "0.3"
+web-sys = { version = "0.3", features = ["Document", "Element", "Window", "HtmlHeadElement", "HtmlElement", "Node", "NodeList", "DomTokenList", "EventTarget", "IntersectionObserver", "IntersectionObserverEntry", "IntersectionObserverInit", "MediaQueryList"] }
 
 [profile.release]
 opt-level = "z"

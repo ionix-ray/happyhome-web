@@ -62,10 +62,6 @@ pub struct MobileNavSignal(pub Signal<bool>);
 #[derive(Clone, Copy)]
 pub struct ModalDoctorSignal(pub Signal<Option<String>>);
 
-#[allow(dead_code)]
-#[derive(Clone, Copy)]
-pub struct ActiveSectionSignal(pub Signal<String>);
-
 #[derive(Clone, Copy)]
 pub struct ToastSignal(pub Signal<Option<String>>);
 
@@ -75,29 +71,19 @@ pub fn init_global_state() -> (
     ThemeSignal,
     MobileNavSignal,
     ModalDoctorSignal,
-    ActiveSectionSignal,
     ToastSignal,
 ) {
     let brand_mode = BrandModeSignal(use_signal(|| BrandMode::Hospital));
     let theme = ThemeSignal(use_signal(|| Theme::Light));
     let mobile_nav = MobileNavSignal(use_signal(|| false));
     let modal_doctor = ModalDoctorSignal(use_signal(|| None));
-    let active_section = ActiveSectionSignal(use_signal(|| "home".to_string()));
     let toast = ToastSignal(use_signal(|| None));
 
     use_context_provider(|| brand_mode);
     use_context_provider(|| theme);
     use_context_provider(|| mobile_nav);
     use_context_provider(|| modal_doctor);
-    use_context_provider(|| active_section);
     use_context_provider(|| toast);
 
-    (
-        brand_mode,
-        theme,
-        mobile_nav,
-        modal_doctor,
-        active_section,
-        toast,
-    )
+    (brand_mode, theme, mobile_nav, modal_doctor, toast)
 }

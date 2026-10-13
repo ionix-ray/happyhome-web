@@ -11,11 +11,7 @@ pub enum DividerType {
 }
 
 #[component]
-pub fn WaveDivider(
-    variant: DividerType,
-    #[props(default = false)]
-    inverted: bool,
-) -> Element {
+pub fn WaveDivider(variant: DividerType, #[props(default = false)] inverted: bool) -> Element {
     let variant_class = match variant {
         DividerType::ToBg2 => "divider-to-bg2",
         DividerType::ToWhite => "divider-to-white",

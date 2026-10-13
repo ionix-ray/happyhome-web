@@ -1274,9 +1274,13 @@ version = "0.1.0"
 dependencies = [
  "console_error_panic_hook",
  "dioxus",
+ "js-sys",
  "serde",
+ "serde_json",
  "thiserror 1.0.69",
  "toml",
+ "wasm-bindgen",
+ "web-sys",
 ]
 
 [[package]]

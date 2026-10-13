@@ -6,6 +6,24 @@ use crate::domain::config::SiteConfig;
 use crate::state::{BrandMode, BrandModeSignal, ModalDoctorSignal};
 use dioxus::prelude::*;
 
+/// Maps TOML-configured doctor image paths to bundled `asset!()` files.
+/// Unknown paths fall back to the founder portrait (all 4 configured
+/// doctors are mapped; the fallback only guards future data edits).
+fn resolve_doctor_image(image_url: &str) -> String {
+    match image_url {
+        "assets/images/dr_ananya_pattnaik.jpg" => {
+            asset!("/assets/images/dr_ananya_pattnaik.jpg").to_string()
+        }
+        "assets/images/dr_jajati_jena.jpg" => {
+            asset!("/assets/images/dr_jajati_jena.jpg").to_string()
+        }
+        "assets/images/dr_sambit_dash.jpg" => {
+            asset!("/assets/images/dr_sambit_dash.jpg").to_string()
+        }
+        _ => asset!("/assets/images/dr_vijay_sahu.jpg").to_string(),
+    }
+}
+
 #[component]
 pub fn Team() -> Element {
     let config = use_context::<SiteConfig>();
@@ -33,7 +51,7 @@ pub fn Team() -> Element {
     rsx! {
         section {
             id: "team",
-            class: "py-20 bg-white dark:bg-[#0a101d]",
+            class: "py-20 bg-slate-50 dark:bg-[#162238]",
             "aria-labelledby": "team-heading",
 
             div { class: "container-x",
@@ -59,10 +77,13 @@ pub fn Team() -> Element {
                                     key: "{doctor.name}",
                                     class: "cure-card overflow-hidden flex flex-col justify-between group peak-in-up {delay_cls}",
 
-                                    // Photo container with realistic image
+                                    // Photo container with realistic image.
+                                    // TOML image_url values are compile-time mapped
+                                    // to bundled asset!() files: raw /assets/*
+                                    // URLs are NOT served by dx (see main.rs).
                                     div { class: "relative aspect-[3/4] overflow-hidden bg-slate-100 dark:bg-slate-800",
                                         img {
-                                            src: "{doctor.image_url}",
+                                            src: "{resolve_doctor_image(&doctor.image_url)}",
                                             alt: "{doctor.name}",
                                             class: "w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105",
                                             decoding: "async",

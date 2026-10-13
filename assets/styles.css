@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Serif+Display&display=swap');
-
 :root, [data-theme="light"] {
   /* Authentic Happy Home Hospital & Rehab Theme (Light Mode) */
   --c-bg: #f3f7fb;              /* Pristine Ice-Blue Medical Background */
@@ -134,10 +132,23 @@ body, #app {
   font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   background: var(--c-bg);
   color: var(--c-text);
-  overflow-x: hidden;
   margin: 0;
   padding: 0;
   transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* Horizontal overflow must be *clipped*, not *hidden*.
+   `overflow-x: hidden` forces the opposite axis's `visible` to compute to
+   `auto`, which silently turns #app into a scroll container. Scroll-driven
+   animations (`animation-timeline: view()`) bind to the nearest scroll
+   container ancestor, so they would freeze against a container that never
+   scrolls. `clip` gives identical clipping without creating one. */
+body {
+  overflow-x: hidden;
+}
+
+#app {
+  overflow-x: clip;
 }
 
 h1, h2, h3, h4, h5, h6, .serif {
@@ -210,26 +221,6 @@ h1.text-white, h2.text-white, h3.text-white, h4.text-white, h5.text-white, h6.te
 /* Top emergency bar */
 .topbar {
   background: linear-gradient(90deg, #101a29 0%, #134cb3 55%, #36a1d7 100%);
-}
-
-/* ── Site-Wide Ambient Bio-Neuro Canvas ────────────────────────── */
-#bio-canvas, .bio-canvas-fixed {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.52;
-  transition: opacity 0.4s ease;
-}
-
-[data-theme="dark"] #bio-canvas,
-.dark #bio-canvas,
-[data-theme="dark"] .bio-canvas-fixed,
-.dark .bio-canvas-fixed {
-  opacity: 0.38;
 }
 
 header, main, footer {
@@ -701,24 +692,9 @@ header, main, footer {
   animation: peakInScale 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-@supports (animation-timeline: view()) {
-  .peak-in-up,
-  .peak-in-left,
-  .peak-in-right,
-  .peak-in-down,
-  .peak-in-scale {
-    animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
-    animation-fill-mode: both;
-    animation-timeline: view();
-    animation-range: entry 5% cover 25%;
-  }
-
-  .peak-in-up { animation-name: peakInUp; }
-  .peak-in-left { animation-name: peakInLeft; }
-  .peak-in-right { animation-name: peakInRight; }
-  .peak-in-down { animation-name: peakInDown; }
-  .peak-in-scale { animation-name: peakInScale; }
-}
+/* One-shot Rust-driven entrance hook (common/fx.rs): the `view()` hijack
+   that used to live here is gone — it spread the motion over ~1000px of
+   scroll, reading as "cards don't move", and needed browser support. */
 
 @keyframes peakInUp {
   from { opacity: 0; transform: translate3d(0, 30px, 0); }
@@ -961,10 +937,18 @@ header, main, footer {
 .cure-card-img-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(15, 23, 42, 0.05) 0%, rgba(15, 23, 42, 0.65) 100%);
+  /* Brand-aware scrim: transparent → brand-blue mid-band → deep slate so the
+     badge and pill text stay legible over any card photo. */
+  background: linear-gradient(
+    180deg,
+    rgba(15, 23, 42, 0.05) 0%,
+    rgba(19, 76, 179, 0.45) 55%,
+    rgba(2, 6, 23, 0.82) 100%
+  );
   display: flex;
   align-items: flex-end;
   padding: 1rem 1.25rem;
+  text-shadow: 0 1px 3px rgba(2, 6, 23, 0.65);
 }
 
 .cure-card-body {
@@ -973,6 +957,31 @@ header, main, footer {
   flex-direction: column;
   flex-grow: 1;
   justify-content: space-between;
+}
+
+/* ── Specialities wing cards: native <details> facility disclosure ────
+   (former Departments feature bullets — collapsed by default so the
+   two-plane section stays scannable; zero JS). */
+.facility-more summary {
+  cursor: pointer;
+  list-style: none;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--c-brand);
+}
+.facility-more summary::-webkit-details-marker {
+  display: none;
+}
+.facility-more summary::after {
+  content: " ▾";
+}
+.facility-more[open] summary::after {
+  content: " ▴";
+}
+.facility-more ul {
+  margin-top: 0.4rem;
 }
 
 /* 4. Running Facts & Stats Marquee Ticker */
@@ -1018,23 +1027,68 @@ header, main, footer {
   text-transform: uppercase;
 }
 
-/* 5. Scroll Reveal System via IntersectionObserver */
+/* 5. Scroll Reveal System — animations orchestrated from Rust, CSS paints.
+   One system, two drivers (§8): the hero above the fold plays on first paint
+   (`.fx-time`); every card entrance here waits for the Rust
+   IntersectionObserver (common/fx.rs) — it marks `#app[data-fx]` once wired
+   (pausing each entrance at frame 0) and releases a card with `.fx-in` the
+   first time it crosses the viewport. Plays once, never reverses on
+   scroll-back, and lands correctly on anchor navigation. No WASM (or
+   reduced motion): `data-fx` is never set, the entrance runs at load off
+   screen and the card ends in its static final state. */
 .reveal-init {
-  opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: opacity, transform;
-}
-
-.reveal-init.is-visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: none;
+  animation: reveal-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes reveal-in {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.reveal-stagger-1 { transition-delay: 80ms; }
-.reveal-stagger-2 { transition-delay: 160ms; }
-.reveal-stagger-3 { transition-delay: 240ms; }
-.reveal-stagger-4 { transition-delay: 320ms; }
+.reveal-stagger-1 { transition-delay: 80ms; animation-delay: 80ms; }
+.reveal-stagger-2 { transition-delay: 160ms; animation-delay: 160ms; }
+.reveal-stagger-3 { transition-delay: 240ms; animation-delay: 240ms; }
+.reveal-stagger-4 { transition-delay: 320ms; animation-delay: 320ms; }
+
+/* Rust entrance hook: pause every card entrance at frame 0 … */
+#app[data-fx] .reveal-init,
+#app[data-fx] .peak-in-up,
+#app[data-fx] .peak-in-left,
+#app[data-fx] .peak-in-right,
+#app[data-fx] .peak-in-scale {
+  animation-play-state: paused;
+}
+/* … and release each one when the observer says it has arrived. */
+#app[data-fx] .fx-in.reveal-init,
+#app[data-fx] .fx-in.peak-in-up,
+#app[data-fx] .fx-in.peak-in-left,
+#app[data-fx] .fx-in.peak-in-right,
+#app[data-fx] .fx-in.peak-in-scale {
+  animation-play-state: running;
+}
+
+/* App boot loader auto-hide — CSS-only (no JS in app shell).
+   Dioxus mounts #app alongside the loader without removing it,
+   so the loader dismisses itself on a timer instead of via script. */
+#app-loading {
+  animation: app-loader-autohide 0.6s ease 2.8s forwards;
+}
+@keyframes app-loader-autohide {
+  to {
+    opacity: 0;
+    visibility: hidden;
+    height: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+}
 
 /* 6. Mobile Navigation Drawer Slide Animation */
 .mobile-drawer-backdrop {
@@ -1075,12 +1129,17 @@ header, main, footer {
 
 @media (prefers-reduced-motion: reduce) {
   .topbar-ticker-content,
-  .facts-ticker-content {
+  .facts-ticker-content,
+  /* Decorative status dots and icon rings are infinite loops too. */
+  .animate-pulse,
+  .animate-ping,
+  .icon-ring {
     animation: none !important;
   }
   .reveal-init {
     opacity: 1 !important;
     transform: none !important;
+    animation: none !important;
   }
 }
 
@@ -1146,13 +1205,427 @@ header, main, footer {
 }
 
 .divider-to-footer {
-  background: #ffffff;
+  background: var(--c-bg-2);
 }
 [data-theme="dark"] .divider-to-footer {
-  background: #0f172a;
+  background: var(--c-bg-2);
 }
 .divider-to-footer path {
   fill: #061830;
 }
 
 
+
+/* ════════════════════════════════════════════════════════════════════════
+   8. Motion system — the vayudh.com entrance trio ported from Wix
+   `motion-revealIn` / `motion-floatIn` / `motion-fadeIn`, orchestrated
+   from Rust (src/components/common/fx.rs picks the motion + `--i` slot).
+   Two drivers, one set of keyframes:
+     • time driver  (`.fx-time`)  — the hero. Above the fold, `view()`
+       reports "already entered" at load, so entrance plays once on first
+       paint, staggered by `animation-delay`.
+     • scroll driver (`.sec-head`) — below-fold section headings, in
+       lockstep on one named `view-timeline`; stagger comes from
+       `animation-range` offsets (`animation-delay` is inert on a scroll
+       timeline).
+   Base rules are static + fully visible; hidden start states live ONLY
+   inside the (supports + no-preference) block, so browsers without
+   scroll-driven animations — and reduced-motion users — render plain,
+   final-state content. Zero JS.
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* Per-word mask. inline-block + overflow:hidden is the mask; padding/negative
+   margin keeps descenders (g, y, p) from being clipped. */
+.fx-mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  padding-bottom: 0.16em;
+  margin-bottom: -0.16em;
+}
+
+.fx-word {
+  display: inline-block;
+  will-change: transform;
+}
+
+/* Word separator. An inline-block sibling collapses inter-element whitespace,
+   so the gap is an explicit non-collapsing space rather than a bare text node. */
+.fx-space {
+  display: inline-block;
+  white-space: pre;
+}
+
+/* One view timeline per heading, declared on the heading itself. Children
+   bind to it by name, so the tag, every word, and the subtitle stay in
+   lockstep no matter how the text wraps. A bare `view()` on the words would
+   instead track each inline box, which is clipped by the mask and therefore
+   reports "already entered" — the heading would never animate. */
+.sec-head {
+  view-timeline-name: --sec-head;
+  view-timeline-axis: block;
+}
+
+.sec-head .sec-title {
+  text-wrap: balance;
+}
+
+/* Four keyframes, shared by both drivers. */
+@keyframes fxMaskRise {
+  from { transform: translateY(115%); }
+  to { transform: translateY(0); }
+}
+@keyframes fxFloatIn {
+  from { opacity: 0; transform: translateY(28px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fxFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes fxWipe {
+  from { clip-path: inset(0 100% 0 0); }
+  to { clip-path: inset(0 0 0 0); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* ── Scroll driver: below-fold section headings ─────────────────────── */
+  @supports (animation-timeline: view()) {
+    /* Words rise out of their mask, cascading left to right. The range
+       offset by --i is the stagger; `both` holds the hidden start state
+       until the heading enters the range. */
+    .sec-head .fx-word {
+      animation: fxMaskRise 1s cubic-bezier(0.22, 1, 0.36, 1) both;
+      animation-timeline: --sec-head;
+      animation-range: entry calc(4% + var(--i, 0) * 3.5%) entry calc(50% + var(--i, 0) * 3.5%);
+    }
+
+    /* Tag: vayudh motion-revealIn — horizontal clip wipe, no opacity fade. */
+    .sec-head .sec-tag {
+      animation: fxWipe 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
+      animation-timeline: --sec-head;
+      animation-range: entry 0% entry 42%;
+    }
+
+    /* Subtitle: soft rise, last in the cascade. */
+    .sec-head .sec-sub {
+      animation: fxFloatIn 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+      animation-timeline: --sec-head;
+      animation-range: entry 26% entry 70%;
+    }
+  }
+
+  /* ── Time driver: hero first-paint cascade ──────────────────────────── */
+  /* vayudh easing; `both` holds the hidden start state through the
+     --i * 70ms stagger delay, then plays once. */
+  .fx-time .fx-word {
+    animation: fxMaskRise 0.85s cubic-bezier(0.445, 0.05, 0.55, 0.95) calc(var(--i, 0) * 70ms) both;
+  }
+  .fx-time .fx-wipe {
+    animation: fxWipe 0.9s cubic-bezier(0.445, 0.05, 0.55, 0.95) calc(var(--i, 0) * 70ms) both;
+  }
+  .fx-time .fx-float {
+    animation: fxFloatIn 0.85s cubic-bezier(0.445, 0.05, 0.55, 0.95) calc(var(--i, 0) * 70ms) both;
+  }
+  .fx-time .fx-fade {
+    animation: fxFadeIn 0.8s cubic-bezier(0.445, 0.05, 0.55, 0.95) calc(var(--i, 0) * 70ms) both;
+  }
+}
+
+/* Reduced motion: content is static final-state text by default, so the
+   only work here is stripping will-change and neutralizing the masks. */
+@media (prefers-reduced-motion: reduce) {
+  .fx-word { will-change: auto; }
+  .fx-mask { overflow: visible; }
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   Ambient brand-aware dynamic background — immersive, fresh, zero JS.
+   Lives on #app so it inherits [data-brand] + dark palette vars.
+   `isolation: isolate` makes #app the stacking context so the negative-z
+   layer paints above the app background yet below all content.
+   GPU-composited transform drift; killed under prefers-reduced-motion.
+   ════════════════════════════════════════════════════════════════════════ */
+#app {
+  isolation: isolate;
+}
+
+#app::before {
+  content: "";
+  position: fixed;
+  inset: -14vmax;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(36vmax 36vmax at 10% 16%, color-mix(in srgb, var(--c-brand) 22%, transparent), transparent 64%),
+    radial-gradient(32vmax 32vmax at 88% 10%, color-mix(in srgb, var(--c-brand-teal) 16%, transparent), transparent 62%),
+    radial-gradient(46vmax 36vmax at 52% 98%, color-mix(in srgb, var(--c-brand-dark) 14%, transparent), transparent 68%);
+  filter: blur(30px) saturate(1.12);
+  opacity: 0.85;
+  will-change: transform;
+  animation: ambientBrandDrift 34s ease-in-out infinite alternate;
+}
+
+/* Dark mode keeps AAA text contrast: dim the ambient wash. */
+#app.dark::before,
+#app[data-theme="dark"]::before,
+html.dark #app::before {
+  opacity: 0.5;
+}
+
+@keyframes ambientBrandDrift {
+  from { transform: translate3d(-2%, -1%, 0) scale(1); }
+  to   { transform: translate3d(3%, 2%, 0) scale(1.07); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #app::before {
+    animation: none !important;
+    will-change: auto;
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   Certification stamps — official seal badges in the footer.
+   Double-ring circular "rubber stamp" seals, each in its own regulatory
+   colour (--stamp-color set inline). Slight alternating rotation for
+   the stamped-on-paper feel; hover straightens and lifts the seal.
+   ════════════════════════════════════════════════════════════════════════ */
+.cert-stamps {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 1.5rem 2rem;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.cert-stamp {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 124px;
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cert-stamp:hover {
+  transform: translateY(-4px);
+}
+
+.cert-stamp-seal {
+  width: 78px;
+  height: 78px;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  border: 2px solid var(--stamp-color, var(--c-brand));
+  box-shadow:
+    inset 0 0 0 3px #ffffff,
+    inset 0 0 0 4.5px var(--stamp-color, var(--c-brand)),
+    0 2px 8px -2px rgba(15, 23, 42, 0.08);
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease;
+  margin-bottom: 0.625rem;
+}
+
+[data-theme="dark"] .cert-stamp-seal,
+.dark .cert-stamp-seal {
+  background: #ffffff;
+  box-shadow:
+    inset 0 0 0 3px #ffffff,
+    inset 0 0 0 4.5px var(--stamp-color, var(--c-brand)),
+    0 4px 14px -3px rgba(0, 0, 0, 0.5);
+}
+
+.cert-stamp:hover .cert-stamp-seal {
+  transform: scale(1.06);
+  box-shadow:
+    inset 0 0 0 3px #ffffff,
+    inset 0 0 0 4.5px var(--stamp-color, var(--c-brand)),
+    0 8px 22px -6px color-mix(in srgb, var(--stamp-color, var(--c-brand)) 55%, transparent);
+}
+
+[data-theme="dark"] .cert-stamp:hover .cert-stamp-seal,
+.dark .cert-stamp:hover .cert-stamp-seal {
+  transform: scale(1.06);
+  box-shadow:
+    inset 0 0 0 3px #ffffff,
+    inset 0 0 0 4.5px var(--stamp-color, var(--c-brand)),
+    0 8px 24px -4px color-mix(in srgb, var(--stamp-color, var(--c-brand)) 70%, transparent);
+}
+
+.cert-stamp-title {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: #1e293b;
+  min-height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+}
+
+[data-theme="dark"] .cert-stamp-title,
+.dark .cert-stamp-title {
+  color: #f1f5f9;
+}
+
+.cert-stamp-sub {
+  font-size: 0.5625rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: #64748b;
+  min-height: 22px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  margin-top: 2px;
+}
+
+[data-theme="dark"] .cert-stamp-sub,
+.dark .cert-stamp-sub {
+  color: #94a3b8;
+}
+
+/* Wing cards — subtle top accent that brightens on hover. */
+.wing-card-hospital,
+.wing-card-rehab {
+  overflow: hidden;
+}
+
+.wing-card-hospital::before,
+.wing-card-rehab::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  opacity: 0.85;
+  transition: opacity 0.3s ease;
+}
+
+.wing-card-hospital::before {
+  background: linear-gradient(90deg, #0ea5e9, #2563eb);
+}
+
+.wing-card-rehab::before {
+  background: linear-gradient(90deg, #14b8a6, #059669);
+}
+
+.wing-card-hospital:hover::before,
+.wing-card-rehab:hover::before {
+  opacity: 1;
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   9. Gene Helix Double-Strand Animation & Floating Hero Capabilities
+   ════════════════════════════════════════════════════════════════════════ */
+
+@keyframes helixOscillateA {
+  0%, 100% {
+    transform: translateY(-12px) scale(0.85);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(12px) scale(1.15);
+    opacity: 0.95;
+  }
+}
+
+@keyframes helixOscillateB {
+  0%, 100% {
+    transform: translateY(12px) scale(1.15);
+    opacity: 0.95;
+  }
+  50% {
+    transform: translateY(-12px) scale(0.85);
+    opacity: 0.5;
+  }
+}
+
+@keyframes helixRungPulse {
+  0%, 100% {
+    opacity: 0.25;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    opacity: 0.7;
+    stroke-dashoffset: 4;
+  }
+}
+
+.helix-node-a {
+  transform-origin: center;
+  animation: helixOscillateA 3.6s ease-in-out infinite;
+}
+
+.helix-node-b {
+  transform-origin: center;
+  animation: helixOscillateB 3.6s ease-in-out infinite;
+}
+
+.helix-rung {
+  animation: helixRungPulse 3.6s ease-in-out infinite;
+}
+
+/* Floating capability consoles in hero visual cluster */
+@keyframes floatSlow {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes floatDelayed {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(7px);
+  }
+}
+
+@keyframes floatGentle {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.animate-float-slow {
+  animation: floatSlow 6s ease-in-out infinite;
+  will-change: transform;
+}
+
+.animate-float-delayed {
+  animation: floatDelayed 6.8s ease-in-out infinite 0.9s;
+  will-change: transform;
+}
+
+.animate-float {
+  animation: floatGentle 5.4s ease-in-out infinite 1.6s;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .helix-node-a,
+  .helix-node-b,
+  .helix-rung,
+  .animate-float-slow,
+  .animate-float-delayed,
+  .animate-float {
+    animation: none !important;
+  }
+}

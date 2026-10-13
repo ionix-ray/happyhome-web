@@ -1,7 +1,7 @@
 //! Why Us component highlighting core institutional strengths and clinical differentiators.
 
 use crate::components::common::SectionHeader;
-use crate::components::icons::{CarbonShieldCheckIcon, DynamicIcon};
+use crate::components::icons::{CarbonShieldCheckIcon, CarbonWhyUsIcon};
 use crate::domain::config::SiteConfig;
 use crate::state::{BrandMode, BrandModeSignal};
 use dioxus::prelude::*;
@@ -48,10 +48,10 @@ pub fn WhyUs() -> Element {
                     for (idx, item) in why_us.into_iter().enumerate() {
                         {
                             let img_src = match idx % 4 {
-                                0 => "/assets/images/card_corridor.jpg",
-                                1 => "/assets/images/card_icu.jpg",
-                                2 => "/assets/images/card_rehab.jpg",
-                                _ => "/assets/images/card_doctor.jpg",
+                                0 => "/assets/images/why_us/why_us_clinical_excellence.jpg",
+                                1 => "/assets/images/why_us/why_us_advanced_monitoring.jpg",
+                                2 => "/assets/images/why_us/why_us_compassionate_care.jpg",
+                                _ => "/assets/images/why_us/why_us_seamless_recovery.jpg",
                             };
                             let delay_cls = match idx % 4 {
                                 0 => "reveal-stagger-1",
@@ -76,12 +76,13 @@ pub fn WhyUs() -> Element {
                                             src: "{img_src}",
                                             alt: "{item.title}",
                                             class: "cure-card-img",
-                                            loading: "lazy",
+                                            loading: "eager",
+                                            decoding: "async",
                                         }
                                         div { class: "cure-card-img-overlay",
                                             div { class: "flex items-center justify-between w-full",
                                                 div { class: "icon-badge {badge_cls} !w-9 !h-9 !rounded-xl shadow-md",
-                                                    DynamicIcon { name: item.icon_key, size: 18, color: "currentColor" }
+                                                    CarbonWhyUsIcon { icon_key: item.icon_key.clone(), size: 18 }
                                                 }
                                                 span { class: "text-lg font-black text-white/90 drop-shadow-md",
                                                     "0{idx + 1}"

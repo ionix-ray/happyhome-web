@@ -13,6 +13,18 @@
       "skillPath": "skills/improve-ui/SKILL.md",
       "computedHash": "5bd7689c5508c6bd8166f796b3d1bd32255077447595b14b60fac9847dce63f1"
     },
+    "seo": {
+      "source": "agricidaniel/claude-seo",
+      "sourceType": "github",
+      "skillPath": "skills/seo/SKILL.md",
+      "computedHash": "a427b96947ce04de59858788137464e1f1259b1c11ab4881d6137cc5da1d68e6"
+    },
+    "seo-local": {
+      "source": "agricidaniel/claude-seo",
+      "sourceType": "github",
+      "skillPath": "skills/seo-local/SKILL.md",
+      "computedHash": "58be818a7642b985e873d3467660c904903b87fd6ecf447871a5ca9d90253b15"
+    },
     "ui-skills-root": {
       "source": "ibelick/ui-skills",
       "sourceType": "github",

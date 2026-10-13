@@ -1,8 +1,6 @@
 [site]
 name = "Happy Home Hospital And Rehab"
 tagline = "Your health, guided by experts"
-logo_url = "https://happyhomehospital.com/wp-content/uploads/2026/05/Logo-happy-home.jpg"
-favicon_url = "https://happyhomehospital.com/wp-content/uploads/2026/05/fav-logo.png"
 
 [emergency]
 message = "24/7 Emergency & Critical Neuro ICU"
@@ -28,9 +26,36 @@ instagram = "https://instagram.com/happyhomehospital"
 title = "Happy Home Hospital And Rehab | Bhubaneswar | Neuro & Spine Rehabilitation Centre"
 description = "Happy Home Hospital and Rehab in Bhubaneswar offers expert neuro rehabilitation, stroke recovery, spinal cord injury care, tracheostomy management, and 24/7 critical care. Call +91 8249914673."
 keywords = ["neuro rehabilitation bhubaneswar", "stroke recovery centre", "spinal cord injury rehab", "tbi care", "happy home hospital", "rehab centre bhubaneswar"]
-og_image = "assets/images/facility.jpg"
 canonical = "https://happyhomehospital.com/"
 schema_type = "Hospital"
+image = "https://happyhomehospital.com/assets/images/facility.jpg"
+price_range = "₹₹"
+sitemap_lastmod = "2026-09-29"
+geo_lat = 20.27193
+geo_lng = 85.78064
+area_served = ["Bhubaneswar", "Cuttack", "Puri", "Khordha", "Jajpur", "Nayagarh", "Kendrapara", "Bhadrak", "Balasore"]
+
+[seo.address]
+street = "Plot no.223, K-1 Kalinga Nagar, Ghatikia"
+locality = "Bhubaneswar"
+region = "Odisha"
+postal_code = "751029"
+country = "IN"
+
+[seo.opening_hours]
+days = ["Mo", "Tu", "We", "Th", "Fr", "Sa"]
+opens = "09:00"
+closes = "20:00"
+
+[seo.emergency_hours]
+days = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"]
+opens = "00:00"
+closes = "23:59"
+
+[analytics]
+# Microsoft Clarity — paste the project ID from https://clarity.ms to enable
+# heatmap/recordings. Empty string keeps analytics disabled (Rule 11).
+clarity_project_id = ""
 
 [footer]
 about_text = "Happy Home Hospital & Inpatient Rehab is Odisha's trusted centre for specialized neuro and spine rehabilitation, critical step-down ICU recovery, and comprehensive holistic patient care since 2021."
@@ -48,8 +73,8 @@ label = "Our Doctors"
 url = "#team"
 
 [[footer.quick_links]]
-label = "Departments"
-url = "#departments"
+label = "Why Us"
+url = "#why-us"
 
 [[footer.quick_links]]
 label = "Rehab Plans"
@@ -58,22 +83,6 @@ url = "#plans"
 [[footer.quick_links]]
 label = "Book Appointment"
 url = "#appointment"
-
-[[footer.legal_links]]
-label = "Terms & Conditions"
-url = "/terms-conditions/"
-
-[[footer.legal_links]]
-label = "Privacy Policy"
-url = "/privacy-policy/"
-
-[[footer.legal_links]]
-label = "Patient Charter & Rights"
-url = "/patient-charter/"
-
-[[footer.legal_links]]
-label = "NABH Accreditation Guidelines"
-url = "/accreditation/"
 
 [rehab]
 name = "Happy Home Rehab"

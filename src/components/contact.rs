@@ -106,7 +106,7 @@ pub fn Contact() -> Element {
                 // Visual Google Maps placeholder / banner
                 div { class: "rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-md h-72 bg-slate-100 dark:bg-slate-800 relative flex items-center justify-center peak-in-scale delay-200",
                     img {
-                        src: "assets/images/facility.jpg",
+                        src: asset!("/assets/images/facility.jpg"),
                         alt: "Happy Home Hospital Facility",
                         class: "w-full h-full object-cover opacity-80",
                     }

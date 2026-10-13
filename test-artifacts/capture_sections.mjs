@@ -36,10 +36,10 @@ async function capture() {
   await page.waitForTimeout(600);
   await page.screenshot({ path: path.join(SCREENSHOT_DIR, '06_why_us_split_cards.png') });
 
-  // 3. Departments section
-  await page.locator('#departments').scrollIntoViewIfNeeded();
+  // 3. About section (moved to the closing slot before the footer)
+  await page.locator('#about').scrollIntoViewIfNeeded();
   await page.waitForTimeout(600);
-  await page.screenshot({ path: path.join(SCREENSHOT_DIR, '07_departments_split_cards.png') });
+  await page.screenshot({ path: path.join(SCREENSHOT_DIR, '07_about_closing.png') });
 
   // 4. Dark Mode Hero & Wave Transitions
   const themeBtn = page.locator('button[aria-label="Toggle theme"]').first();

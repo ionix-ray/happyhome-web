@@ -61,9 +61,14 @@ async function runBrowserTests(browserName, executablePath) {
   }
 
   try {
-    // 1. Page Load
-    await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
-    await page.waitForSelector('nav', { timeout: 10000 });
+    // 1. Page Load (one retry: cold browser/server first navigation flakes)
+    try {
+      await page.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 30000 });
+    } catch (e) {
+      console.log(`[${browserName}] first goto timed out, retrying once...`);
+      await page.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
+    }
+    await page.waitForSelector('nav', { timeout: 15000 });
     const appEl = await page.locator('#app');
     record('App Mounts Cleanly', (await appEl.count()) > 0);
 
@@ -116,19 +121,66 @@ async function runBrowserTests(browserName, executablePath) {
     await themeBtn.click();
     await page.waitForTimeout(300);
 
-    // 7. Services Section & Dual-Track Explorer Tabs
+    // 7. Specialities — image cards + local Medical/Rehabilitation toggle
     await page.locator('#services').scrollIntoViewIfNeeded();
     await page.waitForTimeout(400);
     const serviceCards = page.locator('#services .cure-card');
     const serviceCount = await serviceCards.count();
-    record('Services Section Cure-Cards Rendered', serviceCount >= 4, `Found: ${serviceCount}`);
+    record('Services Section Cure-Cards Rendered (both grids in DOM)', serviceCount >= 15, `Found: ${serviceCount}`);
 
-    const rehabTab = page.locator('#services button:has-text("Addiction & Rehab")').first();
-    if (await rehabTab.count() > 0) {
-      await rehabTab.click();
-      await page.waitForTimeout(300);
-      record('Services In-Page Rehab Explorer Tab Clickable', true);
-    }
+    // Section header: no tag, new title
+    const secTag = page.locator('#services .sec-tag');
+    const secTagCount = await secTag.count();
+    record('Services Section Tag Removed', secTagCount === 0, `sec-tag count=${secTagCount}`);
+    const secTitle = await page.locator('#services h2.sec-title').innerText();
+    const titleOk = secTitle.includes('Multi Speciality Hospital') && secTitle.includes('Rehabilitation Centre');
+    record('Services Title = Multi Speciality Hospital & Rehabilitation Centre', titleOk, secTitle.replace(/\n/g, ' '));
+
+    // Toggle visible at ALL breakpoints (desktop here)
+    const wingToggle = page.locator('#services div[aria-label="Choose a speciality wing"]');
+    const toggleVisible = await wingToggle.isVisible();
+    record('Wing Toggle Visible on Desktop', toggleVisible, `visible=${toggleVisible}`);
+
+    // Default = global brand (hospital on fresh load): 6 medical cards visible
+    const visCards = page.locator('#services .cure-card:visible');
+    const medCount = await visCards.count();
+    record('Default Medical Grid Shows 6 Cards', medCount === 6, `visible=${medCount}`);
+
+    // Consult arrow present on cards
+    const consultLinks = page.locator('#services a[href="#appointment"]');
+    const consultCount = await consultLinks.count();
+    record('Consult Specialist Arrow Links Present', consultCount >= 15, `Found: ${consultCount}`);
+
+    // Click Rehabilitation → 9 cards, hidden grid reveals (IO refires on display change)
+    const svcRehabBtn = page.locator('#services button:has-text("Rehabilitation (9 Programs)")');
+    await svcRehabBtn.click();
+    const rehabPressed = await svcRehabBtn.getAttribute('aria-pressed');
+    const rehabCount = await visCards.count();
+    const firstRehabCard = visCards.first();
+    // Reveal is viewport-driven: bring the card to center (user scroll), then settle.
+    await firstRehabCard.evaluate(el => el.scrollIntoView({ block: 'center', behavior: 'instant' }));
+    await page.waitForTimeout(1100); // display change → IntersectionObserver → peak-in settle
+    const cardOpacity = parseFloat(await firstRehabCard.evaluate(el => getComputedStyle(el).opacity));
+    record('Rehabilitation Toggle Shows 9 Cards + Reveal', rehabPressed === 'true' && rehabCount === 9 && cardOpacity > 0.95, `pressed=${rehabPressed} visible=${rehabCount} opacity=${cardOpacity}`);
+
+    // Back to Medical
+    const svcMedBtn = page.locator('#services button:has-text("Medical (6 Specialties)")');
+    await svcMedBtn.click();
+    await page.waitForTimeout(1100);
+    const medCount2 = await visCards.count();
+    record('Medical Toggle Back to 6 Cards', medCount2 === 6, `visible=${medCount2}`);
+
+    // Mobile: same local toggle drives the grid
+    const origViewport = page.viewportSize();
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.waitForTimeout(300);
+    const mobileToggleVisible = await wingToggle.isVisible();
+    await svcRehabBtn.click();
+    await page.waitForTimeout(1100);
+    const mobileRehabCount = await visCards.count();
+    record('Mobile: Toggle Switches Wing + Cards Reveal', mobileToggleVisible && mobileRehabCount === 9, `toggle=${mobileToggleVisible} visible=${mobileRehabCount}`);
+    await page.setViewportSize(origViewport);
+    await page.waitForTimeout(300);
 
     // 8. Universal Cure-Cards & Duotone Badges Layout
     const totalCureCards = await page.locator('.cure-card').count();
@@ -180,6 +232,52 @@ async function runBrowserTests(browserName, executablePath) {
     await phoneInput.fill('8249914673');
     record('Appointment Form Interactive Input', true);
     await page.screenshot({ path: path.join(SCREENSHOT_DIR, `${prefix}_04_appointment_section.png`) });
+
+    // SEO contract: structured data, artifacts, analytics wiring
+    const ldBlocks = await page.$$eval('script[type="application/ld+json"]',
+      els => els.map(e => e.textContent));
+    let ldOk = ldBlocks.length > 0;
+    let ldType = '';
+    for (const block of ldBlocks) {
+      try {
+        const parsed = JSON.parse(block);
+        if (parsed['@context'] !== 'https://schema.org') ldOk = false;
+        ldType = parsed['@graph']?.[0]?.['@type'] || ldType;
+      } catch {
+        ldOk = false;
+      }
+    }
+    record('JSON-LD Structured Data Parses (schema.org)', ldOk && ldType.length > 0,
+      `blocks=${ldBlocks.length} type=${ldType}`);
+
+    const origin = new URL(BASE_URL).origin;
+    const statuses = {};
+    let artifactsOk = true;
+    for (const artifact of ['robots.txt', 'sitemap.xml', 'llms.txt']) {
+      const resp = await fetch(`${origin}/${artifact}`);
+      statuses[artifact] = resp.status;
+      const body = await resp.text();
+      if (resp.status !== 200) artifactsOk = false;
+      if (artifact === 'robots.txt' && !body.includes('Sitemap: https://happyhomehospital.com/sitemap.xml')) artifactsOk = false;
+      if (artifact === 'sitemap.xml' && !body.includes('<loc>https://happyhomehospital.com/</loc>')) artifactsOk = false;
+      if (artifact === 'llms.txt' && !body.startsWith('# ')) artifactsOk = false;
+    }
+    record('SEO Artifacts Served (robots/sitemap/llms.txt)', artifactsOk, JSON.stringify(statuses));
+
+    const canonicalHref = await page.locator('link[rel="canonical"]').getAttribute('href');
+    const robotsMeta = await page.locator('meta[name="robots"]').getAttribute('content');
+    record('Canonical + Robots Meta Present',
+      canonicalHref === 'https://happyhomehospital.com/' && robotsMeta.includes('follow'),
+      `canonical=${canonicalHref} robots=${robotsMeta}`);
+
+    // Clarity: DOM state must match config wiring (disabled until project ID set)
+    const clarityState = await page.evaluate(() => document.documentElement.dataset.analyticsClarity || 'unset');
+    const clarityScripts = await page.locator('script[src*="clarity.ms"]').count();
+    const clarityOk = clarityState === 'enabled'
+      ? clarityScripts > 0
+      : clarityState === 'disabled' && clarityScripts === 0;
+    record('Microsoft Clarity Wiring Matches Config', clarityOk,
+      `state=${clarityState} scripts=${clarityScripts}`);
 
     // 11. Zero Console & Network Errors
     record('Zero Console Errors', consoleErrors.length === 0, `Errors: ${JSON.stringify(consoleErrors)}`);

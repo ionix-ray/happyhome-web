@@ -4,7 +4,7 @@ default_platform = "web"
 asset_dir = "assets"
 
 [web.app]
-# title configured in index.html to prevent duplication
+title = "Happy Home Hospital And Rehab | Bhubaneswar | Neuro Rehabilitation Centre"
 
 [web.watcher]
 reload_html = true
