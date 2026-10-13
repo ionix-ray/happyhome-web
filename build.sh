@@ -47,7 +47,7 @@ BASE_ARG=""
 if [ -n "$BASE_PATH" ]; then
     BASE_ARG="--base-path $BASE_PATH"
 fi
-dx build --platform web --release $BASE_ARG
+dx build --platform web --release --debug-symbols false $BASE_ARG
 
 echo "=> Copying assets to public directory..."
 mkdir -p target/dx/happyhome/release/web/public/assets
