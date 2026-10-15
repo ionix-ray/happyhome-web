@@ -92,28 +92,28 @@ fn facility(slug: &str) -> Option<(&'static str, &'static [&'static str])> {
 /// Contextual, distinct image for each specialty card.
 /// Every single one of the 15 specialties maps to its own unique 16:9 image
 /// without any repetition.
-fn service_card_image(slug: &str) -> &'static str {
+fn service_card_image(slug: &str) -> String {
     match slug {
         // Hospital wing (6 specialties)
-        "emergency-trauma" => "/assets/images/services/service_emergency_trauma.jpg",
-        "critical-care-hdu" => "/assets/images/services/service_critical_care_hdu.jpg",
-        "multispecialty-opd" => "/assets/images/services/service_multispecialty_opd.jpg",
-        "diagnostic-laboratory" => "/assets/images/services/service_diagnostic_laboratory.jpg",
-        "advanced-physiotherapy" => "/assets/images/services/service_advanced_physiotherapy.jpg",
-        "oncology-palliative" => "/assets/images/services/service_oncology_palliative.jpg",
+        "emergency-trauma" => asset!("/assets/images/services/service_emergency_trauma.jpg").to_string(),
+        "critical-care-hdu" => asset!("/assets/images/services/service_critical_care_hdu.jpg").to_string(),
+        "multispecialty-opd" => asset!("/assets/images/services/service_multispecialty_opd.jpg").to_string(),
+        "diagnostic-laboratory" => asset!("/assets/images/services/service_diagnostic_laboratory.jpg").to_string(),
+        "advanced-physiotherapy" => asset!("/assets/images/services/service_advanced_physiotherapy.jpg").to_string(),
+        "oncology-palliative" => asset!("/assets/images/services/service_oncology_palliative.jpg").to_string(),
         // Rehab wing (9 programs)
-        "post-neuro-surgery-rehabilitation" => "/assets/images/services/service_neuro_rehab.jpg",
-        "spinal-cord-injury-rehabilitation" => "/assets/images/services/service_spinal_cord_rehab.jpg",
-        "traumatic-brain-injury-tbi-care" => "/assets/images/services/service_tbi_care.jpg",
-        "advanced-bedsore-wound-care" => "/assets/images/services/service_bedsore_wound_care.jpg",
-        "tracheostomy-respiratory-support-care" => "/assets/images/services/service_tracheostomy_respiratory.jpg",
-        "cancer-palliative-critical-care-management" => "/assets/images/services/service_cancer_palliative.jpg",
-        "parkinsons-disease-dementia-rehabilitation" => "/assets/images/services/service_parkinsons_dementia.jpg",
-        "stroke-recovery-paralysis-management" => "/assets/images/services/service_stroke_recovery.jpg",
+        "post-neuro-surgery-rehabilitation" => asset!("/assets/images/services/service_neuro_rehab.jpg").to_string(),
+        "spinal-cord-injury-rehabilitation" => asset!("/assets/images/services/service_spinal_cord_rehab.jpg").to_string(),
+        "traumatic-brain-injury-tbi-care" => asset!("/assets/images/services/service_tbi_care.jpg").to_string(),
+        "advanced-bedsore-wound-care" => asset!("/assets/images/services/service_bedsore_wound_care.jpg").to_string(),
+        "tracheostomy-respiratory-support-care" => asset!("/assets/images/services/service_tracheostomy_respiratory.jpg").to_string(),
+        "cancer-palliative-critical-care-management" => asset!("/assets/images/services/service_cancer_palliative.jpg").to_string(),
+        "parkinsons-disease-dementia-rehabilitation" => asset!("/assets/images/services/service_parkinsons_dementia.jpg").to_string(),
+        "stroke-recovery-paralysis-management" => asset!("/assets/images/services/service_stroke_recovery.jpg").to_string(),
         "post-general-abdominal-orthopedic-ctvs-surgery-rehabilitation" => {
-            "/assets/images/services/service_orthopedic_ctvs.jpg"
+            asset!("/assets/images/services/service_orthopedic_ctvs.jpg").to_string()
         }
-        _ => "/assets/images/card_doctor.jpg",
+        _ => asset!("/assets/images/facility.jpg").to_string(),
     }
 }
 

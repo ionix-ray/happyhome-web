@@ -48,10 +48,10 @@ pub fn WhyUs() -> Element {
                     for (idx, item) in why_us.into_iter().enumerate() {
                         {
                             let img_src = match idx % 4 {
-                                0 => "/assets/images/why_us/why_us_clinical_excellence.jpg",
-                                1 => "/assets/images/why_us/why_us_advanced_monitoring.jpg",
-                                2 => "/assets/images/why_us/why_us_compassionate_care.jpg",
-                                _ => "/assets/images/why_us/why_us_seamless_recovery.jpg",
+                                0 => asset!("/assets/images/why_us/why_us_clinical_excellence.jpg").to_string(),
+                                1 => asset!("/assets/images/why_us/why_us_advanced_monitoring.jpg").to_string(),
+                                2 => asset!("/assets/images/why_us/why_us_compassionate_care.jpg").to_string(),
+                                _ => asset!("/assets/images/why_us/why_us_seamless_recovery.jpg").to_string(),
                             };
                             let delay_cls = match idx % 4 {
                                 0 => "reveal-stagger-1",

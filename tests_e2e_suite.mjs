@@ -250,11 +250,12 @@ async function runBrowserTests(browserName, executablePath) {
     record('JSON-LD Structured Data Parses (schema.org)', ldOk && ldType.length > 0,
       `blocks=${ldBlocks.length} type=${ldType}`);
 
-    const origin = new URL(BASE_URL).origin;
+    const baseUrlObj = new URL(BASE_URL);
+    const basePath = baseUrlObj.pathname.endsWith('/') ? baseUrlObj.pathname : baseUrlObj.pathname + '/';
     const statuses = {};
     let artifactsOk = true;
     for (const artifact of ['robots.txt', 'sitemap.xml', 'llms.txt']) {
-      const resp = await fetch(`${origin}/${artifact}`);
+      const resp = await fetch(`${baseUrlObj.origin}${basePath}${artifact}`);
       statuses[artifact] = resp.status;
       const body = await resp.text();
       if (resp.status !== 200) artifactsOk = false;
